@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PinMate.iml" filepath="$PROJECT_DIR$/PinMate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PinMateFrontend.iml" filepath="$PROJECT_DIR$/PinMateFrontend.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
