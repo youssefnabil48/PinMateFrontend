@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_1"
+    tools:context="com.example.saraelsheemi.pinmate.views.Login">
+
+    <RelativeLayout
+        android:id="@+id/relative_logo"
+
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="100dp"
+            android:layout_marginStart="30dp"
+            android:layout_height="100dp" />
+        <TextView
+            android:id="@+id/txt_appname"
+            style="@style/LogoArea"
+            android:layout_toEndOf="@id/img_logo" />
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/edt_username_reg"
+        android:layout_marginTop="30dp"
+        android:inputType="textEmailAddress"
+        android:layout_below="@id/relative_logo"
+        android:hint="Name"
+        style="@style/EditText"
+        />
+
+    <EditText
+        android:id="@+id/edt_email_reg"
+        style="@style/EditText"
+        android:inputType="textEmailAddress"
+        android:layout_below="@id/edt_username_reg"
+        android:hint="Email"
+        />
+
+    <EditText
+        android:id="@+id/edt_password_reg"
+        style="@style/EditText"
+        android:layout_below="@id/edt_email_reg"
+        android:inputType="textPassword"
+        android:hint="Password"
+
+        />
+    <EditText
+        android:id="@+id/edt_password_confirm"
+        style="@style/EditText"
+        android:layout_below="@id/edt_password_reg"
+        android:inputType="textPassword"
+        android:hint="Confirm Password"/>
+
+
+
+    <RadioGroup
+        android:id="@+id/radiogp_gender"
+        android:layout_below="@id/edt_password_confirm"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:buttonTint="@android:color/white"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"/>
+        <RadioButton
+            android:buttonTint="@android:color/white"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btn_reg_reg"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/radiogp_gender"
+        android:text="Register"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorPrimary"
+        android:background="@drawable/rounded_corner_white"
+        style="@style/LoginButton"
+        />
+
+    <Button
+        android:id="@+id/btn_already_member"
+        android:layout_below="@id/btn_reg_reg"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:text="Already a member? Log in."
+        android:textAllCaps="false"
+        android:layout_centerHorizontal="true"
+        />
+
+
+</RelativeLayout>

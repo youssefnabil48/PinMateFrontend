@@ -43,6 +43,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        // to display icons only
         return null;
     }
 }

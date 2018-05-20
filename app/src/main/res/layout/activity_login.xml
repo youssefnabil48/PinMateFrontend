@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_1"
+    tools:context="com.example.saraelsheemi.pinmate.views.Login">
+
+ <RelativeLayout
+     android:id="@+id/relative_logo"
+     android:layout_marginTop="100dp"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="100dp"
+        android:layout_marginStart="30dp"
+        android:layout_height="100dp" />
+    <TextView
+        android:id="@+id/txt_appname"
+        style="@style/LogoArea"
+        android:layout_toEndOf="@id/img_logo" />
+</RelativeLayout>
+
+
+
+    <EditText
+        android:id="@+id/edt_email_reg"
+        android:layout_marginTop="30dp"
+        android:inputType="textEmailAddress"
+        android:layout_below="@id/relative_logo"
+        android:hint="Email"
+        style="@style/EditText"
+    />
+    <ImageView
+        android:id="@+id/img_email"
+        android:src="@drawable/baseline_perm_identity_white_24"
+        android:layout_alignTop="@id/edt_email_reg"
+        android:layout_marginTop="8dp"
+        android:layout_alignStart="@id/edt_email_reg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/edt_password_reg"
+        style="@style/EditText"
+
+        android:layout_below="@id/edt_email_reg"
+        android:inputType="textPassword"
+        android:hint="Password"
+        />
+    <ImageView
+        android:id="@+id/img_password"
+        android:src="@drawable/ic_action_secure"
+        android:layout_alignTop="@id/edt_password_reg"
+        android:layout_marginTop="4dp"
+        android:layout_alignStart="@id/edt_password_reg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/chk_remember"
+        android:text="Remember me"
+        android:buttonTint="@android:color/white"
+        android:textColor="@android:color/white"
+        android:layout_alignStart="@id/edt_password_reg"
+        android:layout_below="@id/edt_password_reg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/chk_remember"
+        android:text="Log In"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/colorPrimary"
+        android:background="@drawable/rounded_corner_white"
+        style="@style/LoginButton"
+        />
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_below="@id/btn_login"
+        android:text="Register"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        style="@style/LoginButton"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/round_corner" />
+
+
+</RelativeLayout>

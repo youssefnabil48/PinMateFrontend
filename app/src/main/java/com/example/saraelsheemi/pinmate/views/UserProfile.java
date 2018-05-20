@@ -14,6 +14,7 @@ public class UserProfile extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle("Home");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 }
