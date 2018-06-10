@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "340522974801",
+    "firebase_url": "https://pinmate-55868.firebaseio.com",
+    "project_id": "pinmate-55868",
+    "storage_bucket": "pinmate-55868.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340522974801:android:b0c2c29d0f6bbaf5",
+        "android_client_info": {
+          "package_name": "com.example.saraelsheemi.pinmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340522974801-hn3igc008vu5h16s4tlimi6u1s1gfrh3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.saraelsheemi.pinmate",
+            "certificate_hash": "8a0458df932462f2e1c28d37c4c79947696fbcc0"
+          }
+        },
+        {
+          "client_id": "340522974801-02k550rdvl08c17casn0kp2bv00fr8so.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "340522974801-02k550rdvl08c17casn0kp2bv00fr8so.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwq3IyYqxPNKoa_iyXKflNpbw3pGX08tM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340522974801-02k550rdvl08c17casn0kp2bv00fr8so.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

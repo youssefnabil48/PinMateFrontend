@@ -23,7 +23,7 @@ public class Login extends AppCompatActivity {
 
     private void init() {
         logo = (ImageView) findViewById(R.id.img_logo);
-        Picasso.with(getApplicationContext()).load(R.drawable.image).resize(100,100).into(logo);
+        Picasso.get().load(R.drawable.image).resize(100,100).into(logo);
         signUp = (Button) findViewById(R.id.btn_register);
         signIn = (Button) findViewById(R.id.btn_login);
         final Intent intent1 = new Intent(this, Home.class);

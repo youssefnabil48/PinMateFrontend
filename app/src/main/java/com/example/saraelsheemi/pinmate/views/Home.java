@@ -10,8 +10,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.firebase.messaging.RemoteMessage;
+import com.pusher.pushnotifications.PushNotificationReceivedListener;
+import com.pusher.pushnotifications.PushNotifications;
 
 import com.example.saraelsheemi.pinmate.R;
 
@@ -22,6 +27,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().getStringExtra("isMyPushNotification") != null) {
+            // This means that the onCreate is the result of a notification being opened
+            Log.i("MyActivity", "Notification incoming!");
+        }
+        PushNotifications.start(getApplicationContext(), "27e97326-f21c-4a92-8713-1dda5cbc88e3");
+        PushNotifications.subscribe("hello");
         setContentView(R.layout.activity_home);
         setTitle("Home");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -48,7 +59,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_settings_drawer, menu);
+    //    getMenuInflater().inflate(R.menu.activity_settings_drawer, menu);
         return true;
     }
 
@@ -99,4 +110,21 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+            @Override
+            public void onMessageReceived(RemoteMessage remoteMessage) {
+                String messagePayload = remoteMessage.getData().get("myMessagePayload");
+                if (messagePayload == null) {
+                    // Message payload was not set for this notification
+                    Log.i("MyActivity", "Payload was missing");
+                } else {
+                    Log.i("MyActivity", messagePayload);
+                    // Now update the UI based on your message payload!
+                }
+            }
+        });
+    }
 }
