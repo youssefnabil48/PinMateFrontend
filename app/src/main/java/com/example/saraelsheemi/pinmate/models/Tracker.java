@@ -1,15 +1,22 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Sara ElSheemi on 5/12/2018.
  */
 
 public class Tracker {
 
+    @SerializedName("_id")
     private String id;
+    @SerializedName("source")
     private String source;
+    @SerializedName("destination")
     private String destination;
+    @SerializedName("created_at")
     private String created_at;
+    @SerializedName("eta")
     private int ETA;
 
     public String getSource() {

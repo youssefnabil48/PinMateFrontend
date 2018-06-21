@@ -1,96 +1,84 @@
 package com.example.saraelsheemi.pinmate.controllers;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONObject;
+import com.example.saraelsheemi.pinmate.models.MResponse;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
 
-/**
- * Created by Sara ElSheemi on 6/3/2018.
- */
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class AsynchTaskPost extends AsyncTask<String, Void, String> {
+    private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private String jsonData;
+    private EventListener<String> mCallBack;
+    private Context mContext;
+    public Exception mException;
 
 
-    // This is the JSON body of the post
-    JSONObject postData;
-    String result;
-    String inputLine;
-
-    public AsynchTaskPost(Map<String, String> postData) {
-        if (postData != null) {
-            this.postData = new JSONObject(postData);
-        }
+    public AsynchTaskPost(String jsonData, Context mContext, EventListener mCallBack) {
+        this.jsonData = jsonData;
+        this.mContext = mContext;
+        this.mCallBack = mCallBack;
     }
 
     @Override
-    protected String doInBackground(String... params) {
-
+    protected String doInBackground(String... strings) {
+        HttpURLConnection connection = null;
         try {
+            URL url = new URL(strings[0]);
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = RequestBody.create(JSON, jsonData);
 
-            URL url = new URL(params[0]);
-        // Create the connection
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Response response = client.newCall(request).execute();
+            Log.e("response status",String.valueOf(response.code()));
+        //   Log.e("response status",response.body().toString());
 
+//            Gson gson = new Gson();
+//            MResponse mResponse = gson.fromJson(response.body().string(),MResponse.class);
+//            Log.e("mresponse",mResponse.getMessage());
 
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
+            return response.body().string();
 
-        connection.setRequestProperty("Content-Type", "application/json");
-
-        connection.setRequestMethod("POST");
-
-        // OPTIONAL - Sets an authorization header
-        connection.setRequestProperty("Authorization", "someAuthString");
-
-        // Send the post body
-        if (this.postData != null) {
-            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-            writer.write(postData.toString());
-            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mException = e;
+        } finally {
+            if (connection != null)
+                connection.disconnect();
         }
-        int statusCode = connection.getResponseCode();
 
-        if (statusCode ==  200) {
-            //Create a new InputStreamReader
-            InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-            //Create a new buffered reader and String Builder
-            BufferedReader reader = new BufferedReader(streamReader);
-            StringBuilder stringBuilder = new StringBuilder();
-
-            //Check if the line we are reading is not null
-            while((inputLine = reader.readLine()) != null){
-                stringBuilder.append(inputLine);
-            }
-            //Close our InputStream and Buffered reader
-            reader.close();
-            streamReader.close();
-            //Set our result equal to our stringBuilder
-            result = stringBuilder.toString();
-        }
-        else {
-            // Status code is not 200
-            // Do something to handle the error
-        }
-    } catch (Exception e) {
-        Log.d("EXCEPTION", e.getLocalizedMessage());
+        return null;
     }
-        return result;
-    }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+    protected void onPostExecute(String response) {
+        if (mCallBack != null) {
+            if (mException == null) {
+                mCallBack.onSuccess(response);
+            } else {
+                mCallBack.onFailure(mException);
+            }
+        }
     }
+
 }

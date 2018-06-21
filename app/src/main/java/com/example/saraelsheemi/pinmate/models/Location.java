@@ -1,12 +1,16 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Sara ElSheemi on 5/12/2018.
  */
 
 public class Location {
 
+    @SerializedName("latitude")
     private String latitude;
+    @SerializedName("longitude")
     private String longitude;
 
 

@@ -1,15 +1,22 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Sara ElSheemi on 5/12/2018.
  */
 
 public class Event {
 
+    @SerializedName("_id")
     private String id;
+    @SerializedName("description")
     private String description;
+    @SerializedName("name")
     private String name;
+    @SerializedName("start_date")
     private String start_date;
+    @SerializedName("end_date")
     private String end_date;
 
     public String getDescription() {

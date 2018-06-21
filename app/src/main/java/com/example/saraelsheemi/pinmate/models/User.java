@@ -1,34 +1,57 @@
 package com.example.saraelsheemi.pinmate.models;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 /**
  * Created by Sara ElSheemi on 5/12/2018.
  */
 
+//@SerializedName tells the json parser which element in the response matches to which attribute in the model
 
 
 public class User {
 
+    @SerializedName("_id")
     private String id;
+    @SerializedName("token")
+    private String user_token;
+    @SerializedName("name")
     private String name;
-    private String username;
+    @SerializedName("email")
     private String email;
+    @SerializedName("password")
     private String password;
+    @SerializedName("gender")
     private String gender;
+    @SerializedName("birth_date")
     private String birth_date;
+    @SerializedName("picture")
     private String picture;
+    @SerializedName("avatar")
     private String avatar;
+    @SerializedName("mobile_number")
     private String mobile_number;
-    private Location home_location;
+    @SerializedName("home_location")
+    private String home_location;
+    @SerializedName("location")
     private Location current_location;
     private Tracker tracker;
-    private ArrayList<Place> favoritePlaces;
+    @SerializedName("favorite_places")
+    private ArrayList<String> favoritePlaces;
+    @SerializedName("email_verification_tkn")
     private String email_verf_token;
-    private ArrayList<User> friendList;
-    private ArrayList<User> blockedList;
+    @SerializedName("tracker_id")
+    private String tracker_id;
+    @SerializedName("friends")
+    private ArrayList<String> friendList;
+    @SerializedName("blocks")
+    private ArrayList<String> blockedList;
+    @SerializedName("visit")
     private ArrayList<VisitedPlace> visitedPlaces;
+    @SerializedName("views")
     private ArrayList<UserViewer> viewers;
-    private ArrayList<Story> stories;
+
 
     public String getName() {
         return name;
@@ -36,14 +59,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
@@ -102,11 +117,11 @@ public class User {
         this.mobile_number = mobile_number;
     }
 
-    public Location getHome_location() {
+    public String getHome_location() {
         return home_location;
     }
 
-    public void setHome_location(Location home_location) {
+    public void setHome_location(String home_location) {
         this.home_location = home_location;
     }
 
@@ -118,11 +133,11 @@ public class User {
         this.current_location = current_location;
     }
 
-    public ArrayList<Place> getFavoritePlaces() {
+    public ArrayList<String> getFavoritePlaces() {
         return favoritePlaces;
     }
 
-    public void setFavoritePlaces(ArrayList<Place> favoritePlaces) {
+    public void setFavoritePlaces(ArrayList<String> favoritePlaces) {
         this.favoritePlaces = favoritePlaces;
     }
 
@@ -132,22 +147,6 @@ public class User {
 
     public void setEmail_verf_token(String email_verf_token) {
         this.email_verf_token = email_verf_token;
-    }
-
-    public ArrayList<User> getFriendList() {
-        return friendList;
-    }
-
-    public void setFriendList(ArrayList<User> friendList) {
-        this.friendList = friendList;
-    }
-
-    public ArrayList<User> getBlockedList() {
-        return blockedList;
-    }
-
-    public void setBlockedList(ArrayList<User> blockedList) {
-        this.blockedList = blockedList;
     }
 
     public ArrayList<VisitedPlace> getVisitedPlaces() {
@@ -166,13 +165,6 @@ public class User {
         this.viewers = viewers;
     }
 
-    public ArrayList<Story> getStories() {
-        return stories;
-    }
-
-    public void setStories(ArrayList<Story> stories) {
-        this.stories = stories;
-    }
 
     public Tracker getTracker() {
         return tracker;
@@ -188,5 +180,37 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public ArrayList<String> getFriendList() {
+        return friendList;
+    }
+
+    public void setFriendList(ArrayList<String> friendList) {
+        this.friendList = friendList;
+    }
+
+    public ArrayList<String> getBlockedList() {
+        return blockedList;
+    }
+
+    public void setBlockedList(ArrayList<String> blockedList) {
+        this.blockedList = blockedList;
+    }
+
+    public String getUser_token() {
+        return user_token;
+    }
+
+    public void setUser_token(String user_token) {
+        this.user_token = user_token;
+    }
+
+    public String getTracker_id() {
+        return tracker_id;
+    }
+
+    public void setTracker_id(String tracker_id) {
+        this.tracker_id = tracker_id;
     }
 }

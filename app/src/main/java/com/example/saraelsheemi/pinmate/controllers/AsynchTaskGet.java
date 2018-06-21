@@ -1,8 +1,12 @@
 package com.example.saraelsheemi.pinmate.controllers;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.saraelsheemi.pinmate.models.MResponse;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -19,15 +23,25 @@ import java.net.URL;
  * Created by Sara ElSheemi on 6/3/2018.
  */
 
-public class AsynchTaskGet extends AsyncTask<String, Void, String> {
+public class AsynchTaskGet extends AsyncTask<String, Void, MResponse> {
     public static final String REQUEST_METHOD = "GET";
     public static final int READ_TIMEOUT = 15000;
     public static final int CONNECTION_TIMEOUT = 15000;
+    private EventListener<MResponse> mCallBack;
+    private Context mContext;
+    public Exception mException;
+
+    public AsynchTaskGet(Context mContext, EventListener<MResponse> mCallBack) {
+        this.mCallBack = mCallBack;
+        this.mContext = mContext;
+    }
+
     @Override
-    protected String doInBackground(String... params) {
+    protected MResponse doInBackground(String... params) {
         String stringUrl = params[0];
         String result;
         String inputLine;
+        MResponse mResponse;
         try {
             //Create a URL object holding our url
             URL myUrl = new URL(stringUrl);
@@ -57,12 +71,36 @@ public class AsynchTaskGet extends AsyncTask<String, Void, String> {
             streamReader.close();
             //Set our result equal to our stringBuilder
             result = stringBuilder.toString();
+            Gson gson = new Gson();
+            mResponse = gson.fromJson(result,MResponse.class);
+            
+          //  Log.e("mresponse",mResponse);
+            return mResponse;
+
+
         }
         catch(IOException e){
             e.printStackTrace();
+            mException = e;
             result = null;
         }
-        return result;
+        return null;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
+
+    @Override
+    protected void onPostExecute(MResponse s) {
+        if (mCallBack != null) {
+            if (mException == null) {
+                mCallBack.onSuccess(s);
+            } else {
+                mCallBack.onFailure(mException);
+            }
+        }
     }
 
 }

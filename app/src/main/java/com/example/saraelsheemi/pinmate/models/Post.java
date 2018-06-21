@@ -1,5 +1,7 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 /**
@@ -8,10 +10,15 @@ import java.util.ArrayList;
 
 public class Post {
 
+    @SerializedName("_id")
     private String id;
+    @SerializedName("user")
     private User user;
+    @SerializedName("content")
     private String content;
+    @SerializedName("created_at")
     private String created_at;
+    @SerializedName("likes")
     private ArrayList<Like> likes;
 
 

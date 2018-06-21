@@ -1,24 +1,24 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Sara ElSheemi on 5/12/2018.
  */
 
 public class Review {
 
+    @SerializedName("_id")
     private String id;
-    private User user;
+    @SerializedName("user_id")
+    private String user_id;
+    @SerializedName("content")
     private String content;
+    @SerializedName("created_at")
     private String created_at;
+    @SerializedName("rating")
     private int rating;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public String getContent() {
         return content;
@@ -50,5 +50,13 @@ public class Review {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

@@ -35,7 +35,7 @@
         />
 
     <EditText
-        android:id="@+id/edt_email_reg"
+        android:id="@+id/edt_email_login"
         style="@style/EditText"
         android:inputType="textEmailAddress"
         android:layout_below="@id/edt_username_reg"
@@ -43,9 +43,9 @@
         />
 
     <EditText
-        android:id="@+id/edt_password_reg"
+        android:id="@+id/edt_password_login"
         style="@style/EditText"
-        android:layout_below="@id/edt_email_reg"
+        android:layout_below="@id/edt_email_login"
         android:inputType="textPassword"
         android:hint="Password"
 
@@ -53,7 +53,7 @@
     <EditText
         android:id="@+id/edt_password_confirm"
         style="@style/EditText"
-        android:layout_below="@id/edt_password_reg"
+        android:layout_below="@id/edt_password_login"
         android:inputType="textPassword"
         android:hint="Confirm Password"/>
 
@@ -68,12 +68,14 @@
         android:layout_height="wrap_content">
 
         <RadioButton
+            android:id="@+id/radio_male"
             android:buttonTint="@android:color/white"
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Male"/>
         <RadioButton
+            android:id="@+id/radio_female"
             android:buttonTint="@android:color/white"
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"

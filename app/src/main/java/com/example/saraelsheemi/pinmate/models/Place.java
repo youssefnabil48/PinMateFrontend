@@ -1,5 +1,7 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 /**
@@ -8,18 +10,32 @@ import java.util.ArrayList;
 
 public class Place {
 
+    @SerializedName("_id")
     private String id;
+    @SerializedName("name")
     private String name;
+    @SerializedName("avatar")
     private String avatar;
+    @SerializedName("picture")
     private String picture;
+    @SerializedName("description")
     private String decsription;
+    @SerializedName("location")
     private Location location;
+    @SerializedName("gallery")
     private ArrayList<String> gallery;
+    @SerializedName("mobile_number")
     private String mobile_number;
+    @SerializedName("managed_by")
     private User manager;
+    @SerializedName("events")
     private ArrayList<Event> events;
+    @SerializedName("posts")
     private ArrayList<Post> posts;
+    @SerializedName("reviews")
     private ArrayList<Review> reviews;
+    @SerializedName("story_id")
+    private ArrayList<Story> stories;
 
     public String getName() {
         return name;
@@ -115,5 +131,13 @@ public class Place {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public ArrayList<Story> getStories() {
+        return stories;
+    }
+
+    public void setStories(ArrayList<Story> stories) {
+        this.stories = stories;
     }
 }
