@@ -8,12 +8,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.saraelsheemi.pinmate.R;
+
 public class Chats extends Fragment {
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.activity_chats, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("Chats");
+    }
+
+    public void init(View view){
+
+
+
     }
 }
