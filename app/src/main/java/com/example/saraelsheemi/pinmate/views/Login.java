@@ -136,13 +136,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         user_token = jsonObject.getJSONObject("data").getString("token");
                         editor.putString("user_token", user_token);
                         editor.apply();
-                        showMessage(user_token);
                         Log.e("user_token", sharedPreferences.getString("user_token", ""));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     Intent intent = new Intent(getApplicationContext(), Home.class);
-                    intent.putExtra("user_token",user_token);
                     startActivity(intent);
 
                 } else if (ok && message.contains("no user")) {
