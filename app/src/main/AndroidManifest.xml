@@ -29,20 +29,24 @@
         android:roundIcon="@drawable/image"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.Login">
-            <intent-filter>
+      <activity android:name=".views.Login">
+      <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+     
         </activity>
         <activity android:name=".views.Register" />
+      
         <activity
             android:name=".views.Home"
             android:theme="@style/AppTheme">
 
-        </activity>
-
+        <activity>
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme">
+      
         <service android:name=".controllers.NotificationsMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
