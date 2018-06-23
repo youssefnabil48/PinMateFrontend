@@ -18,18 +18,25 @@ import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
+import com.example.saraelsheemi.pinmate.controllers.OnlineUsersAdapter;
 import com.example.saraelsheemi.pinmate.models.MResponse;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Chats extends Fragment {
 
     ListView onlineUsersListView;
+    private Gson gson = new Gson();
+    User user = new User();
+    ArrayList<User> users = new ArrayList<>();
 
     @Nullable
     @Override
@@ -42,20 +49,42 @@ public class Chats extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Online Users");
         init(view);
+        getOnlineUsers(view);
     }
 
-    private void getOnlineUsers(){
-        AsynchTaskGet asyncGetOnlineUsers = new AsynchTaskGet(getContext(), new EventListener<MResponse>() {
+    private void getOnlineUsers(final View view) {
+        AsynchTaskGet asyncGetOnlineUsers = new AsynchTaskGet(getContext(), new EventListener<String>() {
             @Override
-            public void onSuccess(MResponse object) {
+            public void onSuccess(String object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(object);
+                    JSONArray dataArray = jsonObject.getJSONArray("data");
+                    if (dataArray.length() > 0) {
+                        for (int i = 0; i< dataArray.length(); i++){
+                            user = gson.fromJson(jsonObject.getJSONArray("data").getJSONObject(i).toString(),User.class);
+                            users.add(user);
+                        }
+                    }
+                    // Create an {@link AndroidFlavorAdapter}, whose data source is a list of
+                    // {@link AndroidFlavor}s. The adapter knows how to create list item views for each item
+                    // in the list.
+                    OnlineUsersAdapter onlineUsersAdapter = new OnlineUsersAdapter(getActivity(), users);
 
+                    // Get a reference to the ListView, and attach the adapter to the listView.
+                    ListView listView = view.findViewById(R.id.onlineUsersContainer);
+                    listView.setAdapter(onlineUsersAdapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.e("response", object);
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                showMessage("Internal error. Please retry.");
             }
         });
+        asyncGetOnlineUsers.execute(Constants.GET_ALL_USERS);
     }
     public void init(View view){
         onlineUsersListView = (ListView) view.findViewById(R.id.onlineUsersContainer);
