@@ -42,6 +42,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
 
     private void init(View view) {
         name = view.findViewById(R.id.txt_user_name);
+
         email = view.findViewById(R.id.txt_user_email);
         password = view.findViewById(R.id.txt_user_password);
         birthDate = view.findViewById(R.id.txt_user_birthday);

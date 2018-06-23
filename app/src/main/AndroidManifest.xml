@@ -41,11 +41,8 @@
       
         <activity
             android:name=".views.Home"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"/>
 
-        <activity>
-            android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme">
       
         <service android:name=".controllers.NotificationsMessagingService">
             <intent-filter>
