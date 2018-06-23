@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Sara ElSheemi on 5/12/2018.
  */
 
-public class Location {
+public class MLocation {
 
     @SerializedName("latitude")
     private String latitude;

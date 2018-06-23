@@ -41,7 +41,7 @@ public class AsynchTaskGet extends AsyncTask<String, Void, String> {
         String stringUrl = params[0];
         String result;
         String inputLine;
-        MResponse mResponse;
+
         try {
             //Create a URL object holding our url
             URL myUrl = new URL(stringUrl);
@@ -72,7 +72,6 @@ public class AsynchTaskGet extends AsyncTask<String, Void, String> {
             //Set our result equal to our stringBuilder
             result = stringBuilder.toString();
 
-            
             return result;
 
 
