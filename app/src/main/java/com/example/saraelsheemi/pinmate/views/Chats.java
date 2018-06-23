@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
@@ -31,12 +33,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Chats extends Fragment {
+public class Chats extends Fragment implements AdapterView.OnItemClickListener{
 
-    ListView onlineUsersListView;
+    private ListView onlineUsersListView;
     private Gson gson = new Gson();
-    User user = new User();
-    ArrayList<User> users = new ArrayList<>();
+    private User user = new User();
+    private ArrayList<User> users = new ArrayList<>();
 
     @Nullable
     @Override
@@ -53,7 +55,7 @@ public class Chats extends Fragment {
     }
 
     private void getOnlineUsers(final View view) {
-        AsynchTaskGet asyncGetOnlineUsers = new AsynchTaskGet(getContext(), new EventListener<String>() {
+        final AsynchTaskGet asyncGetOnlineUsers = new AsynchTaskGet(getContext(), new EventListener<String>() {
             @Override
             public void onSuccess(String object) {
                 try {
@@ -82,12 +84,15 @@ public class Chats extends Fragment {
             @Override
             public void onFailure(Exception e) {
                 showMessage("Internal error. Please retry.");
+
             }
         });
         asyncGetOnlineUsers.execute(Constants.GET_ALL_USERS);
     }
-    public void init(View view){
+
+    private void init(View view){
         onlineUsersListView = (ListView) view.findViewById(R.id.onlineUsersContainer);
+        onlineUsersListView.setOnItemClickListener(this);
     }
 
     private void showMessage(String message) {
@@ -95,4 +100,11 @@ public class Chats extends Fragment {
     }
 
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        TextView idTextView = (TextView) view.findViewById(R.id.id);
+        Intent intent = new Intent(getActivity(), SingleChat.class);
+        intent.putExtra("userId", idTextView.getText());
+        startActivity(intent);
+    }
 }
