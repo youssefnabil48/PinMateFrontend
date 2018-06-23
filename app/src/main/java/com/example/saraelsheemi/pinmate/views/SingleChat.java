@@ -1,6 +1,6 @@
 package com.example.saraelsheemi.pinmate.views;
 
-import android.content.Intent;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +10,11 @@ import android.widget.EditText;
 
 import com.example.saraelsheemi.pinmate.R;
 
+import com.example.saraelsheemi.pinmate.models.User;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.gson.Gson;
+import android.content.SharedPreferences;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,8 +22,14 @@ import org.json.JSONObject;
 import java.net.URISyntaxException;
 
 public class SingleChat extends AppCompatActivity implements View.OnClickListener {
-    private String userId;
+    private String receiverId;
     private Socket mSocket;
+    EditText editText;
+    Button sendButton;
+    SharedPreferences sharedPreferences;
+    Gson gson;
+    User loggedInUser;
+    SharedPreferences.Editor editor;
 
 
     @Override
@@ -31,18 +40,26 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
     }
 
     private void init(){
-        EditText editText = (EditText) findViewById(R.id.edittext_chatbox);
-        Button sendButton = (Button) findViewById(R.id.button_chatbox_send);
+        editText = findViewById(R.id.edittext_chatbox);
+        sendButton = findViewById(R.id.button_chatbox_send);
         sendButton.setOnClickListener(this);
-        this.userId = getIntent().getStringExtra("userId");
+        this.receiverId = getIntent().getStringExtra("userId");
         try {
             mSocket = IO.socket("http://192.168.1.104:4000");
-        } catch (URISyntaxException e) {}
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         mSocket.connect();
         JSONObject message = new JSONObject();
+        sharedPreferences = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+        String json = sharedPreferences.getString("user_info","");
+        gson = new Gson();
+        loggedInUser = gson.fromJson(json,User.class);
         try {
-            message.put("email", "user1@user.com");
-            message.put("userid", "5b2ce17913c7ef00147e5aa9");
+            message.put("email", loggedInUser.getEmail());
+            message.put("userid", loggedInUser.getId());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -53,7 +70,16 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_chatbox_send: {
-                // send message to user
+                String messageContent = editText.getText().toString();
+                JSONObject message = new JSONObject();
+                try {
+                    message.put("receiverId", receiverId);
+                    message.put("message", messageContent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mSocket.emit("message", message);
+                editText.setText("");
             }
             break;
         }
