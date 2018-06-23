@@ -35,7 +35,7 @@ public class User {
     @SerializedName("home_location")
     private String home_location;
     @SerializedName("location")
-    private Location current_location;
+    private MLocation current_location;
     private Tracker tracker;
     @SerializedName("favorite_places")
     private ArrayList<String> favoritePlaces;
@@ -125,11 +125,11 @@ public class User {
         this.home_location = home_location;
     }
 
-    public Location getCurrent_location() {
+    public MLocation getCurrent_location() {
         return current_location;
     }
 
-    public void setCurrent_location(Location current_location) {
+    public void setCurrent_location(MLocation current_location) {
         this.current_location = current_location;
     }
 
