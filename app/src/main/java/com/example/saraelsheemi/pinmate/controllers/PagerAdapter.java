@@ -5,11 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.saraelsheemi.pinmate.views.Chats;
-import com.example.saraelsheemi.pinmate.views.Map;
-import com.example.saraelsheemi.pinmate.views.Notifications;
-import com.example.saraelsheemi.pinmate.views.UserProfile;
-
 import java.util.ArrayList;
 import java.util.List;
 

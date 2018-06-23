@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -21,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.PagerAdapter;
 import com.google.firebase.messaging.RemoteMessage;
@@ -132,6 +132,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
+        FragmentActivity fragmentActivity=null;
 
         int id = item.getItemId();
 
@@ -143,6 +144,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 //            startActivity(intent);
         }
         else if (id == R.id.nav_trackers) {
+
+        }else if (id == R.id.nav_map) {
+                fragment = new MapsFragment();
 
         } else if (id == R.id.nav_settings) {
             fragment = new AccountSettingsFragment();

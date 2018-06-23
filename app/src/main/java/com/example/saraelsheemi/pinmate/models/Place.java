@@ -21,7 +21,7 @@ public class Place {
     @SerializedName("description")
     private String decsription;
     @SerializedName("location")
-    private Location location;
+    private MLocation location;
     @SerializedName("gallery")
     private ArrayList<String> gallery;
     @SerializedName("mobile_number")
@@ -69,11 +69,11 @@ public class Place {
         this.decsription = decsription;
     }
 
-    public Location getLocation() {
+    public MLocation getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(MLocation location) {
         this.location = location;
     }
 
