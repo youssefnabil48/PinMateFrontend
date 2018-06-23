@@ -80,7 +80,7 @@ public class UserProfile extends Fragment{
     private void setUpViewPager(ViewPager viewPager){
         PagerAdapter adapter = new PagerAdapter(getFragmentManager(),getContext());
         adapter.addFragment(new UserInfoFragment(),"one");
-        adapter.addFragment(new Chats(),"one");
+        adapter.addFragment(new FriendListFragment(),"one");
         adapter.addFragment(new Notifications(),"one");
         viewPager.setAdapter(adapter);
     }
