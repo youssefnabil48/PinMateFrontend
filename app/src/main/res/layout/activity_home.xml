@@ -8,18 +8,32 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+
     <!-- This LinearLayout represents the contents of the screen  -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- The ActionBar displayed at the top -->
+         The ActionBar displayed at the top
         <include
             layout="@layout/activity_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!--<android.support.design.widget.TabLayout-->
+            <!--android:id="@+id/tabs"-->
+            <!--android:background="@color/colorPrimary"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:tabMode="fixed"-->
+            <!--app:tabGravity="fill"/>-->
+
+        <!--<android.support.v4.view.ViewPager-->
+            <!--android:id="@+id/viewpager"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"  />-->
 
 
         <!-- The main content view where fragments are loaded -->
@@ -27,7 +41,8 @@
             android:id="@+id/content_frame"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+        </FrameLayout>
     </LinearLayout>
 
 
