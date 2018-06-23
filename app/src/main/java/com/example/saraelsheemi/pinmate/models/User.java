@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class User {
 
+    private static User userInstance = null;
     @SerializedName("_id")
     private String id;
     @SerializedName("token")
@@ -52,6 +53,14 @@ public class User {
     @SerializedName("views")
     private ArrayList<UserViewer> viewers;
 
+    public static User getInstance()
+    {
+        if (userInstance == null)
+        {
+            userInstance = new User();
+        }
+        return userInstance;
+    }
 
     public String getName() {
         return name;

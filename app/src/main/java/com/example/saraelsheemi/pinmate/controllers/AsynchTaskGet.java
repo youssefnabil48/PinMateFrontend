@@ -27,11 +27,11 @@ public class AsynchTaskGet extends AsyncTask<String, Void, String> {
     public static final String REQUEST_METHOD = "GET";
     public static final int READ_TIMEOUT = 15000;
     public static final int CONNECTION_TIMEOUT = 15000;
-    private EventListener<MResponse> mCallBack;
+    private EventListener<String> mCallBack;
     private Context mContext;
     public Exception mException;
 
-    public AsynchTaskGet(Context mContext, EventListener<MResponse> mCallBack) {
+    public AsynchTaskGet(Context mContext, EventListener<String> mCallBack) {
         this.mCallBack = mCallBack;
         this.mContext = mContext;
     }
@@ -72,7 +72,7 @@ public class AsynchTaskGet extends AsyncTask<String, Void, String> {
             //Set our result equal to our stringBuilder
             result = stringBuilder.toString();
 
-            return result.toString();
+            return result;
 
 
         }

@@ -29,23 +29,21 @@ public class Main extends Fragment {
     }
     private void init(View view) {
 
-        viewPager =  (ViewPager) view.findViewById(R.id.viewpager);
+        viewPager =   view.findViewById(R.id.viewpager);
         setUpViewPager(viewPager);
-        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        tabLayout =  view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setUpTabIcons();
 
     }
     private void setUpTabIcons(){
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_person_outline_white_48dp);
-//        tabLayout.getTabAt(1).setIcon(R.drawable.ic_place_white_48dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_chat_white_48dp);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_plus_one_white_48dp);
     }
     private void setUpViewPager(ViewPager viewPager){
         PagerAdapter adapter = new PagerAdapter(getFragmentManager(),getContext());
         adapter.addFragment(new UserProfile(),"one");
-//        adapter.addFragment(new Map(),"one");
         adapter.addFragment(new Chats(),"one");
         adapter.addFragment(new Notifications(),"one");
         viewPager.setAdapter(adapter);

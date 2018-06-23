@@ -386,7 +386,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[],
-                                            int[] grantResults) {
+                                           int[] grantResults) {
         mLocationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
