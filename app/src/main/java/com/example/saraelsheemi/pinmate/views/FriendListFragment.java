@@ -52,6 +52,7 @@ public class FriendListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         init(view);
+        getFriendsIds();
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -63,20 +64,11 @@ public class FriendListFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressbar_loading);
         listViewUsers = view.findViewById(R.id.listView_users);
         listViewUsers.setOnItemClickListener(onItemClickListener);
-        userArrayAdapter = new FriendListAdapter(getContext(), R.layout.activity_friends_list_item, friendsList);
+        userArrayAdapter = new FriendListAdapter(getContext(), R.layout.activity_friends_list_item, new ArrayList<User>());
         listViewUsers.setAdapter(userArrayAdapter);
-        populateFriendsArrayListAdapter(friendsList);
-
-
-        Log.e("userarray", friendsList.size() + "");
-
-        //  populateFriendsArrayListAdapter(friendsList);
 
     }
 
-    private void populateListView() {
-
-    }
 
     private void getFriendsIds() {
         String json = sharedPreferences.getString("user_info", "");
@@ -112,11 +104,12 @@ public class FriendListFragment extends Fragment {
                     } else if (ok && message.contains("user found")) {
                         try {
                             user1 = gson.fromJson(jsonObject.getString("data"), User.class);
+                            friendsList = new ArrayList<>();
+                            friendsList.add(user1);
+                            populateFriendsArrayListAdapter(friendsList);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        friendsList.add(user1);
-                      //  populateFriendsArrayListAdapter(friendsList);
                     }
                 }
 
@@ -127,6 +120,7 @@ public class FriendListFragment extends Fragment {
             });
             asynchTaskGet.execute(Constants.GET_USER + friendsIds.get(i));
         }
+
 
 
     }

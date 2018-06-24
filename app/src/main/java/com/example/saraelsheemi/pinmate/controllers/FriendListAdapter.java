@@ -27,15 +27,9 @@ import java.util.ArrayList;
 
 public class FriendListAdapter extends ArrayAdapter<User> {
 
-    Context context;
-    private int layoutResoureId;
-    public ArrayList<User> userArrayList = null;
 
     public FriendListAdapter(@NonNull Context context, int resource, ArrayList<User> users) {
-        super(context, resource);
-        this.context = context;
-        layoutResoureId = resource;
-        userArrayList = users;
+        super(context, resource,users);
     }
 
     @Override
@@ -44,25 +38,31 @@ public class FriendListAdapter extends ArrayAdapter<User> {
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        final PlaceHolder holder;
+        TextView friendName;
+        ImageView friendPicture;
 
-        if (row == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            row = inflater.inflate(layoutResoureId, parent, false);
-            holder = new PlaceHolder(row);
-            row.setTag(holder);
-
-        } else {
-            holder = (PlaceHolder) row.getTag();
+        //convert view == one row
+        // Check if the existing view is being reused, otherwise inflate the view
+        View listItemView = convertView;
+        if(listItemView == null) {
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.activity_friends_list_item, parent, false);
         }
-        User user = userArrayList.get(position);
-        holder.friendName.setText(user.getName());
-        if(user.getPicture() != null)
-        Picasso.get().load(user.getPicture()).into(holder.friendPicture);
-        Log.e("row",holder.friendName.getText().toString());
 
-        return row;
+
+        friendName = listItemView.findViewById(R.id.txt_friend_nname);
+        friendPicture = listItemView.findViewById(R.id.img_friend);
+
+        User user =getItem(position);
+        friendName.setText(user.getName());
+        if(user.getPicture() != null)
+        Picasso.get().load(user.getPicture()).into(friendPicture);
+        else if(user.getGender().contains("female"))
+            Picasso.get().load(R.drawable.female_user_profile).into(friendPicture);
+        else if(user.getGender().contains("male"))
+            Picasso.get().load(R.drawable.male_user_picture).into(friendPicture);
+
+
+        return listItemView;
     }
 
 
