@@ -11,6 +11,7 @@ public class Constants {
     public static final String REGISTER_URL= BASE_URL_REMOTE + "/api/user/create";
     public static final String LOGIN_URL= BASE_URL_REMOTE + "/api/user/signin";
     public static final String GET_ALL_USERS=BASE_URL_REMOTE + "/api/user/all";
+    public static final String GET_MESSAGES = BASE_URL_REMOTE + "/api/chat";
 
 
 }

@@ -17,11 +17,9 @@ import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.controllers.OnlineUsersAdapter;
-import com.example.saraelsheemi.pinmate.models.MResponse;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -31,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Chats extends Fragment implements AdapterView.OnItemClickListener{
 
@@ -91,7 +88,7 @@ public class Chats extends Fragment implements AdapterView.OnItemClickListener{
     }
 
     private void init(View view){
-        onlineUsersListView = (ListView) view.findViewById(R.id.onlineUsersContainer);
+        onlineUsersListView = view.findViewById(R.id.onlineUsersContainer);
         onlineUsersListView.setOnItemClickListener(this);
     }
 
