@@ -11,6 +11,7 @@ public class Constants {
     public static final String REGISTER_URL= BACKEND_URL + "/user/create";
     public static final String LOGIN_URL= BACKEND_URL + "/user/signin";
     public static final String GET_ALL_USERS= BACKEND_URL + "/user/all";
+    public static final String GET_USER= BACKEND_URL + "/user/";
 
 
 
