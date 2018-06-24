@@ -65,10 +65,6 @@ public class HangoutRequestsFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressbar_loading_hangouts);
         listViewHangouts = view.findViewById(R.id.listView_hangouts);
         listViewHangouts.setOnItemClickListener(onItemClickListener);
-        hangoutRequestArrayAdapter = new HangoutRequestsAdapter(getContext(), R.layout.activity_hangouts_list_item, new ArrayList<HangoutRequest>());
-        listViewHangouts.setAdapter(hangoutRequestArrayAdapter);
-
-        // populateFriendsArrayListAdapter(friendsList);
 
 
     }
@@ -105,13 +101,15 @@ public class HangoutRequestsFragment extends Fragment {
                     try {
                         jsonArray = jsonObject.getJSONArray("data");
 
-                        for(int i=0;i<jsonArray.length() ;i++) {
-                         HangoutRequest hangoutRequest = gson.fromJson( jsonArray.get(0).toString(),HangoutRequest.class);
-
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            HangoutRequest hangoutRequest = gson.fromJson(jsonArray.get(0).toString(), HangoutRequest.class);
                             hangoutRequests.add(hangoutRequest);
                         }
-                        Log.e("request",hangoutRequests.get(0).getTitle());
-                        //  populateFriendsArrayListAdapter(hangoutRequests);
+                        hangoutRequestArrayAdapter = new HangoutRequestsAdapter(getActivity(), R.layout.activity_hangouts_list_item, hangoutRequests);
+                        listViewHangouts.setAdapter(hangoutRequestArrayAdapter);
+                        showMessage(hangoutRequestArrayAdapter.getCount()+"");
+
+                        //   populateFriendsArrayListAdapter(hangoutRequests);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
