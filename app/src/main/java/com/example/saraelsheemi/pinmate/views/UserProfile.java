@@ -1,5 +1,7 @@
 package com.example.saraelsheemi.pinmate.views;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -9,18 +11,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.controllers.PagerAdapter;
+import com.example.saraelsheemi.pinmate.models.User;
+import com.google.gson.Gson;
 
 
 public class UserProfile extends Fragment{
     MLRoundedImageView userPicture;
     ImageView userCoverPicture;
+    TextView userName;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    Gson gson;
+    User user;
 
 
     @Nullable
@@ -38,12 +48,25 @@ public class UserProfile extends Fragment{
 
         userCoverPicture = view.findViewById(R.id.img_userp_cover);
         userPicture = view.findViewById(R.id.imground_user_profile);
-
+        userName = view.findViewById(R.id.txt_user_name);
         viewPager =   view.findViewById(R.id.user_viewpager);
         setUpViewPager(viewPager);
         tabLayout =  view.findViewById(R.id.user_tabs);
         tabLayout.setupWithViewPager(viewPager);
         setUpTabIcons();
+
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+        getUserInfo();
+
+    }
+
+    private void getUserInfo() {
+        String json = sharedPreferences.getString("user_info","");
+        gson = new Gson();
+        user = gson.fromJson(json,User.class);
+        userName.setText(user.getName());
 
     }
     private void showMessage(String message) {
@@ -57,8 +80,8 @@ public class UserProfile extends Fragment{
     private void setUpViewPager(ViewPager viewPager){
         PagerAdapter adapter = new PagerAdapter(getFragmentManager(),getContext());
         adapter.addFragment(new UserInfoFragment(),"one");
-        adapter.addFragment(new Chats(),"one");
-        adapter.addFragment(new Notifications(),"one");
+        adapter.addFragment(new FriendListFragment(),"one");
+        adapter.addFragment(new HangoutRequestsFragment(),"one");
         viewPager.setAdapter(adapter);
     }
 }
