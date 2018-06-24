@@ -1,5 +1,7 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 /**
@@ -8,12 +10,35 @@ import java.util.ArrayList;
 
 public class HangoutRequest {
 
+    @SerializedName("date")
     private String date;
+
+    @SerializedName("description")
     private String description;
+    @SerializedName("start_time")
     private String start_time;
+    @SerializedName("title")
     private String title;
-    private User created_by;
-    private ArrayList<Respondand> responded_by;
+    @SerializedName("created_by")
+    private String created_by_id;
+    @SerializedName("invited")
+    private ArrayList<String> invited;
+
+    public String getCreated_by_id() {
+        return created_by_id;
+    }
+
+    public void setCreated_by_id(String created_by_id) {
+        this.created_by_id = created_by_id;
+    }
+
+    public ArrayList<String> getInvited() {
+        return invited;
+    }
+
+    public void setInvited(ArrayList<String> invited) {
+        this.invited = invited;
+    }
 
     public String getDate() {
         return date;
@@ -47,19 +72,5 @@ public class HangoutRequest {
         this.title = title;
     }
 
-    public User getCreated_by() {
-        return created_by;
-    }
 
-    public void setCreated_by(User created_by) {
-        this.created_by = created_by;
-    }
-
-    public ArrayList<Respondand> getResponded_by() {
-        return responded_by;
-    }
-
-    public void setResponded_by(ArrayList<Respondand> responded_by) {
-        this.responded_by = responded_by;
-    }
 }

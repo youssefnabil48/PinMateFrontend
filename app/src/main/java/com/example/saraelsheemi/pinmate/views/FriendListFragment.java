@@ -56,16 +56,26 @@ public class FriendListFragment extends Fragment {
     }
 
     public void init(View view) {
-        listViewUsers = view.findViewById(R.id.listView_users);
-        userArrayAdapter = new FriendListAdapter(getContext(), R.layout.activity_friends_list_item, new ArrayList<User>());
-        listViewUsers.setOnItemClickListener(onItemClickListener);
-        listViewUsers.setAdapter(userArrayAdapter);
-        progressBar = view.findViewById(R.id.progressbar_loading);
-        friendsList = new ArrayList<>();
         sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
-        getFriendsIds();
+        friendsList = new ArrayList<>();
+        progressBar = view.findViewById(R.id.progressbar_loading);
+        listViewUsers = view.findViewById(R.id.listView_users);
+        listViewUsers.setOnItemClickListener(onItemClickListener);
+        userArrayAdapter = new FriendListAdapter(getContext(), R.layout.activity_friends_list_item, friendsList);
+        listViewUsers.setAdapter(userArrayAdapter);
+        populateFriendsArrayListAdapter(friendsList);
+
+
+        Log.e("userarray", friendsList.size() + "");
+
+        //  populateFriendsArrayListAdapter(friendsList);
+
+    }
+
+    private void populateListView() {
+
     }
 
     private void getFriendsIds() {
@@ -76,6 +86,7 @@ public class FriendListFragment extends Fragment {
 
         if (!friendsIds.isEmpty())
             Log.e("IDS", friendsIds.get(0));
+
 
         //i have friends ids now i have to get each one
         for (int i = 0; i < friendsIds.size(); i++) {
@@ -101,12 +112,14 @@ public class FriendListFragment extends Fragment {
                     } else if (ok && message.contains("user found")) {
                         try {
                             user1 = gson.fromJson(jsonObject.getString("data"), User.class);
-                            friendsList.add(user1);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        friendsList.add(user1);
+                      //  populateFriendsArrayListAdapter(friendsList);
                     }
                 }
+
                 @Override
                 public void onFailure(Exception e) {
                     showMessage("Internal server error.");
@@ -114,7 +127,8 @@ public class FriendListFragment extends Fragment {
             });
             asynchTaskGet.execute(Constants.GET_USER + friendsIds.get(i));
         }
-        populateFriendsArrayListAdapter(friendsList);
+
+
     }
 
     public void populateFriendsArrayListAdapter(ArrayList<User> allFriendsArrayList) {

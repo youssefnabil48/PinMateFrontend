@@ -1,41 +1,33 @@
 package com.example.saraelsheemi.pinmate.controllers;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.models.HangoutRequest;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-
-//set onclicklistener for each row
-
-public class FriendListAdapter extends ArrayAdapter<User> {
+public class HangoutRequestsAdapter extends ArrayAdapter<HangoutRequest> {
 
     Context context;
     private int layoutResoureId;
-    public ArrayList<User> userArrayList = null;
+    public ArrayList<HangoutRequest> hangoutRequests = null;
 
-    public FriendListAdapter(@NonNull Context context, int resource, ArrayList<User> users) {
+    public HangoutRequestsAdapter(@NonNull Context context, int resource, ArrayList<HangoutRequest> hangoutRequestArrayList) {
         super(context, resource);
         this.context = context;
         layoutResoureId = resource;
-        userArrayList = users;
+        hangoutRequests = hangoutRequestArrayList;
     }
 
     @Override
@@ -44,8 +36,9 @@ public class FriendListAdapter extends ArrayAdapter<User> {
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         View row = convertView;
-        final PlaceHolder holder;
+        PlaceHolder holder;
 
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -56,11 +49,13 @@ public class FriendListAdapter extends ArrayAdapter<User> {
         } else {
             holder = (PlaceHolder) row.getTag();
         }
-        User user = userArrayList.get(position);
-        holder.friendName.setText(user.getName());
-        if(user.getPicture() != null)
-        Picasso.get().load(user.getPicture()).into(holder.friendPicture);
-        Log.e("row",holder.friendName.getText().toString());
+        HangoutRequest hangoutRequest = hangoutRequests.get(position);
+        holder.hangoutTitle.setText(hangoutRequest.getTitle());
+        holder.hangoutDescription.setText(hangoutRequest.getDescription());
+        holder.hangoutDate.setText(hangoutRequest.getDate());
+
+
+        Log.e("row",holder.hangoutTitle.getText().toString());
 
         return row;
     }
@@ -69,12 +64,15 @@ public class FriendListAdapter extends ArrayAdapter<User> {
 
 
     private static class PlaceHolder {
-        TextView friendName;
-        ImageView friendPicture;
+        TextView hangoutTitle;
+        TextView hangoutDescription;
+        TextView hangoutDate;
+
 
         public PlaceHolder(View view) {
-            friendName = view.findViewById(R.id.txt_friend_nname);
-            friendPicture = view.findViewById(R.id.img_friend);
+            hangoutTitle = view.findViewById(R.id.txt_hangout_title);
+            hangoutDescription = view.findViewById(R.id.txt_hangout_description);
+            hangoutDate = view.findViewById(R.id.txt_hangout_date);
         }
     }
 
