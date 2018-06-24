@@ -23,41 +23,84 @@ public class HangoutRequestsAdapter extends ArrayAdapter<HangoutRequest> {
     private int layoutResoureId;
     public ArrayList<HangoutRequest> hangoutRequests = null;
 
-    public HangoutRequestsAdapter(@NonNull Context context, int resource, ArrayList<HangoutRequest> hangoutRequestArrayList) {
-        super(context, resource);
+    public HangoutRequestsAdapter(@NonNull Context context, ArrayList<HangoutRequest> hangoutRequestArrayList) {
+
         this.context = context;
-        layoutResoureId = resource;
+
         hangoutRequests = hangoutRequestArrayList;
+    }
+
+    public HangoutRequestsAdapter(@NonNull Context context, int resource, ArrayList<HangoutRequest> hangoutRequests) {
+        super(context, resource);
+        this.hangoutRequests = hangoutRequests;
     }
 
     @Override
     public long getItemId(int position) {
         return super.getItemId(position);
     }
+//    @Override
+//    public View getView(int position, View convertView, ViewGroup parent) {
+//
+//        View row = convertView;
+//        PlaceHolder holder;
+//
+//        if (row == null) {
+//            LayoutInflater inflater = LayoutInflater.from(context);
+//            row = inflater.inflate(layoutResoureId, parent, false);
+//            holder = new PlaceHolder(row);
+//            row.setTag(holder);
+//
+//        } else {
+//            holder = (PlaceHolder) row.getTag();
+//        }
+//        HangoutRequest hangoutRequest = hangoutRequests.get(position);
+//        holder.hangoutTitle.setText(hangoutRequest.getTitle());
+//        holder.hangoutDescription.setText(hangoutRequest.getDescription());
+//        holder.hangoutDate.setText(hangoutRequest.getDate());
+//
+//
+//        Log.e("row",holder.hangoutTitle.getText().toString());
+//
+//        return row;
+//    }
+
+    /**
+     * Provides a view for an AdapterView (ListView, GridView, etc.)
+     *
+     * @param position The position in the list of data that should be displayed in the
+     *                 list item view.
+     * @param convertView The recycled view to populate.
+     * @param parent The parent ViewGroup that is used for inflation.
+     * @return The View for the position in the AdapterView.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        View row = convertView;
-        PlaceHolder holder;
-
-        if (row == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            row = inflater.inflate(layoutResoureId, parent, false);
-            holder = new PlaceHolder(row);
-            row.setTag(holder);
-
-        } else {
-            holder = (PlaceHolder) row.getTag();
+        //convert view == one row
+        // Check if the existing view is being reused, otherwise inflate the view
+        View listItemView = convertView;
+        if(listItemView == null) {
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.activity_hangouts_list_item, parent, false);
         }
-        HangoutRequest hangoutRequest = hangoutRequests.get(position);
-        holder.hangoutTitle.setText(hangoutRequest.getTitle());
-        holder.hangoutDescription.setText(hangoutRequest.getDescription());
-        holder.hangoutDate.setText(hangoutRequest.getDate());
 
+        // Get the {@link AndroidFlavor} object located at this position in the list
+        User user = getItem(position);
 
-        Log.e("row",holder.hangoutTitle.getText().toString());
+        // Find the TextView in the list_item.xml layout with the ID version_name
+        TextView idTextView = (TextView) listItemView.findViewById(R.id.id);
+        // Get the version name from the current AndroidFlavor object and
+        // set this text on the name TextView
+        idTextView.setText(user.getId());
 
-        return row;
+        // Find the TextView in the list_item.xml layout with the ID version_number
+        TextView nameTextView = (TextView) listItemView.findViewById(R.id.name);
+        // Get the version number from the current AndroidFlavor object and
+        // set this text on the number TextView
+        nameTextView.setText(user.getName());
+
+        // Return the whole list item layout (containing 2 TextViews and an ImageView)
+        // so that it can be shown in the ListView
+        return listItemView;
     }
 
 
