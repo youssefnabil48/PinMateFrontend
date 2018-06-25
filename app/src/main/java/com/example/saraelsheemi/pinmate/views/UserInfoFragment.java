@@ -64,7 +64,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         email.setText(user.getEmail());
         birthDate.setText(user.getBirth_date());
         gender.setText(user.getGender());
-        home.setText(user.getHome_location());
+        home.setText(user.getHome_address());
 
     }
 

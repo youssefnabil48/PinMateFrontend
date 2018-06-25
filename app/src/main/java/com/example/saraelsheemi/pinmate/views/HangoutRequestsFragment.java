@@ -134,8 +134,8 @@ public class HangoutRequestsFragment extends Fragment {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            User user = (User) adapterView.getItemAtPosition(position);
-            showMessage(user.getName());
+            HangoutRequest hangoutRequest = (HangoutRequest) adapterView.getItemAtPosition(position);
+           // showMessage(user.getName());
 
         }
     };

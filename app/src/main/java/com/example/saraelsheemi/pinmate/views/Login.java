@@ -133,12 +133,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
-                if (ok && message.contains("user loggedin")) {
+                if (ok && message.contains("User logged")) {
                     try {
                         user_token = jsonObject.getJSONObject("data").getString("token");
                        // User user1 = gson.fromJson(jsonObject.getJSONObject("data").getString("user"),User.class);
                          userInfo = jsonObject.getJSONObject("data").getString("user");
-
                          //save info in to shared preferences (like sessions)
                         saveUserData(userInfo, user_token);
 
@@ -148,10 +147,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     }
                     Intent intent = new Intent(getApplicationContext(), Home.class);
                     startActivity(intent);
-
-                } else if (ok && message.contains("no user")) {
+                } else if (ok && message.contains("User not")) {
                     showMessage("No user found.");
-                } else if (ok && message.contains("wrong email")) {
+
+                } else if (ok && message.contains("Wrong email")) {
                     showMessage("Wrong email or password.");
                 }
             }

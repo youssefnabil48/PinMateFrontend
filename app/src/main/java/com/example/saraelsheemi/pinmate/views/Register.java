@@ -16,6 +16,7 @@ import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
+import com.example.saraelsheemi.pinmate.models.MLocation;
 import com.example.saraelsheemi.pinmate.models.MResponse;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
@@ -73,6 +74,10 @@ public class Register extends AppCompatActivity implements  View.OnClickListener
                         user.setEmail(edtEmail.getText().toString());
                         user.setPassword(edtPw.getText().toString());
                         user.setGender(gender);
+                        user.setCurrent_location(new MLocation());
+                        user.getCurrent_location().setLongitude(Constants.DEFAULT_LONTIDUE);
+                        user.getCurrent_location().setLatitude(Constants.DEFAULT_LATITUDE);
+
                         sendData(user);
                     }
             }
