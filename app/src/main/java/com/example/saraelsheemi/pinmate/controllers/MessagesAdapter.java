@@ -5,6 +5,7 @@ import com.example.saraelsheemi.pinmate.models.Message;
 import com.example.saraelsheemi.pinmate.models.User;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * */
 public class MessagesAdapter extends ArrayAdapter<Message> {
 
-    private static final String LOG_TAG = OnlineUsersAdapter.class.getSimpleName();
+    //private static final String LOG_TAG = MessagesAdapter.class.getSimpleName();
 
     /**
      * This is our own custom constructor (it doesn't mirror a superclass constructor).
@@ -33,26 +34,21 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
     //to dont use super
     // activity context
     //arraylist kk
-    public MessagesAdapter(Activity context, ArrayList<Message> messages) {
+    public MessagesAdapter(Activity context,int resource, ArrayList<Message> messages) {
 
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         // the second argument is used when the ArrayAdapter is populating a single TextView.
         // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
         // going to use this second argument, so it can be any value. Here, we used 0.
-        super(context, 0, messages);
+        super(context, resource, messages);
         //context=context
         //kk==androidflavours
     }
 
-    /**
-     * Provides a view for an AdapterView (ListView, GridView, etc.)
-     *
-     * @param position The position in the list of data that should be displayed in the
-     *                 list item view.
-     * @param convertView The recycled view to populate.
-     * @param parent The parent ViewGroup that is used for inflation.
-     * @return The View for the position in the AdapterView.
-     */
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //convert view == one row
@@ -63,16 +59,12 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
         }
 
         Message message = getItem(position);
-
+        Log.e("message contnt", message.getContent());
         TextView senderNameView = listItemView.findViewById(R.id.sender_name);
-        if (message != null) {
-            senderNameView.setText(message.getSenderId());
-        }
+        senderNameView.setText(message.getSenderId());
 
         TextView contentView = listItemView.findViewById(R.id.message);
-        if (message != null) {
-            contentView.setText(message.getContent());
-        }
+        contentView.setText(message.getContent());
 
         return listItemView;
     }

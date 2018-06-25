@@ -15,6 +15,7 @@ import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
+import com.example.saraelsheemi.pinmate.controllers.FriendListAdapter;
 import com.example.saraelsheemi.pinmate.controllers.MessagesAdapter;
 import com.example.saraelsheemi.pinmate.controllers.OnlineUsersAdapter;
 import com.example.saraelsheemi.pinmate.models.Message;
@@ -38,16 +39,17 @@ import java.util.ArrayList;
 public class SingleChat extends AppCompatActivity implements View.OnClickListener {
     private String receiverId;
     private Socket mSocket;
-    EditText editText;
+    private EditText editText;
     Button sendButton;
     SharedPreferences sharedPreferences;
     Gson gson;
     User loggedInUser;
     SharedPreferences.Editor editor;
     JSONObject requestBody = new JSONObject();
-    ArrayList<Message> messages = new ArrayList<>();
+    private ArrayList<Message> messages = new ArrayList<>();
     Message message;
     MessagesAdapter chatMessagesAdapter;
+    ListView listView;
 
 
     @Override
@@ -62,6 +64,9 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
         editText = findViewById(R.id.edittext_chatbox);
         sendButton = findViewById(R.id.button_chatbox_send);
         sendButton.setOnClickListener(this);
+        chatMessagesAdapter = new MessagesAdapter(this,R.id.messages_list,new ArrayList<Message>());
+        listView = findViewById(R.id.messages_list);
+        listView.setAdapter(chatMessagesAdapter);
         this.receiverId = getIntent().getStringExtra("userId");
         try {
             mSocket = IO.socket("http://192.168.1.24:4000");
@@ -94,7 +99,6 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        final Activity a = this;
         AsynchTaskPost getChatMessagesTask = new AsynchTaskPost(requestBody.toString(), getApplicationContext(), new EventListener<String>() {
 
             @Override
@@ -102,23 +106,20 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
                 try {
                     JSONObject jsonObject = new JSONObject(object);
                     JSONArray dataArray = jsonObject.getJSONArray("data");
+                    Log.e("response", dataArray.toString());
                     if (dataArray.length() > 0) {
                         for (int i = 0; i< dataArray.length(); i++){
                             message = gson.fromJson(jsonObject.getJSONArray("data").getJSONObject(i).toString(),Message.class);
                             messages.add(message);
                         }
                     }
+                    Log.e("messages size", String.valueOf(messages.size()));
+                    populateMessagesArrayListAdapter(messages);
 
-                    chatMessagesAdapter = new MessagesAdapter(a, messages);
-
-                    ListView listView = findViewById(R.id.messages_list);
-                    listView.setAdapter(chatMessagesAdapter);
-
-                    Log.e("response", object.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.e("response", object);
+
             }
 
             @Override
@@ -135,6 +136,10 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
     }
 
 
+    public void populateMessagesArrayListAdapter(ArrayList<Message> messages) {
+        chatMessagesAdapter.addAll(messages);
+        chatMessagesAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onClick(View view) {
