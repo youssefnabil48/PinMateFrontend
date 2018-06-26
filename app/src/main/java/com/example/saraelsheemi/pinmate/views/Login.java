@@ -35,13 +35,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     CheckBox rememberMe;
+    Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         init();
-        checkIfRemembered();
+        if(checkIfRemembered()) {
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
+        }
     }
 
     private void init() {
@@ -58,6 +62,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         sharedPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
+        gson = new Gson();
     }
 
     @Override
@@ -71,10 +76,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
             case R.id.btn_login: {
                 if (checkIfValid()) {
-                    User user = new User();
-                    user.setEmail(edtEmail.getText().toString());
-                    user.setPassword(edtPassword.getText().toString());
-                    sendLoginData(user);
+                    User u = new User();
+                    u.setEmail(edtEmail.getText().toString());
+                    u.setPassword(edtPassword.getText().toString());
+                    sendLoginData(u);
                 }
             }
             break;
@@ -87,18 +92,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private boolean checkIfRemembered() {
-        //    if (sharedPreferences.getString("keeploggedin", "") == "true") {
+           if (sharedPreferences.getString("keeploggedin", "").contains("true")) {
         Log.e("logged in", sharedPreferences.getString("keeploggedin", ""));
-        //    return true;
-        //  }
+            return true;
+          }
         return false;
     }
 
     private void keepLogged() {
         if (rememberMe.isChecked()) {
-            editor.putString("keeploggedin", "true");
+            editor.putString("logged_in", "true");
             editor.apply();
-            showMessage(sharedPreferences.getString("keeploggedin", ""));
+            showMessage(sharedPreferences.getString("logged_in", ""));
         }
     }
 
@@ -106,12 +111,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void getLoginData() {
-
-    }
 
     private void sendLoginData(final User user) {
-        Gson gson = new Gson();
+
         String json = gson.toJson(user, User.class);
         AsynchTaskPost asynchTaskPost = new AsynchTaskPost(json, getApplicationContext(), new EventListener<String>() {
 
@@ -119,8 +121,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             public void onSuccess(String object) {
                 JSONObject jsonObject = null;
                 String message = "";
-                String data="";
                 String user_token = "";
+                String userInfo = "";
                 Boolean ok = false;
 
                 try {
@@ -131,23 +133,24 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
-                if (ok && message.contains("user loggedin")) {
+                if (ok && message.contains("User logged")) {
                     try {
                         user_token = jsonObject.getJSONObject("data").getString("token");
-                        editor.putString("user_token", user_token);
-                        editor.apply();
-                        showMessage(user_token);
+                       // User user1 = gson.fromJson(jsonObject.getJSONObject("data").getString("user"),User.class);
+                         userInfo = jsonObject.getJSONObject("data").getString("user");
+                         //save info in to shared preferences (like sessions)
+                        saveUserData(userInfo, user_token);
+
                         Log.e("user_token", sharedPreferences.getString("user_token", ""));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     Intent intent = new Intent(getApplicationContext(), Home.class);
-                    intent.putExtra("user_token",user_token);
                     startActivity(intent);
-
-                } else if (ok && message.contains("no user")) {
+                } else if (ok && message.contains("User not")) {
                     showMessage("No user found.");
-                } else if (ok && message.contains("wrong email")) {
+
+                } else if (ok && message.contains("Wrong email")) {
                     showMessage("Wrong email or password.");
                 }
             }
@@ -158,6 +161,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             }
         });
         asynchTaskPost.execute(Constants.LOGIN_URL);
+
+    }
+
+    private void saveUserData(String userInfo, String token) {
+        editor.putString("user_token", token);
+        String jsonData = gson.toJson(userInfo);
+        editor.putString("user_info",userInfo);
+        editor.apply();
+
 
     }
 

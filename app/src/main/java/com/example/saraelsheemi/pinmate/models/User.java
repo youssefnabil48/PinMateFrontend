@@ -1,4 +1,5 @@
 package com.example.saraelsheemi.pinmate.models;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 public class User {
 
+    private static User userInstance = null;
     @SerializedName("_id")
     private String id;
     @SerializedName("token")
@@ -33,10 +35,11 @@ public class User {
     @SerializedName("mobile_number")
     private String mobile_number;
     @SerializedName("home_location")
-    private String home_location;
-    @SerializedName("location")
-    private Location current_location;
-    private Tracker tracker;
+    private MLocation home_location;
+    @SerializedName("current_location")
+    private MLocation current_location;
+    @SerializedName("home_address")
+    private String home_address;
     @SerializedName("favorite_places")
     private ArrayList<String> favoritePlaces;
     @SerializedName("email_verification_tkn")
@@ -52,6 +55,37 @@ public class User {
     @SerializedName("views")
     private ArrayList<UserViewer> viewers;
 
+    public static User getInstance() {
+        if (userInstance == null) {
+            userInstance = new User();
+        }
+        return userInstance;
+    }
+
+
+    public MLocation getHome_location() {
+        return home_location;
+    }
+
+    public void setHome_location(MLocation home_location) {
+        this.home_location = home_location;
+    }
+
+    public String getHome_address() {
+        return home_address;
+    }
+
+    public void setHome_address(String home_address) {
+        this.home_address = home_address;
+    }
+
+    public String getTracker_id() {
+        return tracker_id;
+    }
+
+    public void setTracker_id(String tracker_id) {
+        this.tracker_id = tracker_id;
+    }
 
     public String getName() {
         return name;
@@ -117,19 +151,12 @@ public class User {
         this.mobile_number = mobile_number;
     }
 
-    public String getHome_location() {
-        return home_location;
-    }
 
-    public void setHome_location(String home_location) {
-        this.home_location = home_location;
-    }
-
-    public Location getCurrent_location() {
+    public MLocation getCurrent_location() {
         return current_location;
     }
 
-    public void setCurrent_location(Location current_location) {
+    public void setCurrent_location(MLocation current_location) {
         this.current_location = current_location;
     }
 
@@ -165,15 +192,6 @@ public class User {
         this.viewers = viewers;
     }
 
-
-    public Tracker getTracker() {
-        return tracker;
-    }
-
-    public void setTracker(Tracker tracker) {
-        this.tracker = tracker;
-    }
-
     public String getId() {
         return id;
     }
@@ -206,11 +224,5 @@ public class User {
         this.user_token = user_token;
     }
 
-    public String getTracker_id() {
-        return tracker_id;
-    }
 
-    public void setTracker_id(String tracker_id) {
-        this.tracker_id = tracker_id;
-    }
 }

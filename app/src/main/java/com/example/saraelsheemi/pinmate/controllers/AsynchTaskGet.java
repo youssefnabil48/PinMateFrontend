@@ -23,25 +23,25 @@ import java.net.URL;
  * Created by Sara ElSheemi on 6/3/2018.
  */
 
-public class AsynchTaskGet extends AsyncTask<String, Void, MResponse> {
+public class AsynchTaskGet extends AsyncTask<String, Void, String> {
     public static final String REQUEST_METHOD = "GET";
     public static final int READ_TIMEOUT = 15000;
     public static final int CONNECTION_TIMEOUT = 15000;
-    private EventListener<MResponse> mCallBack;
+    private EventListener<String> mCallBack;
     private Context mContext;
     public Exception mException;
 
-    public AsynchTaskGet(Context mContext, EventListener<MResponse> mCallBack) {
+    public AsynchTaskGet(Context mContext, EventListener<String> mCallBack) {
         this.mCallBack = mCallBack;
         this.mContext = mContext;
     }
 
     @Override
-    protected MResponse doInBackground(String... params) {
+    protected String doInBackground(String... params) {
         String stringUrl = params[0];
         String result;
         String inputLine;
-        MResponse mResponse;
+
         try {
             //Create a URL object holding our url
             URL myUrl = new URL(stringUrl);
@@ -71,11 +71,8 @@ public class AsynchTaskGet extends AsyncTask<String, Void, MResponse> {
             streamReader.close();
             //Set our result equal to our stringBuilder
             result = stringBuilder.toString();
-            Gson gson = new Gson();
-            mResponse = gson.fromJson(result,MResponse.class);
-            
-          //  Log.e("mresponse",mResponse);
-            return mResponse;
+
+            return result;
 
 
         }
@@ -93,7 +90,7 @@ public class AsynchTaskGet extends AsyncTask<String, Void, MResponse> {
     }
 
     @Override
-    protected void onPostExecute(MResponse s) {
+    protected void onPostExecute(String s) {
         if (mCallBack != null) {
             if (mException == null) {
                 mCallBack.onSuccess(s);

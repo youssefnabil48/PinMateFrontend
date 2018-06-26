@@ -28,7 +28,7 @@ public class AccountSettingsFragment extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       init(view);
+        init(view);
         getActivity().setTitle("Account Settings");
     }
 

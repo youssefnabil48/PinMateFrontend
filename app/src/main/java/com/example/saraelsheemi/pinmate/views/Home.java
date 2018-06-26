@@ -7,9 +7,12 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,8 +22,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
+import com.example.saraelsheemi.pinmate.controllers.PagerAdapter;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 import com.pusher.pushnotifications.PushNotifications;
@@ -33,6 +36,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     NotificationChannel notificationChannel;
     Toolbar toolbar;
     NavigationView navigationView;
+//    TabLayout tabLayout;
+//    ViewPager viewPager;
 
 
     @Override
@@ -40,8 +45,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         init();
-        Bundle extras = getIntent().getExtras();
-        showMessage(extras.getString("user_token"));
 
     }
     private void showMessage(String message) {
@@ -74,8 +77,27 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             notificationChannel.setLightColor(Color.RED);
             notificationManager.createNotificationChannel(notificationChannel);
         }
-    }
 
+//        viewPager =  findViewById(R.id.viewpager);
+//        setUpViewPager(viewPager);
+//        tabLayout = findViewById(R.id.tabs);
+//        tabLayout.setupWithViewPager(viewPager);
+//        setUpTabIcons();
+    }
+//    private void setUpTabIcons(){
+//        tabLayout.getTabAt(0).setIcon(R.drawable.ic_person_outline_white_48dp);
+//        tabLayout.getTabAt(1).setIcon(R.drawable.ic_place_white_48dp);
+//        tabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_white_48dp);
+//        tabLayout.getTabAt(3).setIcon(R.drawable.ic_plus_one_white_48dp);
+//    }
+//    private void setUpViewPager(ViewPager viewPager){
+//        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(),getApplicationContext());
+//        adapter.addFragment(new UserProfile(),"one");
+//        adapter.addFragment(new Map(),"one");
+//        adapter.addFragment(new Chats(),"one");
+//        adapter.addFragment(new Notifications(),"one");
+//        viewPager.setAdapter(adapter);
+//    }
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -110,6 +132,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
+        FragmentActivity fragmentActivity=null;
 
         int id = item.getItemId();
 
@@ -118,9 +141,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             fragment = new CameraFragment();
         } else if (id == R.id.nav_home) {
-            fragment = new Main();
+           fragment = new Main();
+//            Intent intent = new Intent(this,Home.class);
+//            startActivity(intent);
         }
         else if (id == R.id.nav_trackers) {
+
+        }else if (id == R.id.nav_map) {
+                fragment = new MapsFragment();
 
         } else if (id == R.id.nav_settings) {
             fragment = new AccountSettingsFragment();

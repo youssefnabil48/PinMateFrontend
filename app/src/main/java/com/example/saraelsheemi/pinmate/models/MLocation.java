@@ -6,27 +6,26 @@ import com.google.gson.annotations.SerializedName;
  * Created by Sara ElSheemi on 5/12/2018.
  */
 
-public class Location {
+public class MLocation {
 
     @SerializedName("latitude")
-    private String latitude;
+    private double latitude;
     @SerializedName("longitude")
-    private String longitude;
+    private double longitude;
 
-
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 }
