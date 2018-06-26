@@ -115,6 +115,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+
+            fragment = new CameraFragment();
         } else if (id == R.id.nav_home) {
             fragment = new Main();
         }
