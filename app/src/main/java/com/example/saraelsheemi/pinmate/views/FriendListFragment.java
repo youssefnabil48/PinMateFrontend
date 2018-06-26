@@ -98,10 +98,9 @@ public class FriendListFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-                    if (ok && message.contains("no user")) {
+                    if (ok && message.contains("User not")) {
                         showMessage("No friends yet.");
-                    } else if (ok && message.contains("user found")) {
+                    } else if (ok && message.contains("User found")) {
                         try {
                             user1 = gson.fromJson(jsonObject.getString("data"), User.class);
                             friendsList = new ArrayList<>();

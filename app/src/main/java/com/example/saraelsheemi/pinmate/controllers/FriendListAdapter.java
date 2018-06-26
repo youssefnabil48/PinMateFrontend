@@ -65,17 +65,4 @@ public class FriendListAdapter extends ArrayAdapter<User> {
         return listItemView;
     }
 
-
-
-
-    private static class PlaceHolder {
-        TextView friendName;
-        ImageView friendPicture;
-
-        public PlaceHolder(View view) {
-            friendName = view.findViewById(R.id.txt_friend_nname);
-            friendPicture = view.findViewById(R.id.img_friend);
-        }
-    }
-
 }
