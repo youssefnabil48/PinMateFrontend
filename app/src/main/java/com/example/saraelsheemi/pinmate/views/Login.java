@@ -45,6 +45,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         if(checkIfRemembered()) {
             Intent intent = new Intent(getApplicationContext(), Home.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -92,7 +93,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private boolean checkIfRemembered() {
-           if (sharedPreferences.getString("keeploggedin", "").contains("true")) {
+        if (sharedPreferences.getString("logged_in", "").contains("true")) {
         Log.e("logged in", sharedPreferences.getString("keeploggedin", ""));
             return true;
           }

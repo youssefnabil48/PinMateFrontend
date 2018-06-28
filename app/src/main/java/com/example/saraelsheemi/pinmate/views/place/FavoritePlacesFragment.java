@@ -55,6 +55,7 @@ public class FavoritePlacesFragment extends Fragment implements SwipeRefreshLayo
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             init(view);
+            getActivity().setTitle("Favorites");
             getPlaces();
             super.onViewCreated(view, savedInstanceState);
         }

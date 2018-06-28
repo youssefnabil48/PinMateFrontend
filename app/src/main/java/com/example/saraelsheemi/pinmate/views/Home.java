@@ -2,7 +2,9 @@ package com.example.saraelsheemi.pinmate.views;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +36,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     NotificationChannel notificationChannel;
     Toolbar toolbar;
     NavigationView navigationView;
-//    TabLayout tabLayout;
+//    HomeTabLayout tabLayout;
 //    ViewPager viewPager;
 
 
@@ -43,6 +45,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         init();
+
+        Fragment fragment = new Main();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
 
     }
 
@@ -104,7 +112,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                finish();
+            } else {
+                getSupportFragmentManager().popBackStack();
+            }
         }
     }
 
@@ -138,12 +150,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-
             fragment = new CameraFragment();
         } else if (id == R.id.nav_home) {
             fragment = new Main();
-//            Intent intent = new Intent(this,Home.class);
+//            Intent intent = new Intent(this,HomeTabLayout.class);
 //            startActivity(intent);
         } else if (id == R.id.nav_place) {
             fragment = new AllPlacesFragment();
@@ -165,7 +175,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
-          //  ft.addToBackStack(null);
+            ft.addToBackStack(null);
             ft.commit();
             item.setChecked(true);
         }
@@ -176,6 +186,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     protected void onResume() {
         super.onResume();
+
         PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
             @Override
             public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -189,5 +200,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 }
             }
         });
+    }
+
+    private boolean checkIfLoggedIn(){
+        SharedPreferences sharedPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("logged_in", "").contains("true"))
+            return true;
+        return false;
     }
 }
