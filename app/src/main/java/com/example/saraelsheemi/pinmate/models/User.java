@@ -54,6 +54,24 @@ public class User {
     private ArrayList<VisitedPlace> visitedPlaces;
     @SerializedName("views")
     private ArrayList<UserViewer> viewers;
+    @SerializedName("notification_token")
+    private String notification_token;
+
+    public static User getUserInstance() {
+        return userInstance;
+    }
+
+    public static void setUserInstance(User userInstance) {
+        User.userInstance = userInstance;
+    }
+
+    public String getNotification_token() {
+        return notification_token;
+    }
+
+    public void setNotification_token(String notification_token) {
+        this.notification_token = notification_token;
+    }
 
     public static User getInstance() {
         if (userInstance == null) {

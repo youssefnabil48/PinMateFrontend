@@ -12,7 +12,6 @@ public class HangoutRequest {
 
     @SerializedName("date")
     private String date;
-
     @SerializedName("description")
     private String description;
     @SerializedName("start_time")
@@ -23,6 +22,16 @@ public class HangoutRequest {
     private String created_by_id;
     @SerializedName("invited")
     private ArrayList<String> invited;
+    @SerializedName("place")
+    private String place_id;
+
+    public String getPlace_id() {
+        return place_id;
+    }
+
+    public void setPlace_id(String place_id) {
+        this.place_id = place_id;
+    }
 
     public String getCreated_by_id() {
         return created_by_id;

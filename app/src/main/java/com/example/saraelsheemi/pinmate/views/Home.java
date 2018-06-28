@@ -21,14 +21,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPut;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
+import com.example.saraelsheemi.pinmate.controllers.EventListener;
+import com.example.saraelsheemi.pinmate.controllers.NotificationsMessagingService;
+import com.example.saraelsheemi.pinmate.models.User;
 import com.example.saraelsheemi.pinmate.views.place.AllPlacesFragment;
 import com.example.saraelsheemi.pinmate.views.place.FavoritePlacesFragment;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 import com.pusher.pushnotifications.PushNotifications;
 
 import com.example.saraelsheemi.pinmate.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawer;
@@ -59,20 +68,21 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     private void init() {
+
         //Pusher notification subscription
         PushNotifications.start(getApplicationContext(), "27e97326-f21c-4a92-8713-1dda5cbc88e3");
         PushNotifications.subscribe("hello");
 
         setTitle("Home");
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //setup notification
@@ -85,7 +95,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             notificationChannel.setLightColor(Color.RED);
             notificationManager.createNotificationChannel(notificationChannel);
         }
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("myfirebaseinstance", "Refreshed token: " + refreshedToken);
 
+        // If you want to send messages to this application instance or
+        // manage this apps subscriptions on the server side, send the
+        // Instance ID token to your app server.
+        sendRegistrationToServer(refreshedToken);
 //        viewPager =  findViewById(R.id.viewpager);
 //        setUpViewPager(viewPager);
 //        tabLayout = findViewById(R.id.tabs);
@@ -107,6 +123,42 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 //        adapter.addFragment(new Notifications(),"one");
 //        viewPager.setAdapter(adapter);
 //    }
+
+    private void sendRegistrationToServer(String refreshedToken) {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.apply();
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("user_info", "");
+        User user = gson.fromJson(json, User.class);
+
+        String token = "{\"notification_token\":\""+refreshedToken+"\"}";
+
+        AsynchTaskPut asynchTaskPut = new AsynchTaskPut(token, getApplicationContext(), new EventListener<String>() {
+            @Override
+            public void onSuccess(String object) {
+                JSONObject jsonObject;
+                Boolean ok = false;
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (ok) {
+                    Log.e("Update", "notification updated successfully");
+                } else {
+                    Log.e("Update failed", "notification not updated");
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("Update failed", "server error");
+            }
+        });
+        asynchTaskPut.execute(Constants.UPDATE_USER + user.getId());
+    }
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {

@@ -16,10 +16,13 @@ import android.widget.Toast;
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPut;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
+import com.example.saraelsheemi.pinmate.controllers.NotificationsMessagingService;
 import com.example.saraelsheemi.pinmate.models.MResponse;
 import com.example.saraelsheemi.pinmate.models.User;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -170,7 +173,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         String jsonData = gson.toJson(userInfo);
         editor.putString("user_info",userInfo);
         editor.apply();
-
 
     }
 
