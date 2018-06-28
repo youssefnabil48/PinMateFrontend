@@ -1,17 +1,25 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Message {
+import java.util.Date;
+
+public class Message implements Comparable<Message>{
     @SerializedName("sender_id")
     private String senderId;
     @SerializedName("receiver_id")
     private String receiverId;
     @SerializedName("content")
     private String content;
+    @SerializedName("created_at")
+    private String createdAt;
     private User sender;
     private User receiver;
 
+    public Message() {
+    }
     public User getSender() {
         return sender;
     }
@@ -28,12 +36,21 @@ public class Message {
         this.receiver = receiver;
     }
 
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public void setUsers(User first, User second){
         if(first.getId() == senderId){
             this.setSender(first);
             this.setReceiver(second);
         }else{
             this.setSender(second);
+
             this.setReceiver(first);
         }
     }
@@ -62,6 +79,8 @@ public class Message {
         this.content = content;
     }
 
-
-
+    @Override
+    public int compareTo(@NonNull Message message) {
+        return this.createdAt.compareTo(message.getCreatedAt());
+    }
 }

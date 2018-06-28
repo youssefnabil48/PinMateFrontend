@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class SingleChat extends AppCompatActivity implements View.OnClickListener {
     private String receiverId;
@@ -147,7 +148,7 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
                             messages.add(message);
                         }
                     }
-                    Log.e("messages size", String.valueOf(messages.size()));
+                    Collections.sort(messages);
                     populateMessagesArrayListAdapter(messages);
 
                 } catch (JSONException e) {
