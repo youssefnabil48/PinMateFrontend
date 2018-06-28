@@ -160,7 +160,8 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
     };
 
     private void showMessage(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        if(getActivity() != null)
+          Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -220,7 +221,8 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                 hangoutRequest.setDate(edtDate.getText().toString());
                 hangoutRequest.setStart_time(edtTime.getText().toString());
                 hangoutRequest.setTitle(title.getText().toString());
-
+                hangoutRequest.setInvited(new ArrayList<String>(friendsSelected.subList(1, friendsSelected.size())));
+                hangoutRequest.setPlace_id(placeSelected);
                 //na2es el invites and place
                 createRequest(hangoutRequest);
             }
@@ -228,19 +230,34 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         }
     }
 
+
     private void createRequest(HangoutRequest hangoutRequest) {
 
         String data = gson.toJson(hangoutRequest, HangoutRequest.class);
+        Log.e("hangout request data", data);
 
-        AsynchTaskPost asynchTaskPost = new AsynchTaskPost(data, getContext(), new EventListener() {
+        AsynchTaskPost asynchTaskPost = new AsynchTaskPost(data, getContext(), new EventListener<String>() {
             @Override
-            public void onSuccess(Object object) {
+            public void onSuccess(String object) {
+                JSONObject jsonObject = null;
+                String message = "";
+                Boolean ok = false;
 
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                    message = jsonObject.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (ok && message.contains("Hangout request created")) {
+                    showMessage("Request sent.");
+                }
             }
-
             @Override
             public void onFailure(Exception e) {
-
+                    showMessage("Internal server error. Retry");
             }
         });
         asynchTaskPost.execute(Constants.CREATE_HANGOUT);
@@ -256,7 +273,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
     ArrayList<User> friendsObjects = new ArrayList<>();
     ArrayList<Place> placesObjects = new ArrayList<>();
     ArrayList<String> friendsSelected = new ArrayList<>();
-    ArrayList<String> placesSelected = new ArrayList<>();
+    String placeSelected ="";
 
     private void createHangoutPopup() {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -272,18 +289,17 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         edtDate = layout.findViewById(R.id.edt_date);
         edtTime = layout.findViewById(R.id.edt_time);
         sendReq = layout.findViewById(R.id.btn_send_req);
+        sendReq.setOnClickListener(this);
         title = layout.findViewById(R.id.edt_title);
         setUpPopup(layout);
         getFriendsNames();
         getPlacesNames();
     }
 
-    AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+    AdapterView.OnItemSelectedListener onFriendSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            String item = adapterView.getItemAtPosition(i).toString();
-            // Showing selected spinner item
-            showMessage(item);
+            friendsSelected.add(friendsObjects.get(i).getId());
         }
 
         @Override
@@ -291,7 +307,17 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
 
         }
     };
+    AdapterView.OnItemSelectedListener onPlacesSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            placeSelected  = placesObjects.get(i).getId();
+        }
 
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
 
     private void getPlacesNames() {
         AsynchTaskGet asynchTaskGet = new AsynchTaskGet(getContext(), new EventListener<String>() {
@@ -323,7 +349,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                                 android.R.layout.simple_spinner_item, places);
                         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         location.setAdapter(adapter2);
-                        location.setOnItemSelectedListener(onItemSelectedListener);
+                        location.setOnItemSelectedListener(onPlacesSelectedListener);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -371,7 +397,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                                 android.R.layout.simple_spinner_item, friendsNames);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         friends.setAdapter(adapter);
-                        friends.setOnItemSelectedListener(onItemSelectedListener);
+                        friends.setOnItemSelectedListener(onFriendSelectedListener);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
