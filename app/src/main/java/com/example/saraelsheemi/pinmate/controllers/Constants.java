@@ -5,6 +5,8 @@ public class Constants {
 
     public static final String CHANNEL_ID="mychannelid";
     public static final String CHANNEL_NAME="channelname";
+    public static final String BASE_URL_REMOTE = "https://pin-mate.herokuapp.com";
+    public static final String BASE_URL_LOCAL = "http://localhost:3000";
     public static final String CHANNEL_DESCRIPTION="channeldescription";
 
 
@@ -15,6 +17,7 @@ public class Constants {
     //backend urls
    // public static final String BACKEND_URL="https://pin-mate.herokuapp.com/api";
     public static final String BACKEND_URL="http://192.168.1.6:3000/api";
+    public static final String REMOTE_SOCKET="wws://pin-mate.herokuapp.com";
 
     //user urls
     public static final String REGISTER_URL= BACKEND_URL + "/user/create";
@@ -23,6 +26,7 @@ public class Constants {
     public static final String GET_USER= BACKEND_URL + "/user/";
     public static final String GET_USER_HANGOUTS= BACKEND_URL + "/hangoutrequest/getsndrrequests/";
     public static final String UPDATE_USER= BACKEND_URL + "/user/update/";
+    public static final String GET_MESSAGES = BACKEND_URL + "/chat";
     public static final String GET_FRIENDS= BACKEND_URL + "/user/friends/";
     public static final String GET_USER_FAVS_PLACES = BACKEND_URL + "/user/favoriteplaces/";
 
