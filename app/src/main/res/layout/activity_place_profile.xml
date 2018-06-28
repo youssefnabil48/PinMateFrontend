@@ -8,50 +8,44 @@
 
 
     <ImageView
-        android:id="@+id/img_userp_cover"
+        android:id="@+id/img_place_cover"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="fitXY"
         android:background="@android:color/darker_gray" />
 
     <com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView
-        android:id="@+id/imground_user_profile"
+        android:id="@+id/imground_place_profile"
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:layout_marginTop="-160dp"
-        android:layout_below="@+id/img_userp_cover"
+        android:layout_below="@+id/img_place_cover"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/app_name"
         android:scaleType="center"
-        android:src="@drawable/male_user_profile_picture" />
+        android:src="@drawable/placeprofile" />
+
     <TextView
-        android:id="@+id/txt_placep_name"
+        android:id="@+id/txt_fav_place_list_name"
         android:text="Name"
-        android:layout_below="@id/imground_user_profile"
+        android:layout_below="@id/imground_place_profile"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <!--<Button-->
-        <!--android:id="@+id/btn_edit_cover_photo"-->
-        <!--android:text="Edit"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:background="@android:color/transparent"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" />-->
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/user_tabs"
+        android:id="@+id/place_tabs"
         android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabMode="fixed"
-        android:layout_below="@id/img_userp_cover"
+        android:layout_below="@id/img_place_cover"
         app:tabGravity="fill"/>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/user_viewpager"
-        android:layout_below="@id/user_tabs"
+        android:id="@+id/place_viewpager"
+        android:layout_below="@id/place_tabs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"  />

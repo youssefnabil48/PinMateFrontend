@@ -2,18 +2,14 @@ package com.example.saraelsheemi.pinmate.controllers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.models.HangoutRequest;
-import com.example.saraelsheemi.pinmate.models.User;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -48,7 +44,7 @@ public class HangoutRequestsAdapter extends ArrayAdapter<HangoutRequest> {
 
         hangoutTitle = listItemView.findViewById(R.id.txt_hangout_title);
         hangoutDescription = listItemView.findViewById(R.id.txt_hangout_description);
-        hangoutDate = listItemView.findViewById(R.id.txt_hangout_date);
+        hangoutDate = listItemView.findViewById(R.id.txt_post_date);
 
 
         hangoutTitle.setText(hangoutRequest.getTitle());
