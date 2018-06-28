@@ -1,6 +1,8 @@
 package com.example.saraelsheemi.pinmate.views;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,6 +38,9 @@ public class Chats extends Fragment implements AdapterView.OnItemClickListener{
     private Gson gson = new Gson();
     private User user = new User();
     private ArrayList<User> users = new ArrayList<>();
+    private User loggedInUser;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Nullable
     @Override
@@ -81,12 +86,18 @@ public class Chats extends Fragment implements AdapterView.OnItemClickListener{
 
             }
         });
-        asyncGetOnlineUsers.execute(Constants.GET_ALL_USERS);
+        asyncGetOnlineUsers.execute(Constants.GET_FRIENDS+loggedInUser.getId());
     }
 
     private void init(View view){
         onlineUsersListView = view.findViewById(R.id.onlineUsersContainer);
         onlineUsersListView.setOnItemClickListener(this);
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+        String json = sharedPreferences.getString("user_info","");
+        gson = new Gson();
+        loggedInUser = gson.fromJson(json,User.class);
     }
 
     private void showMessage(String message) {
