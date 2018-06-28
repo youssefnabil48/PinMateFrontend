@@ -97,7 +97,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private boolean checkIfRemembered() {
         if (sharedPreferences.getString("logged_in", "").contains("true")) {
-        Log.e("logged in", sharedPreferences.getString("keeploggedin", ""));
+        Log.e("logged in", sharedPreferences.getString("logged_in", ""));
             return true;
           }
         return false;

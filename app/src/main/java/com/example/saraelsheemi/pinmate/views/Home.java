@@ -221,6 +221,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         } else if (id == R.id.nav_fav_places) {
             fragment = new FavoritePlacesFragment();
         } else if (id == R.id.nav_logout) {
+            clearSharedPreferences();
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
@@ -254,10 +255,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         });
     }
 
-    private boolean checkIfLoggedIn(){
+    private void clearSharedPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        if (sharedPreferences.getString("logged_in", "").contains("true"))
-            return true;
-        return false;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
+
 }
