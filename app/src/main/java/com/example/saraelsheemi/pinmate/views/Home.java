@@ -7,12 +7,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +20,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.controllers.Constants;
-import com.example.saraelsheemi.pinmate.controllers.PagerAdapter;
+import com.example.saraelsheemi.pinmate.views.place.AllPlacesFragment;
+import com.example.saraelsheemi.pinmate.views.place.FavoritePlacesFragment;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 import com.pusher.pushnotifications.PushNotifications;
@@ -47,9 +45,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         init();
 
     }
+
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
     private void init() {
         //Pusher notification subscription
         PushNotifications.start(getApplicationContext(), "27e97326-f21c-4a92-8713-1dda5cbc88e3");
@@ -70,7 +70,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         //setup notification
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        if(Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             notificationChannel = new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setDescription(Constants.CHANNEL_DESCRIPTION);
             notificationChannel.enableLights(true);
@@ -84,7 +84,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 //        tabLayout.setupWithViewPager(viewPager);
 //        setUpTabIcons();
     }
-//    private void setUpTabIcons(){
+
+    //    private void setUpTabIcons(){
 //        tabLayout.getTabAt(0).setIcon(R.drawable.ic_person_outline_white_48dp);
 //        tabLayout.getTabAt(1).setIcon(R.drawable.ic_place_white_48dp);
 //        tabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_white_48dp);
@@ -110,7 +111,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-    //    getMenuInflater().inflate(R.menu.activity_settings_drawer, menu);
+        //    getMenuInflater().inflate(R.menu.activity_settings_drawer, menu);
         return true;
     }
 
@@ -132,38 +133,41 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
-        FragmentActivity fragmentActivity=null;
+
 
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_home) {
-           fragment = new Main();
+            fragment = new Main();
 //            Intent intent = new Intent(this,Home.class);
 //            startActivity(intent);
-        }
-        else if (id == R.id.nav_trackers) {
+        } else if (id == R.id.nav_place) {
+            fragment = new AllPlacesFragment();
 
-        }else if (id == R.id.nav_map) {
-                fragment = new MapsFragment();
+        } else if (id == R.id.nav_trackers) {
+
+        } else if (id == R.id.nav_map) {
+            fragment = new MapsFragment();
 
         } else if (id == R.id.nav_settings) {
             fragment = new AccountSettingsFragment();
 
         } else if (id == R.id.nav_fav_places) {
-
+            fragment = new FavoritePlacesFragment();
         } else if (id == R.id.nav_logout) {
-            Intent intent = new Intent(this,Login.class);
+            Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
+          //  ft.addToBackStack(null);
             ft.commit();
             item.setChecked(true);
         }
-         drawer.closeDrawer(GravityCompat.START);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

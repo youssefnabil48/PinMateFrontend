@@ -4,32 +4,21 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/progressbar_loading_hangouts"
+        android:id="@+id/progressbar_favorites_loading"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <ImageButton
-        android:id="@+id/btn_new_hangout"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/baseline_add_black_24dp"
-        android:background="@android:color/transparent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swiperefresh_hangouts"
-        android:layout_below="@id/btn_new_hangout"
+        android:id="@+id/swiperefresh_favorites"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/listView_hangouts"
+            android:id="@+id/listView_favorites"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

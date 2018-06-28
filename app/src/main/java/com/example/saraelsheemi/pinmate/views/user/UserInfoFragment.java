@@ -1,18 +1,13 @@
-package com.example.saraelsheemi.pinmate.views;
+package com.example.saraelsheemi.pinmate.views.user;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -41,10 +36,10 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     }
 
     private void init(View view) {
-        name = view.findViewById(R.id.txt_user_name);
+        name = view.findViewById(R.id.txt_placep_name);
 
-        email = view.findViewById(R.id.txt_user_email);
-        password = view.findViewById(R.id.txt_user_password);
+        email = view.findViewById(R.id.txt_place_address);
+        password = view.findViewById(R.id.txt_place_phone);
         birthDate = view.findViewById(R.id.txt_user_birthday);
         gender = view.findViewById(R.id.txt_user_gender);
         home= view.findViewById(R.id.txt_user_home);

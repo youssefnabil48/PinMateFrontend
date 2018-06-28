@@ -24,6 +24,7 @@ import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPut;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
+import com.example.saraelsheemi.pinmate.models.HangoutRequest;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -43,6 +44,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,7 +84,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     private static final String KEY_LOCATION = "location";
 
     //marker settings
-    ArrayList<Marker> markerArrayList;
+    ArrayList<Marker> friendsMarkers;
     Marker userMarker;
 
     //update location
@@ -93,6 +95,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     //friends locations
     private ArrayList<User> friends;
+    Gson gson;
 
     //user address from location
     Geocoder geocoder;
@@ -155,9 +158,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
-        final Gson gson = new Gson();
+        gson = new Gson();
         String json = sharedPreferences.getString("user_info", "");
         user = gson.fromJson(json, User.class);
+        friendsMarkers = new ArrayList<>();
     }
 
     private void updateLocation(double lat, double lng) {
@@ -190,6 +194,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                     Log.e("Update failed", "location not updated");
                 }
             }
+
             @Override
             public void onFailure(Exception e) {
                 Log.e("Update failed", "server error");
@@ -249,6 +254,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                                 updateLocation(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                                getFriends();
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
@@ -276,6 +282,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             public void onSuccess(String object) {
                 JSONObject jsonObject = null;
                 String message = "";
+                JSONArray jsonArray;
                 Boolean ok = false;
 
                 try {
@@ -286,11 +293,27 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                     e.printStackTrace();
                 }
 
+                if (ok && message.contains("friends loaded")) {
+                    try {
+                        jsonArray = jsonObject.getJSONArray("data");
+                        friends = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            User u = gson.fromJson(jsonArray.get(i).toString(), User.class);
+                            friends.add(u);
+                        }
+                        addFriendsMarker();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else if (ok && message.contains("No friends")) {
+                    Log.e("Get friends", "No friends found");
+                }
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                Log.e("Get friends", "internal server error");
             }
         });
 
@@ -311,7 +334,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void addUserMarker() {
-
         if (userMarker == null) {
             userMarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(user.getCurrent_location().getLatitude(), user.getCurrent_location().getLongitude()))
@@ -325,6 +347,32 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 userMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.mapgirl));
         } else
             userMarker.setPosition(new LatLng(user.getCurrent_location().getLatitude(), user.getCurrent_location().getLongitude()));
+    }
+
+    private void addFriendsMarker() {
+
+        if (friends.size() == 0)
+            return;
+        for (int i = 0; i < friends.size(); i++) {
+            if (friendsMarkers.size() == 0 || friendsMarkers.size() <friends.size()) {
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(friends.get(i).getCurrent_location().getLatitude(),
+                                friends.get(i).getCurrent_location().getLongitude()))
+                        .title(friends.get(i).getName())
+                        .snippet(getAddress(friends.get(i).getCurrent_location().getLatitude(),
+                                friends.get(i).getCurrent_location().getLongitude()))
+                        .infoWindowAnchor(0.5f, 0.5f));
+                Log.e("friend name", friends.get(i).getName());
+                Log.e("friend location", friends.get(i).getCurrent_location().getLatitude() + "");
+                if (friends.get(i).getGender().equals("male"))
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.mapguy));
+                else if (user.getGender().equals("female"))
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.mapgirl));
+                friendsMarkers.add(marker);
+            } else
+                friendsMarkers.get(i).setPosition(new LatLng(friends.get(i).getCurrent_location().getLatitude(),
+                        friends.get(i).getCurrent_location().getLongitude()));
+        }
     }
 
     /**
