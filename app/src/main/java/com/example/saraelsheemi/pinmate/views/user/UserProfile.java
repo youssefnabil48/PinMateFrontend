@@ -70,7 +70,8 @@ public class UserProfile extends Fragment{
         userName.setText(user.getName());
         if(user.getPicture() != null)
             Picasso.get().load(user.getPicture()).into(userPicture);
-
+        Picasso.get().load("https://www.whcc.com/assets/ee/uploads/images/cover-options/whcc_covers_large_leather_white.jpg")
+                .into(userCoverPicture);
 
     }
     private void showMessage(String message) {

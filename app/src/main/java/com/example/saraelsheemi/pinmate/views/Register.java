@@ -77,7 +77,7 @@ public class Register extends AppCompatActivity implements  View.OnClickListener
                         user.setCurrent_location(new MLocation());
                         user.getCurrent_location().setLongitude(Constants.DEFAULT_LONTIDUE);
                         user.getCurrent_location().setLatitude(Constants.DEFAULT_LATITUDE);
-
+                        user.setNotification_token("");
                         sendData(user);
                     }
             }

@@ -16,10 +16,13 @@ import android.widget.Toast;
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPut;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
+import com.example.saraelsheemi.pinmate.controllers.NotificationsMessagingService;
 import com.example.saraelsheemi.pinmate.models.MResponse;
 import com.example.saraelsheemi.pinmate.models.User;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +48,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         if(checkIfRemembered()) {
             Intent intent = new Intent(getApplicationContext(), Home.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -92,7 +96,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private boolean checkIfRemembered() {
-           if (sharedPreferences.getString("keeploggedin", "").contains("true")) {
+        if (sharedPreferences.getString("logged_in", "").contains("true")) {
         Log.e("logged in", sharedPreferences.getString("keeploggedin", ""));
             return true;
           }
@@ -169,7 +173,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         String jsonData = gson.toJson(userInfo);
         editor.putString("user_info",userInfo);
         editor.apply();
-
 
     }
 

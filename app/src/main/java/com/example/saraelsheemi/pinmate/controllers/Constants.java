@@ -16,7 +16,7 @@ public class Constants {
 
     //backend urls
     public static final String BACKEND_URL="https://pin-mate.herokuapp.com/api";
-    //public static final String BACKEND_URL="http://192.168.1.6:3000/api";
+  //  public static final String BACKEND_URL="http://192.168.1.6:3000/api";
     public static final String REMOTE_SOCKET="wws://pin-mate.herokuapp.com";
 
     //user urls
@@ -40,5 +40,7 @@ public class Constants {
     public static final String CREATE_POST= BACKEND_URL + "/place/post/create";
     public static final String DELETE_POST= BACKEND_URL + "/place/post/delete/";
 
+    //hangout requests urls
+    public static final String CREATE_HANGOUT= BACKEND_URL + "/hangoutRequest/create";
 
 }
