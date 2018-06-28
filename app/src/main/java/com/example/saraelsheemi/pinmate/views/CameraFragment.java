@@ -113,8 +113,9 @@ public class CameraFragment extends Fragment {
             }
             if (pictureFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(getContext(),
-                        "com.zoftino.android.fileprovider",
+                        "ibas.provider",
                         pictureFile);
+//                String photoURI = null;
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(cameraIntent, REQUEST_PICTURE_CAPTURE);
             }

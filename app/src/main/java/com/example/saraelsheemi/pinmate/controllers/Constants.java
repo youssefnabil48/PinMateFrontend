@@ -7,6 +7,7 @@ public class Constants {
     public static final String CHANNEL_NAME="channelname";
     public static final String CHANNEL_DESCRIPTION="channeldescription";
 
+
     //location constants
     public static final Double DEFAULT_LATITUDE= 26.8206;
     public static final Double DEFAULT_LONTIDUE=30.8025;
