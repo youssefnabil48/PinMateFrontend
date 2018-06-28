@@ -1,4 +1,4 @@
-package com.example.saraelsheemi.pinmate.views;
+package com.example.saraelsheemi.pinmate.views.user;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,6 +19,7 @@ import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.controllers.PagerAdapter;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 
 public class UserProfile extends Fragment{
@@ -48,7 +49,7 @@ public class UserProfile extends Fragment{
 
         userCoverPicture = view.findViewById(R.id.img_userp_cover);
         userPicture = view.findViewById(R.id.imground_user_profile);
-        userName = view.findViewById(R.id.txt_user_name);
+        userName = view.findViewById(R.id.txt_placep_name);
         viewPager =   view.findViewById(R.id.user_viewpager);
         setUpViewPager(viewPager);
         tabLayout =  view.findViewById(R.id.user_tabs);
@@ -67,6 +68,9 @@ public class UserProfile extends Fragment{
         gson = new Gson();
         user = gson.fromJson(json,User.class);
         userName.setText(user.getName());
+        if(user.getPicture() != null)
+            Picasso.get().load(user.getPicture()).into(userPicture);
+
 
     }
     private void showMessage(String message) {

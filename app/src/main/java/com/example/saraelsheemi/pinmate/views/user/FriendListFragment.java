@@ -1,4 +1,4 @@
-package com.example.saraelsheemi.pinmate.views;
+package com.example.saraelsheemi.pinmate.views.user;
 
 import android.content.Context;
 import android.content.Intent;

@@ -14,12 +14,14 @@ public class Place {
     private String id;
     @SerializedName("name")
     private String name;
-    @SerializedName("avatar")
-    private String avatar;
+    @SerializedName("icon")
+    private String icon;
     @SerializedName("picture")
     private String picture;
     @SerializedName("description")
     private String decsription;
+    @SerializedName("address")
+    private String address;
     @SerializedName("location")
     private MLocation location;
     @SerializedName("gallery")
@@ -27,7 +29,7 @@ public class Place {
     @SerializedName("mobile_number")
     private String mobile_number;
     @SerializedName("managed_by")
-    private User manager;
+    private String manager;
     @SerializedName("events")
     private ArrayList<Event> events;
     @SerializedName("posts")
@@ -35,7 +37,7 @@ public class Place {
     @SerializedName("reviews")
     private ArrayList<Review> reviews;
     @SerializedName("story_id")
-    private ArrayList<Story> stories;
+    private ArrayList<String> stories;
 
     public String getName() {
         return name;
@@ -45,12 +47,12 @@ public class Place {
         this.name = name;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getPicture() {
@@ -85,6 +87,14 @@ public class Place {
         this.gallery = gallery;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getMobile_number() {
         return mobile_number;
     }
@@ -93,11 +103,11 @@ public class Place {
         this.mobile_number = mobile_number;
     }
 
-    public User getManager() {
+    public String  getManager() {
         return manager;
     }
 
-    public void setManager(User manager) {
+    public void setManager(String manager) {
         this.manager = manager;
     }
 
@@ -133,11 +143,12 @@ public class Place {
         this.id = id;
     }
 
-    public ArrayList<Story> getStories() {
+    public ArrayList<String> getStories() {
         return stories;
     }
 
-    public void setStories(ArrayList<Story> stories) {
+
+    public void setStories(ArrayList<String> stories) {
         this.stories = stories;
     }
 }

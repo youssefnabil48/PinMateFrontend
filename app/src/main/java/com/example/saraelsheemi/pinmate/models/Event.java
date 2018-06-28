@@ -2,6 +2,8 @@ package com.example.saraelsheemi.pinmate.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 /**
  * Created by Sara ElSheemi on 5/12/2018.
  */
@@ -18,6 +20,10 @@ public class Event {
     private String start_date;
     @SerializedName("end_date")
     private String end_date;
+
+    //HANFAD LEL POSTS TAMAMAN
+    @SerializedName("posts")
+    private ArrayList<Post> posts;
 
     public String getDescription() {
         return description;

@@ -1,4 +1,4 @@
-package com.example.saraelsheemi.pinmate.views;
+package com.example.saraelsheemi.pinmate.views.user;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,6 +36,7 @@ public class HangoutRequestsFragment extends Fragment {
     private ArrayList<HangoutRequest> hangoutRequests;
     private String user_id;
     private ArrayAdapter<HangoutRequest> hangoutRequestArrayAdapter;
+    private
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     ProgressBar progressBar;
@@ -82,7 +83,7 @@ public class HangoutRequestsFragment extends Fragment {
             public void onSuccess(String object) {
                 progressBar.setVisibility(View.INVISIBLE);
                 JSONObject jsonObject = null;
-                JSONArray jsonArray = null;
+                JSONArray jsonArray ;
                 String message = "";
                 Boolean ok = false;
 
@@ -102,7 +103,7 @@ public class HangoutRequestsFragment extends Fragment {
                         jsonArray = jsonObject.getJSONArray("data");
 
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            HangoutRequest hangoutRequest = gson.fromJson(jsonArray.get(0).toString(), HangoutRequest.class);
+                            HangoutRequest hangoutRequest = gson.fromJson(jsonArray.get(i).toString(), HangoutRequest.class);
                             hangoutRequests.add(hangoutRequest);
                         }
 
