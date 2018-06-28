@@ -64,9 +64,6 @@ public class Chats extends Fragment implements AdapterView.OnItemClickListener{
                             users.add(user);
                         }
                     }
-                    // Create an {@link AndroidFlavorAdapter}, whose data source is a list of
-                    // {@link AndroidFlavor}s. The adapter knows how to create list item views for each item
-                    // in the list.
                     OnlineUsersAdapter onlineUsersAdapter = new OnlineUsersAdapter(getActivity(), users);
 
                     // Get a reference to the ListView, and attach the adapter to the listView.
@@ -100,8 +97,10 @@ public class Chats extends Fragment implements AdapterView.OnItemClickListener{
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         TextView idTextView = (TextView) view.findViewById(R.id.id);
+        TextView userNameTextView = (TextView) view.findViewById(R.id.user_name);
         Intent intent = new Intent(getActivity(), SingleChat.class);
         intent.putExtra("userId", idTextView.getText());
+        intent.putExtra("userName", userNameTextView.getText());
         startActivity(intent);
     }
 }

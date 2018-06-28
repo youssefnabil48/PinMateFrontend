@@ -2,7 +2,6 @@ package com.example.saraelsheemi.pinmate.views;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,15 +14,13 @@ import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
-import com.example.saraelsheemi.pinmate.controllers.FriendListAdapter;
 import com.example.saraelsheemi.pinmate.controllers.MessagesAdapter;
-import com.example.saraelsheemi.pinmate.controllers.OnlineUsersAdapter;
 import com.example.saraelsheemi.pinmate.models.Message;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.github.nkzawa.emitter.Emitter;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import android.content.SharedPreferences;
 import android.widget.ListView;
@@ -38,19 +35,49 @@ import java.util.ArrayList;
 
 public class SingleChat extends AppCompatActivity implements View.OnClickListener {
     private String receiverId;
+    private String receiverName;
     private Socket mSocket;
     private EditText editText;
-    Button sendButton;
-    SharedPreferences sharedPreferences;
-    Gson gson;
-    User loggedInUser;
-    SharedPreferences.Editor editor;
-    JSONObject requestBody = new JSONObject();
+    private Button sendButton;
+    private SharedPreferences sharedPreferences;
+    private Gson gson;
+    private User loggedInUser;
+    private SharedPreferences.Editor editor;
+    private JSONObject requestBody = new JSONObject();
     private ArrayList<Message> messages = new ArrayList<>();
-    Message message;
-    MessagesAdapter chatMessagesAdapter;
-    ListView listView;
-
+    private Message message;
+    private MessagesAdapter chatMessagesAdapter;
+    private ListView listView;
+    private Activity currentActivity = this;
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            currentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String messageContent;
+                    try {
+                        messageContent = data.getString("message");
+                        listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    User tempUser = new User();
+                    tempUser.setName(receiverName);
+                    Message newMessage = new Message();
+                    newMessage.setContent(messageContent);
+                    newMessage.setSenderId(receiverId);
+                    newMessage.setReceiverId(loggedInUser.getId());
+                    newMessage.setSender(tempUser);
+                    messages.add(newMessage);
+                    chatMessagesAdapter.refreshMessages(messages);
+                    listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
+                }
+            });
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +87,24 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
         getChatMessages();
     }
 
+
     private void init(){
         editText = findViewById(R.id.edittext_chatbox);
         sendButton = findViewById(R.id.button_chatbox_send);
         sendButton.setOnClickListener(this);
         chatMessagesAdapter = new MessagesAdapter(this,R.id.messages_list,new ArrayList<Message>());
         listView = findViewById(R.id.messages_list);
+        listView.setDivider(null);
+        listView.setDividerHeight(0);
         listView.setAdapter(chatMessagesAdapter);
         this.receiverId = getIntent().getStringExtra("userId");
+        this.receiverName = getIntent().getStringExtra("userName");
         try {
-            mSocket = IO.socket("http://192.168.1.24:4000");
+            mSocket = IO.socket(Constants.REMOTE_SOCKET);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        mSocket.on("message", onNewMessage);
         mSocket.connect();
         JSONObject message = new JSONObject();
         sharedPreferences = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
@@ -105,11 +137,13 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
             public void onSuccess(String object) {
                 try {
                     JSONObject jsonObject = new JSONObject(object);
-                    JSONArray dataArray = jsonObject.getJSONArray("data");
-                    Log.e("response", dataArray.toString());
+                    JSONArray dataArray = jsonObject.getJSONObject("data").getJSONArray("chat");
+                    User firstUser = gson.fromJson(jsonObject.getJSONObject("data").getJSONObject("firstUser").toString(),User.class);
+                    User secondUser = gson.fromJson(jsonObject.getJSONObject("data").getJSONObject("secondUser").toString(),User.class);
                     if (dataArray.length() > 0) {
                         for (int i = 0; i< dataArray.length(); i++){
-                            message = gson.fromJson(jsonObject.getJSONArray("data").getJSONObject(i).toString(),Message.class);
+                            message = gson.fromJson(dataArray.getJSONObject(i).toString(),Message.class);
+                            message.setUsers(firstUser, secondUser);
                             messages.add(message);
                         }
                     }
@@ -119,18 +153,11 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
             @Override
             public void onFailure(Exception e) {
                 showMessage("Internal error. Please retry.");
             }
-
-            private void showMessage(String message) {
-                Toast.makeText(getParent(), message, Toast.LENGTH_SHORT).show();
-            }
-
         });
         getChatMessagesTask.execute(Constants.GET_MESSAGES);
     }
@@ -140,12 +167,18 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
         chatMessagesAdapter.addAll(messages);
         chatMessagesAdapter.notifyDataSetChanged();
     }
-
+    private void showMessage(String message) {
+        Toast.makeText(getParent(), message, Toast.LENGTH_SHORT).show();
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_chatbox_send: {
                 String messageContent = editText.getText().toString();
+                if(messageContent.length() == 0){
+                    showMessage("cannot send empty message");
+                    return;
+                }
                 JSONObject message = new JSONObject();
                 try {
                     message.put("receiverId", receiverId);
@@ -155,8 +188,23 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
                 }
                 mSocket.emit("message", message);
                 editText.setText("");
+                Message messageObj = new Message();
+                messageObj.setContent(messageContent);
+                messageObj.setSender(loggedInUser);
+                messageObj.setSenderId(loggedInUser.getId());
+                messageObj.setReceiverId(receiverId);
+                messages.add(messageObj);
+                chatMessagesAdapter.refreshMessages(messages);
+                listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
             }
             break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSocket.disconnect();
+        mSocket.off("message", onNewMessage);
     }
 }

@@ -61,23 +61,14 @@ public class OnlineUsersAdapter extends ArrayAdapter<User> {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.online_users_row, parent, false);
         }
 
-        // Get the {@link AndroidFlavor} object located at this position in the list
         User user = getItem(position);
 
-        // Find the TextView in the list_item.xml layout with the ID version_name
         TextView idTextView = (TextView) listItemView.findViewById(R.id.id);
-        // Get the version name from the current AndroidFlavor object and
-        // set this text on the name TextView
         idTextView.setText(user.getId());
 
-        // Find the TextView in the list_item.xml layout with the ID version_number
-        TextView nameTextView = (TextView) listItemView.findViewById(R.id.name);
-        // Get the version number from the current AndroidFlavor object and
-        // set this text on the number TextView
+        TextView nameTextView = listItemView.findViewById(R.id.user_name);
         nameTextView.setText(user.getName());
 
-        // Return the whole list item layout (containing 2 TextViews and an ImageView)
-        // so that it can be shown in the ListView
         return listItemView;
     }
 

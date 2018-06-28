@@ -9,7 +9,34 @@ public class Message {
     private String receiverId;
     @SerializedName("content")
     private String content;
+    private User sender;
+    private User receiver;
 
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
+
+    public void setUsers(User first, User second){
+        if(first.getId() == senderId){
+            this.setSender(first);
+            this.setReceiver(second);
+        }else{
+            this.setSender(second);
+            this.setReceiver(first);
+        }
+    }
 
     public String getSenderId() {
         return senderId;
