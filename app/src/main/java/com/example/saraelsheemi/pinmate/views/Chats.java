@@ -107,8 +107,8 @@ public class Chats extends Fragment implements AdapterView.OnItemClickListener{
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TextView idTextView = (TextView) view.findViewById(R.id.id);
-        TextView userNameTextView = (TextView) view.findViewById(R.id.user_name);
+        TextView idTextView = view.findViewById(R.id.id);
+        TextView userNameTextView = view.findViewById(R.id.user_name);
         Intent intent = new Intent(getActivity(), SingleChat.class);
         intent.putExtra("userId", idTextView.getText());
         intent.putExtra("userName", userNameTextView.getText());
