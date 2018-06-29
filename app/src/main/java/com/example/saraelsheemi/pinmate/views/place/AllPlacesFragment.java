@@ -63,10 +63,10 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
     public void init(View view) {
         places = new ArrayList<>();
         gson = new Gson();
-        swipeRefreshLayout = view.findViewById(R.id.swiperefresh_favorites);
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh_allPlaces);
         swipeRefreshLayout.setOnRefreshListener(this);
         progressBar = view.findViewById(R.id.progressbar_favorites_loading);
-        listViewPlace = view.findViewById(R.id.listView_favorites);
+        listViewPlace = view.findViewById(R.id.listView_allPlaces);
 
         placesAdapter = new PlacesAdapter(getActivity(), R.layout.activity_allplaces_list_item, new ArrayList<Place>(), this);
         listViewPlace.setAdapter(placesAdapter);
@@ -112,7 +112,6 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
                     }
                 }
             }
-
             @Override
             public void onFailure(Exception e) {
                 swipeRefreshLayout.setRefreshing(false);
@@ -142,11 +141,12 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
             editor.putString("place_details", jsonData);
             editor.apply();
 
+
             //open place profile
             Fragment profile = new PlaceProfile();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.content_frame, profile); // give your fragment container id in first parameter
-            //   transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+            transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
             transaction.commit();
         }
     };

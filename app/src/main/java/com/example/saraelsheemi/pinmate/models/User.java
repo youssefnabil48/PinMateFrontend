@@ -46,6 +46,8 @@ public class User {
     private String email_verf_token;
     @SerializedName("tracker_id")
     private String tracker_id;
+    @SerializedName("friend_requests")
+    private ArrayList<String> friend_requests;
     @SerializedName("friends")
     private ArrayList<String> friendList;
     @SerializedName("blocks")
@@ -56,6 +58,14 @@ public class User {
     private ArrayList<UserViewer> viewers;
     @SerializedName("notification_token")
     private String notification_token;
+
+    public ArrayList<String> getFriend_requests() {
+        return friend_requests;
+    }
+
+    public void setFriend_requests(ArrayList<String> friend_requests) {
+        this.friend_requests = friend_requests;
+    }
 
     public static User getUserInstance() {
         return userInstance;

@@ -34,12 +34,13 @@
         android:text="Place Description"
         android:textColor="#747B80" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/imgbtn_favs_places"
         android:background="@android:color/transparent"
         android:src="@drawable/unfav2"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
+
         android:layout_alignTop="@id/txt_fav_place_list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

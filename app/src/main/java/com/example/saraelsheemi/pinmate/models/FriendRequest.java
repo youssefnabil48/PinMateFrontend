@@ -1,14 +1,20 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Sara ElSheemi on 5/12/2018.
  */
 
 public class FriendRequest {
 
+    @SerializedName("created_at")
     private String created_at;
+    @SerializedName("status")
     private boolean Status;
+    @SerializedName("sender_id")
     private User sender_id;
+    @SerializedName("receiver_id")
     private User receiver_id;
 
     public String getCreated_at() {

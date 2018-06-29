@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/img_friend"
+        android:id="@+id/img_notf_friend"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
@@ -16,8 +16,8 @@
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:id="@+id/txt_friend_nname"
-        android:layout_toEndOf="@id/img_friend"
+        android:id="@+id/txt_notf_friend_name"
+        android:layout_toEndOf="@id/img_notf_friend"
         android:layout_marginTop="45dp"
         android:text="Friend Name"
         android:textColor="@android:color/black" />
