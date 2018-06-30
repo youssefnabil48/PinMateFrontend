@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 import com.example.saraelsheemi.pinmate.R;
 
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.controllers.adapters.MessagesAdapter;

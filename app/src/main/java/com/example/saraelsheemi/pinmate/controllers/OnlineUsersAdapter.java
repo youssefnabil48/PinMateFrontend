@@ -2,6 +2,7 @@ package com.example.saraelsheemi.pinmate.controllers;
 
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.models.User;
+import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -66,8 +67,12 @@ public class OnlineUsersAdapter extends ArrayAdapter<User> {
         TextView idTextView = (TextView) listItemView.findViewById(R.id.id);
         idTextView.setText(user.getId());
 
+
         TextView nameTextView = listItemView.findViewById(R.id.user_name);
         nameTextView.setText(user.getName());
+        MLRoundedImageView userImage = listItemView.findViewById(R.id.user_image);
+        if(user.getPicture()!=null)
+            Picasso.get().load(user.getPicture()).into(userImage);
 
         return listItemView;
     }

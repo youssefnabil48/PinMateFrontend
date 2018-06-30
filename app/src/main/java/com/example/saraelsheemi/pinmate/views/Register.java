@@ -13,11 +13,10 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.models.MLocation;
-import com.example.saraelsheemi.pinmate.models.MResponse;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -25,7 +24,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity implements  View.OnClickListener {

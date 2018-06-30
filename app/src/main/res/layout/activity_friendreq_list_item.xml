@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView
+        android:id="@+id/img_frreq_friend"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/male_user_profile_picture" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/txt_frreq_friend_name"
+        android:layout_toEndOf="@id/img_frreq_friend"
+        android:layout_marginTop="40dp"
+        android:text="Friend Name"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/btn_frreq_accept"
+        android:text="Accept"
+        style="@style/LoginButton"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="85dp"
+        android:background="@drawable/round_corner"
+        android:textSize="13sp"
+        android:layout_width="70dp"
+        android:layout_height="30dp" />
+
+    <Button
+        android:id="@+id/btn_frreq_decline"
+        android:text="Decline"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:textAllCaps="false"
+        android:layout_marginStart="10dp"
+        android:layout_alignTop="@id/btn_frreq_accept"
+        android:background="@drawable/rounded_corner_white"
+        android:textColor="@color/colorPrimary"
+        android:layout_width="70dp"
+        android:textSize="13sp"
+        android:layout_height="30dp" />
+
+</RelativeLayout>

@@ -47,9 +47,9 @@ public class Constants {
     public static final String RESPOND_HANGOUT_REQUEST = BACKEND_URL + "/hangoutRequest/respond";
 
     //friend requests urls
-    public static final String GET_FRIEND_REQUESTS = BACKEND_URL + "/friendRequest/getall/";
     public static final String SEND_FRIEND_REQUEST  = BACKEND_URL + "/friendRequest/create";
     public static final String RESPOND_FRIEND_REQUEST = BACKEND_URL + "/friendRequest/respond";
+    public static final String GET_FRIEND_REQUESTS = BACKEND_URL + "/friendRequest/getrcvrrequests/";
 
 
 }

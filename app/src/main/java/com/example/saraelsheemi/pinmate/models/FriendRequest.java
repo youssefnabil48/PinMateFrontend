@@ -13,9 +13,19 @@ public class FriendRequest {
     @SerializedName("status")
     private boolean Status;
     @SerializedName("sender_id")
-    private User sender_id;
+    private String sender_id;
     @SerializedName("receiver_id")
-    private User receiver_id;
+    private String receiver_id;
+    @SerializedName("_id")
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCreated_at() {
         return created_at;
@@ -33,19 +43,19 @@ public class FriendRequest {
         Status = status;
     }
 
-    public User getSender_id() {
+    public String getSender_id() {
         return sender_id;
     }
 
-    public void setSender_id(User sender_id) {
+    public void setSender_id(String sender_id) {
         this.sender_id = sender_id;
     }
 
-    public User getReceiver_id() {
+    public String  getReceiver_id() {
         return receiver_id;
     }
 
-    public void setReceiver_id(User receiver_id) {
+    public void setReceiver_id(String receiver_id) {
         this.receiver_id = receiver_id;
     }
 }

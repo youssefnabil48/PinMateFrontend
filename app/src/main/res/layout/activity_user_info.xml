@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageButton
         android:id="@+id/btn_edit_userinfo"
-        android:layout_margin="10dp"
+        android:layout_margin="20dp"
         android:layout_alignTop="@id/txt_placep_name"
         android:src="@android:drawable/ic_menu_edit"
         android:layout_alignParentEnd="true"
@@ -16,63 +20,80 @@
     <ImageView
         android:src="@drawable/baseline_person_outline_black_24dp"
         android:id="@+id/img_userp_name_icon"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+
         android:layout_alignTop="@id/txt_placep_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView
+    <EditText
         android:id="@+id/txt_placep_name"
         android:text="User name"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="15dp"
+        android:textSize="13sp"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ImageView
-        android:src="@drawable/baseline_lock_black_24"
+        android:src="@drawable/baseline_phone_black_24dp"
         android:id="@+id/img_place_phone_icon"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+
         android:layout_alignTop="@id/txt_place_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView
+    <EditText
         android:id="@+id/txt_place_phone"
         android:layout_below="@id/txt_placep_name"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="5dp"
-        android:text="User password"
-        android:inputType="textPassword"
+        android:layout_marginStart="50dp"
+        android:text="User phone"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp"
+        android:textSize="13sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ImageView
         android:src="@drawable/baseline_email_black_24dp"
         android:id="@+id/img_placep_address_icon"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+
         android:layout_alignTop="@id/txt_place_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView
+    <EditText
         android:id="@+id/txt_place_address"
         android:layout_below="@id/txt_place_phone"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="50dp"
+        android:textSize="13sp"
         android:text="youremail@yahoo.com"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp"
         android:inputType="textEmailAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <ImageView
         android:src="@drawable/baseline_cake_black_24dp"
         android:id="@+id/img_userp_birth_icon"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+
         android:layout_alignTop="@id/txt_user_birthday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView
+    <EditText
         android:id="@+id/txt_user_birthday"
         android:layout_below="@id/txt_place_address"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="50dp"
+        android:textSize="13sp"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp"
         android:text="22/9/1996"
         android:inputType="date"
         android:layout_width="wrap_content"
@@ -81,15 +102,19 @@
     <ImageView
         android:src="@drawable/baseline_fingerprint_black_24dp"
         android:id="@+id/img_userp_gender_icon"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_alignTop="@id/txt_user_gender"
+        android:layout_marginTop="10dp"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView
+    <EditText
         android:id="@+id/txt_user_gender"
         android:layout_below="@id/txt_user_birthday"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="50dp"
+        android:textSize="13sp"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp"
         android:text="Female"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -97,16 +122,21 @@
     <ImageView
         android:src="@drawable/baseline_place_black_24"
         android:id="@+id/img_userp_home_icon"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_alignTop="@id/txt_user_home"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView
+
+    <EditText
         android:id="@+id/txt_user_home"
         android:layout_below="@id/txt_user_gender"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="50dp"
+        android:textSize="13sp"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp"
         android:text="Home Address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>
+</ScrollView>

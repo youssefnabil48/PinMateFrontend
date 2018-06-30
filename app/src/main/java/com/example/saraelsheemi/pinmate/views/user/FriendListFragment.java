@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.controllers.adapters.FriendListAdapter;
+import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.User;
+import com.example.saraelsheemi.pinmate.views.place.PlaceProfile;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -130,8 +133,18 @@ public class FriendListFragment extends Fragment {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            User user = (User) adapterView.getItemAtPosition(position);
-            showMessage(user.getName());
+
+            User u = (User) adapterView.getItemAtPosition(position);
+            String jsonData = gson.toJson(u, User.class);
+            editor.putString("friend_details", jsonData);
+            editor.apply();
+
+            //open place profile
+//            Fragment profile = new UserProfile();
+//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//            transaction.replace(R.id.content_frame, profile); // give your fragment container id in first parameter
+//            transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+//            transaction.commit();
 
         }
     };

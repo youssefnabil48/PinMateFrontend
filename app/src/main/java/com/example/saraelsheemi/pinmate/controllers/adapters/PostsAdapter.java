@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.saraelsheemi.pinmate.R;
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.models.Post;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.example.saraelsheemi.pinmate.views.place.PostsFragment;

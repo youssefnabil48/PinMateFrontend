@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.squareup.picasso.Picasso;
 
@@ -33,7 +34,7 @@ public class FriendListAdapter extends ArrayAdapter<User> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView friendName;
-        ImageView friendPicture;
+        MLRoundedImageView friendPicture;
 
         //convert view == one row
         // Check if the existing view is being reused, otherwise inflate the view

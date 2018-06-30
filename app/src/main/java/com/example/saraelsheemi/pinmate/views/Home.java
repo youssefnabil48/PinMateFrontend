@@ -21,10 +21,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPut;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPut;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
-import com.example.saraelsheemi.pinmate.controllers.NotificationsMessagingService;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.example.saraelsheemi.pinmate.views.place.AllPlacesFragment;
 import com.example.saraelsheemi.pinmate.views.place.FavoritePlacesFragment;
@@ -120,7 +119,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 //        adapter.addFragment(new UserProfile(),"one");
 //        adapter.addFragment(new Map(),"one");
 //        adapter.addFragment(new Chats(),"one");
-//        adapter.addFragment(new NotificationsFragment(),"one");
+//        adapter.addFragment(new FriendRequestsFragment(),"one");
 //        viewPager.setAdapter(adapter);
 //    }
 
@@ -210,9 +209,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         } else if (id == R.id.nav_place) {
             fragment = new AllPlacesFragment();
 
-        } else if (id == R.id.nav_trackers) {
-
-        } else if (id == R.id.nav_map) {
+        }  else if (id == R.id.nav_map) {
             fragment = new MapsFragment();
 
         } else if (id == R.id.nav_settings) {

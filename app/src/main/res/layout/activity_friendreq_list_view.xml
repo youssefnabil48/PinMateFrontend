@@ -6,12 +6,12 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swiperefresh_req"
+        android:id="@+id/swiperefresh_frreq"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/listView_req"
+            android:id="@+id/listView_frreq"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -20,11 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.saraelsheemi.pinmate.R;
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPut;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPut;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
-import com.example.saraelsheemi.pinmate.models.HangoutRequest;
+import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -85,6 +85,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     //marker settings
     ArrayList<Marker> friendsMarkers;
+    ArrayList<Marker> placesMarkers;
     Marker userMarker;
 
     //update location
@@ -95,6 +96,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     //friends locations
     private ArrayList<User> friends;
+    private ArrayList<Place> places;
     Gson gson;
 
     //user address from location
@@ -162,6 +164,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         String json = sharedPreferences.getString("user_info", "");
         user = gson.fromJson(json, User.class);
         friendsMarkers = new ArrayList<>();
+        placesMarkers = new ArrayList<>();
     }
 
     private void updateLocation(double lat, double lng) {
@@ -255,6 +258,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                                 updateLocation(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                                 getFriends();
+                                getPlaces();
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
@@ -274,6 +278,45 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void startIntentSenderForResult(IntentSender intent, int requestCode, @Nullable Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags, Bundle options) throws IntentSender.SendIntentException {
         super.startIntentSenderForResult(intent, requestCode, fillInIntent, flagsMask, flagsValues, extraFlags, options);
+    }
+
+    private void getPlaces() {
+        AsynchTaskGet asynchTaskGet = new AsynchTaskGet(getContext(), new EventListener<String>() {
+            @Override
+            public void onSuccess(String object) {
+                JSONObject jsonObject = null;
+                JSONArray jsonArray;
+                String message = "";
+                Boolean ok = false;
+
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                    message = jsonObject.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (ok && message.contains("Places loaded")) {
+                    try {
+                        jsonArray = jsonObject.getJSONArray("data");
+                        places = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Place place = gson.fromJson(jsonArray.get(i).toString(), Place.class);
+                            places.add(place);
+                        }
+                    addPlacessMarker();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("loading places","Internal server error.");
+            }
+        });
+        asynchTaskGet.execute(Constants.GET_PLACES);
     }
 
     private void getFriends() {
@@ -347,6 +390,29 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 userMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.mapgirl));
         } else
             userMarker.setPosition(new LatLng(user.getCurrent_location().getLatitude(), user.getCurrent_location().getLongitude()));
+    }
+
+    private void addPlacessMarker() {
+
+        if (places.size() == 0)
+            return;
+        for (int i = 0; i < places.size(); i++) {
+            if (placesMarkers.size() == 0 || placesMarkers.size() <places.size()) {
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(places.get(i).getLocation().getLatitude(),
+                                places.get(i).getLocation().getLongitude()))
+                        .title(places.get(i).getName())
+                        .snippet(getAddress(places.get(i).getLocation().getLatitude(),
+                                places.get(i).getLocation().getLongitude()))
+                        .infoWindowAnchor(0.5f, 0.5f));
+                Log.e("friend name", places.get(i).getName());
+                Log.e("friend location", places.get(i).getLocation().getLatitude() + "");
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
+                placesMarkers.add(marker);
+            } else
+                placesMarkers.get(i).setPosition(new LatLng(places.get(i).getLocation().getLatitude(),
+                        places.get(i).getLocation().getLongitude()));
+        }
     }
 
     private void addFriendsMarker() {

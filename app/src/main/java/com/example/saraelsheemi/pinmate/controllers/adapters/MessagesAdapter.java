@@ -1,9 +1,11 @@
 package com.example.saraelsheemi.pinmate.controllers.adapters;
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.models.Message;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -53,8 +56,12 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
                 listItemView = LayoutInflater.from(getContext()).inflate(R.layout.message_row_send, parent, false);
             }else {
                 listItemView = LayoutInflater.from(getContext()).inflate(R.layout.message_row_receive, parent, false);
-                TextView senderNameView = listItemView.findViewById(R.id.sender_name);
-                senderNameView.setText(message.getSender().getName());
+               // TextView senderNameView = listItemView.findViewById(R.id.sender_name);
+                MLRoundedImageView senderPic = listItemView.findViewById(R.id.image_message_profile);
+                if(message.getSender().getPicture() != null)
+                    Picasso.get().load(message.getSender().getPicture()).into(senderPic);
+              //  senderNameView.setText(message.getSender().getName());
+
             }
             TextView contentView = listItemView.findViewById(R.id.message_content);
             contentView.setText(message.getContent());

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.PagerAdapter;
+import com.example.saraelsheemi.pinmate.views.user.FriendRequestsFragment;
 import com.example.saraelsheemi.pinmate.views.user.UserProfile;
 
 public class Main extends Fragment {
@@ -46,7 +47,7 @@ public class Main extends Fragment {
         PagerAdapter adapter = new PagerAdapter(getFragmentManager(),getContext());
         adapter.addFragment(new UserProfile(),"one");
         adapter.addFragment(new Chats(),"one");
-        adapter.addFragment(new NotificationsFragment(),"one");
+        adapter.addFragment(new FriendRequestsFragment(),"one");
         viewPager.setAdapter(adapter);
     }
 }
