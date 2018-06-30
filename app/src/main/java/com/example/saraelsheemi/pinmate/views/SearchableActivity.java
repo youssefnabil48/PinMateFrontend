@@ -149,10 +149,15 @@ public class SearchableActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //set listener on item click to redirect to single user or place view
-        String itemId = (String)((TextView) view.findViewById(R.id.search_item_id)).getText();
         String itemType = (String)((TextView) view.findViewById(R.id.search_item_type)).getText();
         if (itemType.equals("place")){
             //redirect to place view
+            try {
+                JSONObject placeJson = (JSONObject)jsonArray.get(position);
+                showMessage(placeJson.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }else {
             try {
                 Intent i = new Intent(this, AnyUser.class);
@@ -161,16 +166,6 @@ public class SearchableActivity extends AppCompatActivity implements AdapterView
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            //Intent i = new Intent(this, AnyUser.class);
-            //i.putExtra("user", searchItems.get(position).getClass());
-            //startActivity(i);
         }
-
-//        TextView idTextView = view.findViewById(R.id.id);
-//        TextView userNameTextView = view.findViewById(R.id.user_name);
-//        Intent intent = new Intent(this, SingleChat.class);
-//        intent.putExtra("userId", idTextView.getText());
-//        intent.putExtra("userName", userNameTextView.getText());
-//        startActivity(intent);
     }
 }
