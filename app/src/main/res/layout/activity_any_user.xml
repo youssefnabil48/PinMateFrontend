@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.saraelsheemi.pinmate.views.user.UserProfile">
+
+    <RelativeLayout
+        android:id="@+id/upper_half"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_userp_cover"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:background="@android:color/darker_gray" />
+
+        <com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView
+            android:id="@+id/imground_user_profile"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="-160dp"
+            android:layout_below="@+id/img_userp_cover"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/app_name"
+            android:scaleType="center"
+            android:src="@drawable/male_user_profile_picture" />
+
+        <TextView
+            android:id="@+id/txt_placep_name"
+            android:text="Name"
+            android:layout_below="@id/imground_user_profile"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+    <!--<Button-->
+    <!--android:id="@+id/btn_edit_cover_photo"-->
+    <!--android:text="Edit"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:background="@android:color/transparent"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+    <Button
+        android:id="@+id/add_friend_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/upper_half"
+        android:text="Add as Friend"/>
+    <RelativeLayout
+        android:id="@+id/lower_half"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_below="@id/add_friend_btn"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/baseline_person_outline_black_24dp"
+            android:id="@+id/img_userp_name_icon"
+            android:layout_marginStart="10dp"
+            android:layout_alignTop="@id/txt_placep_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/txt_placep_username"
+            android:text="User name"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:src="@drawable/baseline_email_black_24dp"
+            android:id="@+id/img_placep_address_icon"
+            android:layout_marginStart="10dp"
+            android:layout_alignTop="@id/txt_place_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/txt_place_address"
+            android:layout_below="@id/txt_placep_username"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"
+            android:text="youremail@yahoo.com"
+            android:inputType="textEmailAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:src="@drawable/baseline_cake_black_24dp"
+            android:id="@+id/img_userp_birth_icon"
+            android:layout_marginStart="10dp"
+            android:layout_alignTop="@id/txt_user_birthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/txt_user_birthday"
+            android:layout_below="@id/txt_place_address"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"
+            android:text="22/9/1996"
+            android:inputType="date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:src="@drawable/baseline_fingerprint_black_24dp"
+            android:id="@+id/img_userp_gender_icon"
+            android:layout_marginStart="10dp"
+            android:layout_alignTop="@id/txt_user_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/txt_user_gender"
+            android:layout_below="@id/txt_user_birthday"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"
+            android:text="Female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</RelativeLayout>

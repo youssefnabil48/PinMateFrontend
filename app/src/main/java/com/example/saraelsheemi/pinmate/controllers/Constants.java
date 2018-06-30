@@ -52,4 +52,6 @@ public class Constants {
     public static final String RESPOND_FRIEND_REQUEST = BACKEND_URL + "/friendRequest/respond";
 
 
+    //search urls
+    public static final String SEARCH = BACKEND_URL + "/search/";
 }
