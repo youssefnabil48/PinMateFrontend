@@ -1,39 +1,25 @@
 package com.example.saraelsheemi.pinmate.views;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
-import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
-import com.example.saraelsheemi.pinmate.controllers.PlacesAdapter;
 import com.example.saraelsheemi.pinmate.controllers.SearchAdapter;
-import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.SearchItem;
-import com.example.saraelsheemi.pinmate.models.User;
-import com.example.saraelsheemi.pinmate.views.place.PlaceProfile;
 import com.example.saraelsheemi.pinmate.views.user.AnyUser;
 import com.google.gson.Gson;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
