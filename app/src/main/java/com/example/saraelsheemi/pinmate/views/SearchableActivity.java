@@ -28,7 +28,9 @@ import com.example.saraelsheemi.pinmate.controllers.PlacesAdapter;
 import com.example.saraelsheemi.pinmate.controllers.SearchAdapter;
 import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.SearchItem;
+import com.example.saraelsheemi.pinmate.models.User;
 import com.example.saraelsheemi.pinmate.views.place.PlaceProfile;
+import com.example.saraelsheemi.pinmate.views.user.AnyUser;
 import com.google.gson.Gson;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -47,6 +49,8 @@ public class SearchableActivity extends AppCompatActivity implements AdapterView
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Gson gson;
+    JSONObject jsonObject = null;
+    JSONArray jsonArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +76,8 @@ public class SearchableActivity extends AppCompatActivity implements AdapterView
         AsynchTaskGet asynchTaskGet = new AsynchTaskGet(this, new EventListener<String>() {
             @Override
             public void onSuccess(String object) {
-                JSONObject jsonObject = null;
-                JSONArray jsonArray;
+//                JSONObject jsonObject = null;
+//                JSONArray jsonArray;
                 String message;
                 Boolean ok = false;
 
@@ -151,6 +155,16 @@ public class SearchableActivity extends AppCompatActivity implements AdapterView
             showMessage("place");
         }else {
             showMessage("user");
+            try {
+                Intent i = new Intent(this, AnyUser.class);
+                i.putExtra("user", jsonArray.get(position).toString());
+                startActivity(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //Intent i = new Intent(this, AnyUser.class);
+            //i.putExtra("user", searchItems.get(position).getClass());
+            //startActivity(i);
         }
 
 //        TextView idTextView = view.findViewById(R.id.id);
