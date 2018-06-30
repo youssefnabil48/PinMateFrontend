@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,34 +13,34 @@
         android:src="@drawable/placeprofile" />
 
     <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
         android:id="@+id/txt_fav_place_list_name"
-        android:layout_toEndOf="@id/img_fav_place_list_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:textSize="15sp"
+        android:layout_toEndOf="@id/img_fav_place_list_picture"
         android:text="Place Name"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
 
     <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
         android:id="@+id/txt_fav_place_list_description"
-        android:layout_below="@id/txt_fav_place_list_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignStart="@id/txt_fav_place_list_name"
+        android:layout_below="@id/txt_fav_place_list_name"
         android:layout_marginTop="5dp"
-        android:textSize="13sp"
         android:text="Place Description"
-        android:textColor="#747B80" />
+        android:textColor="#747B80"
+        android:textSize="13sp" />
 
     <ImageButton
         android:id="@+id/imgbtn_favs_places"
-        android:background="@android:color/transparent"
-        android:src="@drawable/fav2"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:layout_alignTop="@id/txt_fav_place_list_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/txt_fav_place_list_name"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/fav2" />
 
 </RelativeLayout>

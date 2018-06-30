@@ -1,4 +1,4 @@
-package com.example.saraelsheemi.pinmate.controllers;
+package com.example.saraelsheemi.pinmate.controllers.adapters;
 
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.models.Message;

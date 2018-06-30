@@ -1,4 +1,4 @@
-package com.example.saraelsheemi.pinmate.controllers;
+package com.example.saraelsheemi.pinmate.controllers.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.views.place.FavoritePlacesFragment;
 import com.squareup.picasso.Picasso;

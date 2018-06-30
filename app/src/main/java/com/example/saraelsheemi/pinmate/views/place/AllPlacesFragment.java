@@ -22,7 +22,7 @@ import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
-import com.example.saraelsheemi.pinmate.controllers.PlacesAdapter;
+import com.example.saraelsheemi.pinmate.controllers.adapters.PlacesAdapter;
 import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;

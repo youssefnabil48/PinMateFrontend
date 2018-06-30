@@ -32,7 +32,7 @@ import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
-import com.example.saraelsheemi.pinmate.controllers.HangoutRequestsAdapter;
+import com.example.saraelsheemi.pinmate.controllers.adapters.HangoutRequestsAdapter;
 import com.example.saraelsheemi.pinmate.models.HangoutRequest;
 import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.User;
@@ -48,7 +48,6 @@ import java.util.Calendar;
 public class HangoutRequestsFragment extends Fragment implements View.OnClickListener {
 
     private ListView listViewHangouts;
-    private ArrayList<HangoutRequest> hangoutRequests;
     private String user_id;
     private ArrayAdapter<HangoutRequest> hangoutRequestArrayAdapter;
     private
@@ -78,7 +77,6 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
-        hangoutRequests = new ArrayList<>();
         progressBar = view.findViewById(R.id.progressbar_loading_hangouts);
         listViewHangouts = view.findViewById(R.id.listView_hangouts);
         listViewHangouts.setOnItemClickListener(onItemClickListener);
@@ -119,7 +117,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                 } else if (ok && message.contains("Requests loaded")) {
                     try {
                         jsonArray = jsonObject.getJSONArray("data");
-
+                         ArrayList<HangoutRequest> hangoutRequests = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             HangoutRequest hangoutRequest = gson.fromJson(jsonArray.get(i).toString(), HangoutRequest.class);
                             hangoutRequests.add(hangoutRequest);
@@ -144,6 +142,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
     }
 
     public void populateFriendsArrayListAdapter(ArrayList<HangoutRequest> allHangoutsArrayList) {
+        hangoutRequestArrayAdapter.clear();
         hangoutRequestArrayAdapter.addAll(allHangoutsArrayList);
         hangoutRequestArrayAdapter.notifyDataSetChanged();
     }

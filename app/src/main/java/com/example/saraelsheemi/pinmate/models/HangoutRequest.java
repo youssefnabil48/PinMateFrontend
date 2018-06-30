@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class HangoutRequest {
 
+    @SerializedName("_id")
+    private String id;
     @SerializedName("date")
     private String date;
     @SerializedName("description")
@@ -24,6 +26,14 @@ public class HangoutRequest {
     private ArrayList<String> invited;
     @SerializedName("place")
     private String place_id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getPlace_id() {
         return place_id;

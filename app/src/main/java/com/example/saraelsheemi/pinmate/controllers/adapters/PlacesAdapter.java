@@ -1,4 +1,4 @@
-package com.example.saraelsheemi.pinmate.controllers;
+package com.example.saraelsheemi.pinmate.controllers.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

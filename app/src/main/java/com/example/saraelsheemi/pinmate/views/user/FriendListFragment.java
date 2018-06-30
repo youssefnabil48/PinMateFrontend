@@ -1,12 +1,10 @@
 package com.example.saraelsheemi.pinmate.views.user;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +19,7 @@ import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
-import com.example.saraelsheemi.pinmate.controllers.FriendListAdapter;
+import com.example.saraelsheemi.pinmate.controllers.adapters.FriendListAdapter;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
 

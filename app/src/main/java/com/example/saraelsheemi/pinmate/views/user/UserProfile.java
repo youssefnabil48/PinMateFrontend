@@ -81,12 +81,14 @@ public class UserProfile extends Fragment{
         tabLayout.getTabAt(0).setText("BIO");
         tabLayout.getTabAt(1).setText("FRIENDS");
         tabLayout.getTabAt(2).setText("HANGOUTS");
+        tabLayout.getTabAt(3).setText("REQUESTS");
     }
     private void setUpViewPager(ViewPager viewPager){
         PagerAdapter adapter = new PagerAdapter(getFragmentManager(),getContext());
         adapter.addFragment(new UserInfoFragment(),"one");
         adapter.addFragment(new FriendListFragment(),"one");
         adapter.addFragment(new HangoutRequestsFragment(),"one");
+        adapter.addFragment(new RequestsFragment(),"one");
         viewPager.setAdapter(adapter);
     }
 }

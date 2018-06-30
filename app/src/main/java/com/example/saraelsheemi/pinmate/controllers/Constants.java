@@ -15,8 +15,8 @@ public class Constants {
     public static final Double DEFAULT_LONTIDUE=30.8025;
 
     //backend urls
-    public static final String BACKEND_URL="https://pin-mate.herokuapp.com/api";
-  // public static final String BACKEND_URL="http://192.168.1.6:3000/api";
+  //  public static final String BACKEND_URL="https://pin-mate.herokuapp.com/api";
+    public static final String BACKEND_URL="http://192.168.1.6:3000/api";
     public static final String REMOTE_SOCKET="wws://pin-mate.herokuapp.com";
 
     //user urls
@@ -24,7 +24,6 @@ public class Constants {
     public static final String LOGIN_URL= BACKEND_URL + "/user/signin";
     public static final String GET_ALL_USERS= BACKEND_URL + "/user/all";
     public static final String GET_USER= BACKEND_URL + "/user/";
-    public static final String GET_USER_HANGOUTS= BACKEND_URL + "/hangoutrequest/getsndrrequests/";
     public static final String UPDATE_USER= BACKEND_URL + "/user/update/";
     public static final String GET_MESSAGES = BACKEND_URL + "/chat";
     public static final String GET_FRIENDS= BACKEND_URL + "/user/friends/";
@@ -43,6 +42,9 @@ public class Constants {
     //hangout requests urls
     public static final String CREATE_HANGOUT= BACKEND_URL + "/hangoutRequest/create";
     public static final String DELETE_HANGOUT= BACKEND_URL + "/hangoutRequest/delete/";
+    public static final String GET_USER_HANGOUTS= BACKEND_URL + "/hangoutrequest/getsndrrequests/";
+    public static final String GET_HANGOUTS= BACKEND_URL + "/hangoutRequest/getrcvrrequests/";
+    public static final String RESPOND_HANGOUT_REQUEST = BACKEND_URL + "/hangoutRequest/respond";
 
     //friend requests urls
     public static final String GET_FRIEND_REQUESTS = BACKEND_URL + "/friendRequest/getall/";
