@@ -16,9 +16,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPut;
@@ -44,6 +46,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     NotificationChannel notificationChannel;
     Toolbar toolbar;
     NavigationView navigationView;
+    SearchView searchView;
 //    HomeTabLayout tabLayout;
 //    ViewPager viewPager;
 
@@ -84,6 +87,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        searchView = findViewById(R.id.search_bar);
+
         //setup notification
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -106,6 +111,23 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 //        tabLayout = findViewById(R.id.tabs);
 //        tabLayout.setupWithViewPager(viewPager);
 //        setUpTabIcons();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();     // Close keyboard on pressing IME_ACTION_SEARCH option
+                Intent intent = new Intent(getApplicationContext(), SearchableActivity.class);
+                intent.putExtra("query", query);
+                startActivity(intent);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //showMessage(newText);
+                return false;
+            }
+        });
     }
 
     //    private void setUpTabIcons(){
