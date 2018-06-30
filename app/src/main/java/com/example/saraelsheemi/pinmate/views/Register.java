@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity implements  View.OnClickListener {
@@ -78,6 +79,9 @@ public class Register extends AppCompatActivity implements  View.OnClickListener
                         user.getCurrent_location().setLongitude(Constants.DEFAULT_LONTIDUE);
                         user.getCurrent_location().setLatitude(Constants.DEFAULT_LATITUDE);
                         user.setNotification_token("");
+                        user.setBirth_date("1/1/1996");
+                        user.setHome_address("");
+                        user.setMobile_number("");
                         sendData(user);
                     }
             }

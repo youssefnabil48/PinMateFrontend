@@ -36,7 +36,7 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
         TextView placeName;
         TextView placeDescription;
         ImageView placePicture;
-        final ImageButton favoritePlace;
+        final ImageView favoritePlace;
 
         //convert view == one row
         // Check if the existing view is being reused, otherwise inflate the view
@@ -61,7 +61,7 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
         favoritePlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImageButton btn = view.findViewById(R.id.imgbtn_favs_places);
+                ImageView btn = view.findViewById(R.id.imgbtn_favs_places);
                 if(btn.getTag().equals("no")) {
                     btn.setImageResource(R.drawable.fav2);
                     btn.setTag("yes");

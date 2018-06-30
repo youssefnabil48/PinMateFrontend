@@ -9,20 +9,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-
-//set onclicklistener for each row
-
-public class FriendListAdapter extends ArrayAdapter<User> {
+public class NotificationsAdapter  extends ArrayAdapter<User> {
 
 
-    public FriendListAdapter(@NonNull Context context, int resource, ArrayList<User> users) {
+    public NotificationsAdapter(@NonNull Context context, int resource, ArrayList<User> users) {
         super(context, resource,users);
     }
 
@@ -49,7 +45,7 @@ public class FriendListAdapter extends ArrayAdapter<User> {
         User user =getItem(position);
         friendName.setText(user.getName());
         if(user.getPicture() != null)
-        Picasso.get().load(user.getPicture()).into(friendPicture);
+            Picasso.get().load(user.getPicture()).into(friendPicture);
         else if(user.getGender().contains("female"))
             Picasso.get().load(R.drawable.female_user_profile).into(friendPicture);
         else if(user.getGender().contains("male"))

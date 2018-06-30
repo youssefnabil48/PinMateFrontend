@@ -46,7 +46,7 @@ public class Main extends Fragment {
         PagerAdapter adapter = new PagerAdapter(getFragmentManager(),getContext());
         adapter.addFragment(new UserProfile(),"one");
         adapter.addFragment(new Chats(),"one");
-        adapter.addFragment(new Notifications(),"one");
+        adapter.addFragment(new NotificationsFragment(),"one");
         viewPager.setAdapter(adapter);
     }
 }

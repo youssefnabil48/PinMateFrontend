@@ -142,7 +142,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 //        adapter.addFragment(new UserProfile(),"one");
 //        adapter.addFragment(new Map(),"one");
 //        adapter.addFragment(new Chats(),"one");
-//        adapter.addFragment(new Notifications(),"one");
+//        adapter.addFragment(new NotificationsFragment(),"one");
 //        viewPager.setAdapter(adapter);
 //    }
 
