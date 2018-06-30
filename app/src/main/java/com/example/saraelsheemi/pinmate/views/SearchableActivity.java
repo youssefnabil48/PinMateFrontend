@@ -152,9 +152,8 @@ public class SearchableActivity extends AppCompatActivity implements AdapterView
         String itemId = (String)((TextView) view.findViewById(R.id.search_item_id)).getText();
         String itemType = (String)((TextView) view.findViewById(R.id.search_item_type)).getText();
         if (itemType.equals("place")){
-            showMessage("place");
+            //redirect to place view
         }else {
-            showMessage("user");
             try {
                 Intent i = new Intent(this, AnyUser.class);
                 i.putExtra("user", jsonArray.get(position).toString());
