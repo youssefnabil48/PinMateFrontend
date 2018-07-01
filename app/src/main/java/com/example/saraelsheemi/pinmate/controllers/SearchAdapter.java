@@ -48,7 +48,7 @@ public class SearchAdapter extends ArrayAdapter<SearchItem> {
         TextView hintTextView = listItemView.findViewById(R.id.search_item_hint);
         hintTextView.setText(item.getHint());
 
-        ImageView itemPicture = listItemView.findViewById(R.id.search_item_picture);
+        MLRoundedImageView itemPicture = listItemView.findViewById(R.id.search_item_picture);
         if (item.getPicURL() != null)
             Picasso.get().load(item.getPicURL()).into(itemPicture);
 

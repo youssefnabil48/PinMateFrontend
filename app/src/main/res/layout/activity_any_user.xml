@@ -6,10 +6,18 @@
     android:layout_height="match_parent"
     tools:context="com.example.saraelsheemi.pinmate.views.user.UserProfile">
 
+    The ActionBar displayed at the top
+    <include
+        android:id="@+id/tool"
+        layout="@layout/activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <RelativeLayout
         android:id="@+id/upper_half"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:layout_below="@id/tool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -53,8 +61,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:padding="10dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@id/upper_half"
-        android:text="Add as Friend"/>
+        style="@style/LoginButton"
+        android:background="@drawable/round_corner"
+        android:text="Add as a friend"/>
     <RelativeLayout
         android:id="@+id/lower_half"
         xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,8 +1,11 @@
 package com.example.saraelsheemi.pinmate.views;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +20,9 @@ import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.controllers.SearchAdapter;
+import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.SearchItem;
+import com.example.saraelsheemi.pinmate.views.place.PlaceProfile;
 import com.example.saraelsheemi.pinmate.views.user.AnyUser;
 import com.google.gson.Gson;
 
@@ -138,12 +143,28 @@ public class SearchableActivity extends AppCompatActivity implements AdapterView
         String itemType = (String)((TextView) view.findViewById(R.id.search_item_type)).getText();
         if (itemType.equals("place")){
             //redirect to place view
+
             try {
                 JSONObject placeJson = (JSONObject)jsonArray.get(position);
+                Place p = gson.fromJson(placeJson.toString(), Place.class);
+                String jsonData = gson.toJson(p,Place.class);
                 showMessage(placeJson.getString("name"));
+                sharedPreferences = getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.apply();
+                editor.putString("place_details", jsonData);
+                editor.apply();
+
+                Fragment placeProfile = new PlaceProfile();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.content_frame, placeProfile);
+                ft.addToBackStack(null);
+                ft.commit();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+
         }else {
             try {
                 Intent i = new Intent(this, AnyUser.class);
