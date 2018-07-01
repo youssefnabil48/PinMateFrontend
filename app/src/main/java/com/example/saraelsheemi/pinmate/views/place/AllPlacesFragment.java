@@ -56,6 +56,7 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         init(view);
+        getActivity().setTitle("Places");
         getPlaces();
         super.onViewCreated(view, savedInstanceState);
     }
@@ -127,6 +128,7 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     public void populatePlacesArrayListAdapter(ArrayList<Place> placeArrayList) {
+        placesAdapter.clear();
         placesAdapter.addAll(placeArrayList);
         placesAdapter.notifyDataSetChanged();
     }
@@ -141,13 +143,14 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
             editor.putString("place_details", jsonData);
             editor.apply();
 
-
             //open place profile
-            Fragment profile = new PlaceProfile();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_frame, profile); // give your fragment container id in first parameter
-            transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
-            transaction.commit();
+            PlaceProfile profile = new PlaceProfile();
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            if(profile != null ) {
+                transaction.replace(R.id.content_frame, profile); // give your fragment container id in first parameter
+                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                transaction.commit();
+            }
         }
     };
 

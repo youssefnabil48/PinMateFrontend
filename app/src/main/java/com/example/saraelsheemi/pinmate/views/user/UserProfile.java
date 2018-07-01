@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.controllers.PagerAdapter;
+import com.example.saraelsheemi.pinmate.controllers.UserProfilePager;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -37,7 +38,6 @@ public class UserProfile extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Profile");
         return inflater.inflate(R.layout.activity_user_profile,container,false);
     }
 
@@ -54,8 +54,6 @@ public class UserProfile extends Fragment{
         setUpViewPager(viewPager);
         tabLayout =  view.findViewById(R.id.user_tabs);
         tabLayout.setupWithViewPager(viewPager);
-        setUpTabIcons();
-
         sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
@@ -77,19 +75,11 @@ public class UserProfile extends Fragment{
     private void showMessage(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
-    private void setUpTabIcons(){
-        tabLayout.getTabAt(0).setText("BIO");
-        tabLayout.getTabAt(1).setText("FRIENDS");
-        tabLayout.getTabAt(2).setText("HANGOUTS");
-        tabLayout.getTabAt(3).setText("REQUESTS");
-    }
+
     private void setUpViewPager(ViewPager viewPager){
-        PagerAdapter adapter = new PagerAdapter(getFragmentManager(),getContext());
-        adapter.addFragment(new UserInfoFragment(),"one");
-        adapter.addFragment(new FriendListFragment(),"one");
-        adapter.addFragment(new HangoutRequestsFragment(),"one");
-        adapter.addFragment(new RequestsFragment(),"one");
+        UserProfilePager adapter = new UserProfilePager(getChildFragmentManager(),getContext());
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(4);
     }
 }
 

@@ -62,6 +62,7 @@ public class AccountSettingsFragment extends Fragment implements View.OnClickLis
         if (fragment != null) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
+            ft.addToBackStack(null);
             ft.commit();
         }
     }

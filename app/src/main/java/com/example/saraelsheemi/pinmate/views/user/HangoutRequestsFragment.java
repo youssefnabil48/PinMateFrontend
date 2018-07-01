@@ -112,7 +112,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                 }
 
                 if (ok && message.contains("No requests")) {
-                    showMessage("No Requests yet.");
+
 
                 } else if (ok && message.contains("Requests loaded")) {
                     try {
@@ -437,6 +437,9 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         pw.setOutsideTouchable(true);
         // display the pop-up in the center
         pw.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+    public void disableNew() {
+        newHangoutReq.setVisibility(View.GONE);
     }
 
 }

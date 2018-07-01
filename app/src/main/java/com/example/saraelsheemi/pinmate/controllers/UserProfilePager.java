@@ -5,27 +5,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.saraelsheemi.pinmate.views.place.EventFragment;
-import com.example.saraelsheemi.pinmate.views.place.PlaceAboutFragment;
-import com.example.saraelsheemi.pinmate.views.place.PlaceProfile;
-import com.example.saraelsheemi.pinmate.views.place.PostsFragment;
-import com.example.saraelsheemi.pinmate.views.place.ReviewFragment;
 import com.example.saraelsheemi.pinmate.views.user.FriendListFragment;
 import com.example.saraelsheemi.pinmate.views.user.HangoutRequestsFragment;
 import com.example.saraelsheemi.pinmate.views.user.RequestsFragment;
 import com.example.saraelsheemi.pinmate.views.user.UserInfoFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by Sara ElSheemi on 3/5/2018.
- */
-
-public class PagerAdapter extends FragmentPagerAdapter {
+public class UserProfilePager extends FragmentPagerAdapter {
     private Context context;
 
-    public PagerAdapter(FragmentManager fm, Context context) {
+    public UserProfilePager(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
     }
@@ -34,13 +22,13 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new PlaceAboutFragment();
+                return new UserInfoFragment();
             case 1:
-                return new PostsFragment();
+                return new FriendListFragment();
             case 2:
-                return new ReviewFragment();
+                return new HangoutRequestsFragment();
             case 3 :
-                return new EventFragment();
+                return new RequestsFragment();
 
         }
         return null;
@@ -54,10 +42,10 @@ public class PagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle ( int position){
         switch (position) {
-            case 0 : return "ABOUT";
-            case 1 : return "POSTS";
-            case 2 : return "REVIEWS";
-            case 3 : return "EVENTS";
+            case 0 : return "BIO";
+            case 1 : return "FRIENDS";
+            case 2 : return "HANGOUTS";
+            case 3 : return "Requests";
         }
         return null;
     }

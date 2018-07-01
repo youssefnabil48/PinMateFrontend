@@ -16,7 +16,7 @@
         android:layout_height="0dp"
         android:visibility="invisible"/>
 
-    <ImageView
+    <com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView
         android:id="@+id/search_item_picture"
         android:layout_width="70dp"
         android:layout_height="70dp"

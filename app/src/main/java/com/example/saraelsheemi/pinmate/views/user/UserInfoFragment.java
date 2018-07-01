@@ -59,12 +59,13 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
-        getUserInfo();
+        getUserInfo("user_info");
 
 
     }
-    private void getUserInfo() {
-        String json = sharedPreferences.getString("user_info","");
+    public void getUserInfo(String shared) {
+        String json = sharedPreferences.getString(shared,"");
+        Log.e("json",json);
         gson = new Gson();
         user = gson.fromJson(json,User.class);
         name.setText(user.getName());
@@ -190,7 +191,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                     sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                     editor.putString("user_info",newData);
                     editor.apply();
-                    getUserInfo();
+                    getUserInfo("user_info");
                 } else {
                     showMessage("Info not updated. Retry");
                 }
@@ -208,4 +209,6 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     private void showMessage(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
+
+
 }
