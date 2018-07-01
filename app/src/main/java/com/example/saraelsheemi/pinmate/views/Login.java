@@ -145,6 +145,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     }
                     Intent intent = new Intent(getApplicationContext(), Home.class);
                     startActivity(intent);
+                    finish();
                 } else if (ok && message.contains("User not")) {
                     showMessage("No user found.");
 
