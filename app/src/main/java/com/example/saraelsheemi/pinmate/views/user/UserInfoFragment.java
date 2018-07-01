@@ -187,6 +187,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                 if (ok) {
                     showMessage("Info updated successfully.");
                     editor.clear();
+                    sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                     editor.putString("user_info",newData);
                     editor.apply();
                     getUserInfo();

@@ -431,9 +431,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 Log.e("friend name", friends.get(i).getName());
                 Log.e("friend location", friends.get(i).getCurrent_location().getLatitude() + "");
                 if (friends.get(i).getGender().equals("male"))
-                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.mapguy));
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.boy));
                 else if (user.getGender().equals("female"))
-                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.mapgirl));
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.woman));
                 friendsMarkers.add(marker);
             } else
                 friendsMarkers.get(i).setPosition(new LatLng(friends.get(i).getCurrent_location().getLatitude(),
