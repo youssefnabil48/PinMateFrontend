@@ -1,4 +1,4 @@
-package com.example.saraelsheemi.pinmate.views.place;
+package com.example.saraelsheemi.pinmate.views.user;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,29 +15,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.controllers.FriendPager;
 import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.controllers.PagerAdapter;
-import com.example.saraelsheemi.pinmate.models.Place;
+import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-public class PlaceProfile extends Fragment {
-    MLRoundedImageView placePicture;
-    ImageView placeCoverPicture;
-    TextView placeName;
+public class FriendProfileFragment extends Fragment {
+    MLRoundedImageView userPicture;
+    ImageView userCoverPicture;
+    TextView userName;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Gson gson;
-    Place place;
+    User user;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       getActivity().setTitle("Profile");
-        return inflater.inflate(R.layout.activity_place_profile,container,false);
+        getActivity().setTitle("Profile");
+        return inflater.inflate(R.layout.activity_user_profile,container,false);
     }
 
     @Override
@@ -46,14 +47,14 @@ public class PlaceProfile extends Fragment {
     }
     private void init(View view) {
 
-        placeCoverPicture = view.findViewById(R.id.img_place_cover);
-        placePicture = view.findViewById(R.id.imground_place_profile);
-        placeName = view.findViewById(R.id.txt_fav_place_list_name);
-        viewPager =   view.findViewById(R.id.place_viewpager);
-        setUpViewPager(viewPager);
-        tabLayout =  view.findViewById(R.id.place_tabs);
+        userCoverPicture = view.findViewById(R.id.img_userp_cover);
+        userPicture = view.findViewById(R.id.imground_user_profile);
+        userName = view.findViewById(R.id.txt_placep_name);
+        viewPager =   view.findViewById(R.id.user_viewpager);
+        tabLayout =  view.findViewById(R.id.user_tabs);
         tabLayout.setupWithViewPager(viewPager);
-        sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
+        setUpViewPager(viewPager);
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
         getUserInfo();
@@ -61,15 +62,14 @@ public class PlaceProfile extends Fragment {
     }
 
     private void getUserInfo() {
-        String json = sharedPreferences.getString("place_details","");
+        String json = sharedPreferences.getString("friend_details","");
         gson = new Gson();
-        place = gson.fromJson(json,Place.class);
-        placeName.setText(place.getName());
-        if(place.getPicture()!=null)
-            Picasso.get().load(place.getPicture()).into(placePicture);
-
+        user = gson.fromJson(json,User.class);
+        userName.setText(user.getName());
+        if(user.getPicture() != null)
+            Picasso.get().load(user.getPicture()).into(userPicture);
         Picasso.get().load("https://www.whcc.com/assets/ee/uploads/images/cover-options/whcc_covers_large_leather_white.jpg")
-                .into(placeCoverPicture);
+                .into(userCoverPicture);
 
     }
     private void showMessage(String message) {
@@ -77,9 +77,8 @@ public class PlaceProfile extends Fragment {
     }
 
     private void setUpViewPager(ViewPager viewPager){
-        PagerAdapter adapter = new PagerAdapter(getChildFragmentManager(),getContext());
+        FriendPager adapter = new FriendPager(getChildFragmentManager(),getContext());
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(2);
     }
 }
-

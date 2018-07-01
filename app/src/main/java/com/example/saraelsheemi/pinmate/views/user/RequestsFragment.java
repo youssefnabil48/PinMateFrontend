@@ -95,7 +95,7 @@ public class RequestsFragment extends Fragment implements View.OnClickListener, 
 
                 if (ok && message.contains("No requests")) {
                     swipeRefreshLayout.setRefreshing(false);
-                    showMessage("No Requests yet.");
+
 
                 } else if (ok && message.contains("Requests loaded")) {
                     swipeRefreshLayout.setRefreshing(false);

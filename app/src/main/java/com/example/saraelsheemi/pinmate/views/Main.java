@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.controllers.HomePager;
 import com.example.saraelsheemi.pinmate.controllers.PagerAdapter;
 import com.example.saraelsheemi.pinmate.views.user.FriendRequestsFragment;
 import com.example.saraelsheemi.pinmate.views.user.UserProfile;
@@ -44,10 +45,8 @@ public class Main extends Fragment {
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_plus_one_white_48dp);
     }
     private void setUpViewPager(ViewPager viewPager){
-        PagerAdapter adapter = new PagerAdapter(getFragmentManager(),getContext());
-        adapter.addFragment(new UserProfile(),"one");
-        adapter.addFragment(new Chats(),"one");
-        adapter.addFragment(new FriendRequestsFragment(),"one");
+        HomePager adapter = new HomePager(getChildFragmentManager(),getContext());
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
     }
 }

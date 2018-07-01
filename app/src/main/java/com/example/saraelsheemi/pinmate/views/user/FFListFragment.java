@@ -21,9 +21,7 @@ import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.controllers.adapters.FriendListAdapter;
-import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.User;
-import com.example.saraelsheemi.pinmate.views.place.PlaceProfile;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -32,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class FriendListFragment extends Fragment {
+public class FFListFragment  extends Fragment {
     private ListView listViewUsers;
     private ArrayList<String> friendsIds;
     private ArrayList<User> friendsList;
@@ -54,7 +52,7 @@ public class FriendListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         init(view);
-        getFriendsIds("user_info");
+        getFriendsIds("friend_details");
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -152,3 +150,4 @@ public class FriendListFragment extends Fragment {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }
+
