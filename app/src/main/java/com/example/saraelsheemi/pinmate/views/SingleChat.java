@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,8 +31,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 public class SingleChat extends AppCompatActivity implements View.OnClickListener {
     private String receiverId;
@@ -71,6 +74,7 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
                     newMessage.setSenderId(receiverId);
                     newMessage.setReceiverId(loggedInUser.getId());
                     newMessage.setSender(tempUser);
+                    newMessage.setCreatedAt(getCurrentTimeStamp());
                     messages.add(newMessage);
                     chatMessagesAdapter.refreshMessages(messages);
                     listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
@@ -120,6 +124,15 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
             e.printStackTrace();
         }
         mSocket.emit("login", message);
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(messages);
+                populateMessagesArrayListAdapter(messages);
+                chatMessagesAdapter.refreshMessages(messages);
+                listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
+            }
+        });
     }
 
 
@@ -147,8 +160,10 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
                             messages.add(message);
                         }
                     }
-                    Collections.sort(messages);
-                    populateMessagesArrayListAdapter(messages);
+//                    Collections.sort(messages);
+//                    populateMessagesArrayListAdapter(messages);
+                    chatMessagesAdapter.refreshMessages(messages);
+                    listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -193,12 +208,25 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
                 messageObj.setSender(loggedInUser);
                 messageObj.setSenderId(loggedInUser.getId());
                 messageObj.setReceiverId(receiverId);
+                messageObj.setCreatedAt(getCurrentTimeStamp());
                 messages.add(messageObj);
+                Collections.sort(messages);
                 chatMessagesAdapter.refreshMessages(messages);
                 listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
             }
             break;
         }
+    }
+
+    public static String getCurrentTimeStamp() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");//dd/MM/yyyy
+        Date now = new Date();
+        String strDate = sdfDate.format(now);
+        StringBuilder newStrDate = new StringBuilder(strDate);
+        newStrDate.setCharAt(10, 'T');
+        strDate = newStrDate.toString();
+        strDate += "Z";
+        return strDate;
     }
 
     @Override

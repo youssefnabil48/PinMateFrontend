@@ -66,6 +66,9 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
             TextView contentView = listItemView.findViewById(R.id.message_content);
             contentView.setText(message.getContent());
 
+            TextView dataView = listItemView.findViewById(R.id.text_message_time);
+            dataView.setText(message.getCreatedAt().substring(11, 16));
+
         }
         return listItemView;
     }

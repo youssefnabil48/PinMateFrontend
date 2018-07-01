@@ -1,6 +1,7 @@
 package com.example.saraelsheemi.pinmate.models;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -81,6 +82,7 @@ public class Message implements Comparable<Message>{
 
     @Override
     public int compareTo(@NonNull Message message) {
+        Log.e("created at: ", message.getCreatedAt());
         return this.createdAt.compareTo(message.getCreatedAt());
     }
 }
