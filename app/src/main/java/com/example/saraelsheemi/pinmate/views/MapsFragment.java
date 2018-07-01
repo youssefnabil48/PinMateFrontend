@@ -385,9 +385,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                     .infoWindowAnchor(0.5f, 0.5f));
 
             if (user.getGender().equals("male"))
-                userMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.mapguy));
+                userMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.manmap));
             else if (user.getGender().equals("female"))
-                userMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.mapgirl));
+                userMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.womanmap));
         } else
             userMarker.setPosition(new LatLng(user.getCurrent_location().getLatitude(), user.getCurrent_location().getLongitude()));
     }
@@ -431,9 +431,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 Log.e("friend name", friends.get(i).getName());
                 Log.e("friend location", friends.get(i).getCurrent_location().getLatitude() + "");
                 if (friends.get(i).getGender().equals("male"))
-                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.boy));
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.manmap));
                 else if (user.getGender().equals("female"))
-                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.woman));
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.womanmap));
                 friendsMarkers.add(marker);
             } else
                 friendsMarkers.get(i).setPosition(new LatLng(friends.get(i).getCurrent_location().getLatitude(),
