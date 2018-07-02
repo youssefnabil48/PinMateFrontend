@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /*
  * {@link AndroidFlavorAdapter} is an {@link ArrayAdapter} that can provide the layout for each list
@@ -30,6 +31,8 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
     User loggedInUser;
     SharedPreferences.Editor editor;
     ArrayList<Message> messages;
+
+
     public MessagesAdapter(Activity context,int resource, ArrayList<Message> messages) {
         super(context, resource, messages);
         sharedPreferences = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
@@ -51,32 +54,32 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
         // Check if the existing view is being reused, otherwise inflate the view
         View listItemView = convertView;
         Message message = getItem(position);
-        if(listItemView == null) {
-            if(message.getSenderId().equals(loggedInUser.getId())){
-                listItemView = LayoutInflater.from(getContext()).inflate(R.layout.message_row_send, parent, false);
-            }else {
-                listItemView = LayoutInflater.from(getContext()).inflate(R.layout.message_row_receive, parent, false);
-               // TextView senderNameView = listItemView.findViewById(R.id.sender_name);
-                MLRoundedImageView senderPic = listItemView.findViewById(R.id.image_message_profile);
-                if(message.getSender().getPicture() != null)
-                    Picasso.get().load(message.getSender().getPicture()).into(senderPic);
-              //  senderNameView.setText(message.getSender().getName());
-
-            }
-            TextView contentView = listItemView.findViewById(R.id.message_content);
-            contentView.setText(message.getContent());
-
-            TextView dataView = listItemView.findViewById(R.id.text_message_time);
-            dataView.setText(message.getCreatedAt().substring(11, 16));
+        if(message.getSenderId().equals(loggedInUser.getId())){
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.message_row_send, parent, false);
+        }else {
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.message_row_receive, parent, false);
+            // TextView senderNameView = listItemView.findViewById(R.id.sender_name);
+            MLRoundedImageView senderPic = listItemView.findViewById(R.id.image_message_profile);
+            if(message.getSender().getPicture() != null)
+                Picasso.get().load(message.getSender().getPicture()).into(senderPic);
+            //  senderNameView.setText(message.getSender().getName());
 
         }
+        TextView contentView = listItemView.findViewById(R.id.message_content);
+        contentView.setText(message.getContent());
+
+        TextView dataView = listItemView.findViewById(R.id.text_message_time);
+        dataView.setText(message.getCreatedAt().substring(11, 16));
+
         return listItemView;
     }
 
     public void refreshMessages(ArrayList<Message> messages) {
         this.messages.clear();
+        Collections.sort(this.messages);
         this.messages.addAll(messages);
         this.notifyDataSetChanged();
     }
+
 
 }

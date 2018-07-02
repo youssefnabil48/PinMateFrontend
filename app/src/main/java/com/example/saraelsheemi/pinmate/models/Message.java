@@ -82,7 +82,6 @@ public class Message implements Comparable<Message>{
 
     @Override
     public int compareTo(@NonNull Message message) {
-        Log.e("created at: ", message.getCreatedAt());
         return this.createdAt.compareTo(message.getCreatedAt());
     }
 }

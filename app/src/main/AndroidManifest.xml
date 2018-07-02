@@ -71,7 +71,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".views.SingleChat" />
+        <activity android:name=".views.SingleChat" android:windowSoftInputMode="adjustPan"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
