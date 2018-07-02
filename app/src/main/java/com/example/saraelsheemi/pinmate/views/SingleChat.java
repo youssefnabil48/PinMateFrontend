@@ -5,7 +5,10 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -24,6 +27,8 @@ import com.google.gson.Gson;
 
 import android.content.SharedPreferences;
 import android.widget.ListView;
+import android.widget.TabWidget;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -35,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import android.view.KeyEvent;
 
 public class SingleChat extends AppCompatActivity implements View.OnClickListener {
     private String receiverId;
@@ -124,13 +130,15 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
             e.printStackTrace();
         }
         mSocket.emit("login", message);
-        editText.setOnClickListener(new View.OnClickListener() {
+
+        editText.setImeActionLabel("Send", KeyEvent.KEYCODE_ENTER);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                Collections.sort(messages);
-                populateMessagesArrayListAdapter(messages);
-                chatMessagesAdapter.refreshMessages(messages);
-                listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == KeyEvent.KEYCODE_ENTER){
+                    sendMessage();
+                }
+                return true;
             }
         });
     }
@@ -160,8 +168,8 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
                             messages.add(message);
                         }
                     }
-//                    Collections.sort(messages);
-//                    populateMessagesArrayListAdapter(messages);
+                    Collections.sort(messages);
+                    populateMessagesArrayListAdapter(messages);
                     chatMessagesAdapter.refreshMessages(messages);
                     listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
 
@@ -179,40 +187,18 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
 
 
     public void populateMessagesArrayListAdapter(ArrayList<Message> messages) {
-        chatMessagesAdapter.addAll(messages);
+        Collections.sort(this.messages);
+        chatMessagesAdapter.addAll(this.messages);
         chatMessagesAdapter.notifyDataSetChanged();
     }
     private void showMessage(String message) {
-        Toast.makeText(getParent(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_chatbox_send: {
-                String messageContent = editText.getText().toString();
-                if(messageContent.length() == 0){
-                    showMessage("cannot send empty message");
-                    return;
-                }
-                JSONObject message = new JSONObject();
-                try {
-                    message.put("receiverId", receiverId);
-                    message.put("message", messageContent);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                mSocket.emit("message", message);
-                editText.setText("");
-                Message messageObj = new Message();
-                messageObj.setContent(messageContent);
-                messageObj.setSender(loggedInUser);
-                messageObj.setSenderId(loggedInUser.getId());
-                messageObj.setReceiverId(receiverId);
-                messageObj.setCreatedAt(getCurrentTimeStamp());
-                messages.add(messageObj);
-                Collections.sort(messages);
-                chatMessagesAdapter.refreshMessages(messages);
-                listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
+                sendMessage();
             }
             break;
         }
@@ -229,10 +215,39 @@ public class SingleChat extends AppCompatActivity implements View.OnClickListene
         return strDate;
     }
 
+    private void sendMessage(){
+        String messageContent = editText.getText().toString();
+        if(messageContent.length() == 0){
+            showMessage("cannot send empty message");
+            return;
+        }
+        JSONObject message = new JSONObject();
+        try {
+            message.put("receiverId", receiverId);
+            message.put("message", messageContent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("message", message);
+        editText.setText("");
+        Message messageObj = new Message();
+        messageObj.setContent(messageContent);
+        messageObj.setSender(loggedInUser);
+        messageObj.setSenderId(loggedInUser.getId());
+        messageObj.setReceiverId(receiverId);
+        messageObj.setCreatedAt(getCurrentTimeStamp());
+        messages.add(messageObj);
+        chatMessagesAdapter.refreshMessages(messages);
+        listView.smoothScrollToPosition(chatMessagesAdapter.getCount());
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         mSocket.disconnect();
         mSocket.off("message", onNewMessage);
     }
+
+
+
 }
