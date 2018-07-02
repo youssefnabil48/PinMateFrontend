@@ -12,6 +12,10 @@
     <string name="option_get_place">Get place</string>
     <string name="pick_place">Choose a place</string>
 
+    <string name="app_permission_notice">This permission request is very important to your app functionality. If it is not granted your app might not work the way it is intended</string>
+    <string name="failed_draw">Empty line path return</string>
+    <string name="server_error">Server error. Something when wrong with the server</string>
+
     <!--    Permissions    -->
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
     <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>

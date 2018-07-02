@@ -177,8 +177,8 @@ public class RequestsFragment extends Fragment implements View.OnClickListener, 
 
                 if (ok) {
                         showMessage("Response sent.");
-                        getHangouts();
                 }
+                getHangouts();
 
             }
             @Override

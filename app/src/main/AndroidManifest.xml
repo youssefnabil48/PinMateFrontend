@@ -84,7 +84,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".views.user.AnyUser"></activity>
+        <activity android:name=".views.user.AnyUser" />
+        <activity android:name=".views.AnyPlace"></activity>
     </application>
 
 </manifest>

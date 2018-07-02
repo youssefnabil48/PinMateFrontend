@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,9 +16,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
@@ -40,6 +50,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
@@ -54,7 +66,8 @@ import java.util.List;
 
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
-        GoogleMap.OnMyLocationButtonClickListener {
+        GoogleMap.OnMyLocationButtonClickListener,   GoogleMap.OnPolylineClickListener,
+        GoogleMap.OnPolygonClickListener {
 
 
     private static final String TAG = MapsFragment.class.getSimpleName();
@@ -103,6 +116,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     Geocoder geocoder;
     List<Address> addresses;
 
+    //Tracker
+    Button tracker;
+    ArrayList<Place> placesObjects = new ArrayList<>();
+
 
     @Nullable
     @Override
@@ -140,10 +157,114 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        tracker = view.findViewById(R.id.create_tracker);
+        tracker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createTrackerPopup();
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
 
     }
 
+    Spinner src, dest;
+    private void createTrackerPopup() {
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //Inflate the view from a predefined XML layout (no need for root id, using entire layout)
+        View layout = inflater.inflate(R.layout.activity_create_tracker, null);
+        Button start;
+
+        src = layout.findViewById(R.id.spinner_src);
+        dest = layout.findViewById(R.id.spinner_dst);
+        start = layout.findViewById(R.id.btn_start);
+
+        setUpPopup(layout);
+        getPlacesNames();
+
+    }
+
+    private void getPlacesNames() {
+        AsynchTaskGet asynchTaskGet = new AsynchTaskGet(getContext(), new EventListener<String>() {
+            @Override
+            public void onSuccess(String object) {
+                JSONObject jsonObject = null;
+                JSONArray jsonArray;
+                String message = "";
+                Boolean ok = false;
+
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                    message = jsonObject.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (ok && message.contains("Places loaded")) {
+                    try {
+                        jsonArray = jsonObject.getJSONArray("data");
+                        ArrayList<String> places = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Place place = gson.fromJson(jsonArray.get(i).toString(), Place.class);
+                            placesObjects.add(place);
+                            places.add(place.getName());
+                        }
+                        ArrayAdapter adapter2 = new ArrayAdapter<String>(getContext(),
+                                android.R.layout.simple_spinner_item, places);
+                        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        src.setAdapter(adapter2);
+                        src.setOnItemSelectedListener(onPlacesSelectedListener);
+                        ArrayAdapter adapter = new ArrayAdapter<String>(getContext(),
+                                android.R.layout.simple_spinner_item, places);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        dest.setAdapter(adapter2);
+                        dest.setOnItemSelectedListener(onPlacesSelectedListener);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+            }
+        });
+        asynchTaskGet.execute(Constants.GET_PLACES);
+    }
+    String placeSelected ="";
+    AdapterView.OnItemSelectedListener onPlacesSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            placeSelected  = placesObjects.get(i).getId();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    private void setUpPopup(View view) {
+        //Get the devices screen density to calculate correct pixel sizes
+        float density = getActivity().getResources().getDisplayMetrics().density;
+        // create a focusable PopupWindow with the given layout and correct size
+        final PopupWindow pw = new PopupWindow(view, (int) density * 250, (int) density * 200, true);
+        //Set up touch closing outside of pop-up
+        pw.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        pw.setTouchInterceptor(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    pw.dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
+        pw.setOutsideTouchable(true);
+        // display the pop-up in the center
+        pw.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
     /**
      * Saves the state of the map when the activity is paused.
      */
@@ -161,6 +282,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         editor = sharedPreferences.edit();
         editor.apply();
         gson = new Gson();
+
         String json = sharedPreferences.getString("user_info", "");
         user = gson.fromJson(json, User.class);
         friendsMarkers = new ArrayList<>();
@@ -509,5 +631,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+    @Override
+    public void onPolygonClick(Polygon polygon) {
+
+    }
+
+    @Override
+    public void onPolylineClick(Polyline polyline) {
+
     }
 }

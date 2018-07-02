@@ -155,11 +155,9 @@ public class SearchableActivity extends AppCompatActivity implements AdapterView
                 editor.putString("place_details", jsonData);
                 editor.apply();
 
-                Fragment placeProfile = new PlaceProfile();
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, placeProfile);
-                ft.addToBackStack(null);
-                ft.commit();
+                Intent i = new Intent(this, AnyPlace.class);
+                startActivity(i);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

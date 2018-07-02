@@ -1,18 +1,14 @@
-package com.example.saraelsheemi.pinmate.views.place;
+package com.example.saraelsheemi.pinmate.views;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
@@ -21,7 +17,7 @@ import com.example.saraelsheemi.pinmate.models.Place;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-public class PlaceProfile extends Fragment {
+public class AnyPlace extends AppCompatActivity {
     MLRoundedImageView placePicture;
     ImageView placeCoverPicture;
     TextView placeName;
@@ -32,34 +28,26 @@ public class PlaceProfile extends Fragment {
     Gson gson;
     Place place;
 
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       getActivity().setTitle("Profile");
-        return inflater.inflate(R.layout.activity_place_profile,container,false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_any_place);
+        init();
     }
+    private void init() {
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        init(view);
-    }
-    private void init(View view) {
-
-        placeCoverPicture = view.findViewById(R.id.img_place_cover);
-        placePicture = view.findViewById(R.id.imground_place_profile);
-        placeName = view.findViewById(R.id.txt_fav_place_list_name);
-        viewPager =   view.findViewById(R.id.place_viewpager);
+        placeCoverPicture = findViewById(R.id.img_place_cover);
+        placePicture = findViewById(R.id.imground_place_profile);
+        placeName = findViewById(R.id.txt_fav_place_list_name);
+        viewPager =   findViewById(R.id.place_viewpager);
         setUpViewPager(viewPager);
-        tabLayout =  view.findViewById(R.id.place_tabs);
+        tabLayout =  findViewById(R.id.place_tabs);
         tabLayout.setupWithViewPager(viewPager);
-        sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
         getPlaceInfo();
-
     }
-
     private void getPlaceInfo() {
         String json = sharedPreferences.getString("place_details","");
         gson = new Gson();
@@ -72,14 +60,9 @@ public class PlaceProfile extends Fragment {
                 .into(placeCoverPicture);
 
     }
-    private void showMessage(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
-
     private void setUpViewPager(ViewPager viewPager){
-        PagerAdapter adapter = new PagerAdapter(getChildFragmentManager(),getContext());
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(),getApplicationContext());
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(4);
     }
 }
-
