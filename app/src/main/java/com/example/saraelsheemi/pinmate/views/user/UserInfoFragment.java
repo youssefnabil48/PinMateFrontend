@@ -73,6 +73,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         birthDate.setText(user.getBirth_date());
         gender.setText(user.getGender());
         home.setText(user.getHome_address());
+        phone.setText(user.getMobile_number());
 
     }
 
@@ -187,7 +188,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                 }
                 if (ok) {
                     showMessage("Info updated successfully.");
-                    editor.clear();
+                   // editor.clear();
                     sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                     editor.putString("user_info",newData);
                     editor.apply();

@@ -1,66 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
-    <Button
-        android:id="@+id/btn_blocked_users"
-        android:text="Blocked Users"
-        style="@style/AccountSettingsButtons"
-        android:layout_marginTop="80dp"
-        android:layout_marginStart="80dp" />
-    <ImageView
-        android:id="@+id/img_blocked_users"
-        android:src="@drawable/baseline_block_black_18"
-        android:layout_alignTop="@id/btn_blocked_users"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+    <!--<Button-->
+    <!--android:id="@+id/btn_blocked_users"-->
+    <!--android:text="Blocked Users"-->
+    <!--style="@style/AccountSettingsButtons"-->
+    <!--android:layout_marginTop="80dp"-->
+    <!--android:layout_marginStart="80dp" />-->
+    <!--<ImageView-->
+    <!--android:id="@+id/img_blocked_users"-->
+    <!--android:src="@drawable/baseline_block_black_18"-->
+    <!--android:layout_alignTop="@id/btn_blocked_users"-->
+    <!--android:layout_marginStart="40dp"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:layout_width="30dp"-->
+    <!--android:layout_height="30dp" />-->
     <Button
         android:id="@+id/btn_change_pw"
-        android:text="Change Password"
-        android:layout_below="@id/btn_blocked_users"
-        android:layout_alignStart="@id/btn_blocked_users"
-        style="@style/AccountSettingsButtons" />
+        style="@style/AccountSettingsButtons"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="80dp"
+        android:text="Change Password" />
 
     <ImageView
         android:id="@+id/img_change_pw"
-        android:src="@drawable/baseline_lock_black_18"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignTop="@id/btn_change_pw"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
-    <Button
-        android:id="@+id/btn_linked_acc"
-        android:text="Linked Accounts"
-        android:layout_below="@id/btn_change_pw"
-        android:layout_alignStart="@id/btn_change_pw"
-        style="@style/AccountSettingsButtons" />
-    <ImageView
-        android:id="@+id/img_linked_acc"
-        android:src="@drawable/baseline_share_black_18"
-        android:layout_alignTop="@id/btn_linked_acc"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+        android:src="@drawable/baseline_lock_black_18" />
+
     <Button
         android:id="@+id/btn_deactivate"
-        android:text="Deactivate Account"
-        android:layout_below="@id/btn_linked_acc"
-        android:layout_alignStart="@id/btn_linked_acc"
-        style="@style/AccountSettingsButtons" />
+        style="@style/AccountSettingsButtons"
+        android:layout_alignStart="@id/btn_change_pw"
+        android:layout_below="@id/btn_change_pw"
+        android:text="Deactivate Account" />
+
     <ImageView
         android:id="@+id/img_deactivate"
-        android:src="@drawable/baseline_exit_to_app_black_18"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignTop="@id/btn_deactivate"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+        android:src="@drawable/baseline_exit_to_app_black_18" />
 
 </RelativeLayout>

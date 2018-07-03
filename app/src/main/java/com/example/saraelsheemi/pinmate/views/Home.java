@@ -63,6 +63,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         ft.addToBackStack(null);
         ft.commit();
 
+
     }
 
     private void showMessage(String message) {
@@ -76,15 +77,15 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         PushNotifications.subscribe("hello");
 
         setTitle("Home");
-        toolbar =  findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        drawer =  findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView =  findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         searchView = findViewById(R.id.search_bar);
@@ -153,7 +154,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         String json = sharedPreferences.getString("user_info", "");
         User user = gson.fromJson(json, User.class);
 
-        String token = "{\"notification_token\":\""+refreshedToken+"\"}";
+        String token = "{\"notification_token\":\"" + refreshedToken + "\"}";
 
         AsynchTaskPut asynchTaskPut = new AsynchTaskPut(token, getApplicationContext(), new EventListener<String>() {
             @Override
@@ -180,6 +181,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         });
         asynchTaskPut.execute(Constants.UPDATE_USER + user.getId());
     }
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -231,8 +233,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         } else if (id == R.id.nav_place) {
             fragment = new AllPlacesFragment();
 
-        }  else if (id == R.id.nav_map) {
+        } else if (id == R.id.nav_map) {
             fragment = new MapsFragment();
+
+        } else if (id == R.id.nav_active_trackers) {
+            fragment = new ActiveTrackersFragment();
 
         } else if (id == R.id.nav_settings) {
             fragment = new AccountSettingsFragment();
@@ -247,7 +252,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
-          //  ft.addToBackStack(null);
+            //  ft.addToBackStack(null);
             ft.commit();
             item.setChecked(true);
         }
