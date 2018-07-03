@@ -23,8 +23,25 @@
         android:layout_marginStart="20dp"
         android:textColor="#747B80"
         android:textSize="15sp"
+        android:paddingStart="10dp"
+        android:layout_marginTop="5dp"
+        android:paddingEnd="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/edt_desc"
+        android:layout_below="@id/line"
+        android:layout_toEndOf="@id/edt_title"
+        android:hint="Description.."
+        android:background="@drawable/rounded_corner_white"
+        android:layout_marginStart="20dp"
+        android:paddingStart="10dp"
+        android:textColor="#747B80"
+        android:textSize="15sp"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="200dp"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/txt_create_hangout"
@@ -63,7 +80,7 @@
         android:id="@+id/txt_start_date"
         android:layout_below="@id/search_places"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="12dp"
         android:text="Starts"
         android:textStyle="bold"
         android:textColor="#747B80"

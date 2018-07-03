@@ -160,38 +160,51 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     public void favoritePlace(String placeId) {
-        Log.e("unfavorite id", placeId);
-        String data = "{\"place_id\":\"" + placeId + "\","
-                + "\"user_id\":\"" + getUserID() + "\"}";
-        Log.e("data", data);
 
-        AsynchTaskPost asynchTaskPost = new AsynchTaskPost(data, getContext(), new EventListener<String>() {
-            @Override
-            public void onSuccess(String object) {
-                JSONObject jsonObject = null;
-                String message = "";
-                Boolean ok = false;
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+        String json = sharedPreferences.getString("user_info", "");
+        Gson gson = new Gson();
+        User user = gson.fromJson(json, User.class);
+        if(user.getFavoritePlaces().contains(placeId))
+            showMessage("Place already in favorites.");
 
-                try {
-                    jsonObject = new JSONObject(object);
-                    ok = jsonObject.getBoolean("ok");
-                    message = jsonObject.getString("message");
-                } catch (JSONException e) {
-                    e.printStackTrace();
+       else {
+            Log.e("unfavorite id", placeId);
+            String data = "{\"place_id\":\"" + placeId + "\","
+                    + "\"user_id\":\"" + getUserID() + "\"}";
+            Log.e("data", data);
+
+            AsynchTaskPost asynchTaskPost = new AsynchTaskPost(data, getContext(), new EventListener<String>() {
+                @Override
+                public void onSuccess(String object) {
+                    JSONObject jsonObject = null;
+                    String message = "";
+                    Boolean ok = false;
+
+                    try {
+                        jsonObject = new JSONObject(object);
+                        ok = jsonObject.getBoolean("ok");
+                        message = jsonObject.getString("message");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (ok && message.contains("Favorite added")) {
+                        showMessage("Added to favorites.");
+                    } else {
+                        showMessage("Place not added.");
+                    }
                 }
 
-                if (ok && message.contains("Favorite added")) {
-                    showMessage("Added to favorites.");
-                } else {
-                    showMessage("Place not added.");
+                @Override
+                public void onFailure(Exception e) {
+                    showMessage("Internal server error");
                 }
-            }
-            @Override
-            public void onFailure(Exception e) {
-                showMessage("Internal server error");
-            }
-        });
-        asynchTaskPost.execute(Constants.FAVORITE_PLACE);
+            });
+            asynchTaskPost.execute(Constants.FAVORITE_PLACE);
+        }
     }
 
     private String getUserID() {

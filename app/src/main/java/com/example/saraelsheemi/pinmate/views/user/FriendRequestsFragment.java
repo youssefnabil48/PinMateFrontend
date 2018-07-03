@@ -108,7 +108,7 @@ public class FriendRequestsFragment extends Fragment implements SwipeRefreshLayo
 
                 if (ok && message.contains("No requests")) {
                     swipeRefreshLayout.setRefreshing(false);
-                    showMessage("No requests yet.");
+                    populateFriendsArrayListAdapter(new ArrayList<FriendRequestResponse>());
 
                 } else if (ok && message.contains("Requests loaded")) {
                     swipeRefreshLayout.setRefreshing(false);
@@ -147,6 +147,7 @@ public class FriendRequestsFragment extends Fragment implements SwipeRefreshLayo
     public void respondToRequest(FriendRequestResponse request, boolean response) {
         String data = "{ \"status\": " + response
                 + ",\"request_id\":\"" + request.getFriendRequest().getId() + "\","
+                + "\"sender_id\":\"" + request.getFriendRequest().getSender_id() +"\","
                 + "\"receiver_id\":\"" + user_id + "\"}";
 
         Log.e("data", data);

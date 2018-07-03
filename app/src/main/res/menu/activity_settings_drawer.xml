@@ -11,6 +11,10 @@
             android:icon="@drawable/baseline_place_24"
             android:title="Map" />
         <item
+            android:id="@+id/nav_active_trackers"
+            android:icon="@drawable/ic_action_location_found"
+            android:title="Active Trackers" />
+        <item
             android:id="@+id/nav_place"
             android:icon="@drawable/placeholde_black_24"
             android:title="Places" />

@@ -30,6 +30,7 @@ public class Main extends Fragment {
            init(view);
         getActivity().setTitle("Home");
     }
+
     private void init(View view) {
 
         viewPager =   view.findViewById(R.id.viewpager);
@@ -39,6 +40,8 @@ public class Main extends Fragment {
         setUpTabIcons();
 
     }
+
+
     private void setUpTabIcons(){
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_person_outline_white_48dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_chat_white_48dp);

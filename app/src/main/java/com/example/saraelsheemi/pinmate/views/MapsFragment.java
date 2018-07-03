@@ -1,6 +1,7 @@
 package com.example.saraelsheemi.pinmate.views;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,17 +26,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskDelete;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPut;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.models.Place;
+import com.example.saraelsheemi.pinmate.models.Tracker;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -47,11 +51,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
@@ -61,13 +67,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
-        GoogleMap.OnMyLocationButtonClickListener,   GoogleMap.OnPolylineClickListener,
-        GoogleMap.OnPolygonClickListener {
+        GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnPolylineClickListener {
 
 
     private static final String TAG = MapsFragment.class.getSimpleName();
@@ -117,8 +124,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     List<Address> addresses;
 
     //Tracker
-    Button tracker;
+    Button btntracker;
     ArrayList<Place> placesObjects = new ArrayList<>();
+    Tracker tracker;
+
+    Polyline polyline1;
+    private static final int COLOR_BLACK_ARGB = 0xff000000;
+    private static final int POLYLINE_STROKE_WIDTH_PX = 12;
 
 
     @Nullable
@@ -157,8 +169,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        tracker = view.findViewById(R.id.create_tracker);
-        tracker.setOnClickListener(new View.OnClickListener() {
+        btntracker = view.findViewById(R.id.create_tracker);
+        btntracker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createTrackerPopup();
@@ -169,18 +181,28 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     }
 
     Spinner src, dest;
+
     private void createTrackerPopup() {
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //Inflate the view from a predefined XML layout (no need for root id, using entire layout)
-        View layout = inflater.inflate(R.layout.activity_create_tracker, null);
+        final View layout = inflater.inflate(R.layout.activity_create_tracker, null);
         Button start;
 
         src = layout.findViewById(R.id.spinner_src);
         dest = layout.findViewById(R.id.spinner_dst);
         start = layout.findViewById(R.id.btn_start);
-
-        setUpPopup(layout);
+        final PopupWindow p = setUpPopup(layout);
         getPlacesNames();
+
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createTracker();
+                p.dismiss();
+
+            }
+        });
+
 
     }
 
@@ -210,16 +232,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                             placesObjects.add(place);
                             places.add(place.getName());
                         }
-                        ArrayAdapter adapter2 = new ArrayAdapter<String>(getContext(),
+                        ArrayAdapter adapter2 = new ArrayAdapter<>(getContext(),
                                 android.R.layout.simple_spinner_item, places);
                         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         src.setAdapter(adapter2);
-                        src.setOnItemSelectedListener(onPlacesSelectedListener);
-                        ArrayAdapter adapter = new ArrayAdapter<String>(getContext(),
+                        src.setOnItemSelectedListener(onSourceSelected);
+                        ArrayAdapter adapter = new ArrayAdapter<>(getContext(),
                                 android.R.layout.simple_spinner_item, places);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         dest.setAdapter(adapter2);
-                        dest.setOnItemSelectedListener(onPlacesSelectedListener);
+                        dest.setOnItemSelectedListener(onDestinationSelected);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -232,11 +255,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         });
         asynchTaskGet.execute(Constants.GET_PLACES);
     }
-    String placeSelected ="";
-    AdapterView.OnItemSelectedListener onPlacesSelectedListener = new AdapterView.OnItemSelectedListener() {
+
+    Place sourceSelected;
+    Place destinationSelected;
+
+    AdapterView.OnItemSelectedListener onSourceSelected = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            placeSelected  = placesObjects.get(i).getId();
+            sourceSelected = placesObjects.get(i);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+    AdapterView.OnItemSelectedListener onDestinationSelected = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            destinationSelected = placesObjects.get(i);
         }
 
         @Override
@@ -245,11 +282,32 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
     };
 
-    private void setUpPopup(View view) {
+    public void addPolyLine() {
+
+        if (sourceSelected != null && destinationSelected != null) {
+            polyline1 = mMap.addPolyline(new PolylineOptions()
+                    .clickable(true)
+                    .add(
+                            new LatLng(sourceSelected.getLocation().getLatitude(),
+                                    sourceSelected.getLocation().getLongitude()),
+                            new LatLng(destinationSelected.getLocation().getLatitude(),
+                                    destinationSelected.getLocation().getLongitude())));
+            polyline1.setStartCap(new RoundCap());
+            polyline1.setEndCap(new RoundCap());
+            polyline1.setWidth(POLYLINE_STROKE_WIDTH_PX);
+            polyline1.setColor(COLOR_BLACK_ARGB);
+            polyline1.setJointType(JointType.ROUND);
+            mMap.setOnPolylineClickListener(this);
+        }
+
+
+    }
+
+    private PopupWindow setUpPopup(View view) {
         //Get the devices screen density to calculate correct pixel sizes
         float density = getActivity().getResources().getDisplayMetrics().density;
         // create a focusable PopupWindow with the given layout and correct size
-        final PopupWindow pw = new PopupWindow(view, (int) density * 250, (int) density * 200, true);
+        final PopupWindow pw = new PopupWindow(view, (int) density * 250, (int) density * 220, true);
         //Set up touch closing outside of pop-up
         pw.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         pw.setTouchInterceptor(new View.OnTouchListener() {
@@ -264,7 +322,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         pw.setOutsideTouchable(true);
         // display the pop-up in the center
         pw.showAtLocation(view, Gravity.CENTER, 0, 0);
+        return pw;
     }
+
     /**
      * Saves the state of the map when the activity is paused.
      */
@@ -427,15 +487,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                             Place place = gson.fromJson(jsonArray.get(i).toString(), Place.class);
                             places.add(place);
                         }
-                    addPlacessMarker();
+                         addPlacessMarker();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
+
             @Override
             public void onFailure(Exception e) {
-                Log.e("loading places","Internal server error.");
+                Log.e("loading places", "Internal server error.");
             }
         });
         asynchTaskGet.execute(Constants.GET_PLACES);
@@ -519,21 +580,30 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         if (places.size() == 0)
             return;
         for (int i = 0; i < places.size(); i++) {
-            if (placesMarkers.size() == 0 || placesMarkers.size() <places.size()) {
-                Marker marker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(places.get(i).getLocation().getLatitude(),
-                                places.get(i).getLocation().getLongitude()))
-                        .title(places.get(i).getName())
-                        .snippet(getAddress(places.get(i).getLocation().getLatitude(),
-                                places.get(i).getLocation().getLongitude()))
-                        .infoWindowAnchor(0.5f, 0.5f));
-                Log.e("friend name", places.get(i).getName());
-                Log.e("friend location", places.get(i).getLocation().getLatitude() + "");
+            if (placesMarkers.size() == 0 || placesMarkers.size() < places.size()) {
+
+                if (places.get(i).getLocation() != null) {
+                    Marker marker = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(places.get(i).getLocation().getLatitude(),
+                                    places.get(i).getLocation().getLongitude()))
+                            .title(places.get(i).getName())
+                            .snippet(getAddress(places.get(i).getLocation().getLatitude(),
+                                    places.get(i).getLocation().getLongitude()))
+                            .infoWindowAnchor(0.5f, 0.5f));
                     marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
+                    placesMarkers.add(marker);
+                } else
+                    placesMarkers.get(i).setPosition(new LatLng(places.get(i).getLocation().getLatitude(),
+                            places.get(i).getLocation().getLongitude()));
+            } else {
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(Constants.DEFAULT_LATITUDE,
+                                Constants.DEFAULT_LONTIDUE))
+                        .title(places.get(i).getName())
+                        .infoWindowAnchor(0.5f, 0.5f));
+                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
                 placesMarkers.add(marker);
-            } else
-                placesMarkers.get(i).setPosition(new LatLng(places.get(i).getLocation().getLatitude(),
-                        places.get(i).getLocation().getLongitude()));
+            }
         }
     }
 
@@ -542,7 +612,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         if (friends.size() == 0)
             return;
         for (int i = 0; i < friends.size(); i++) {
-            if (friendsMarkers.size() == 0 || friendsMarkers.size() <friends.size()) {
+            if (friendsMarkers.size() == 0 || friendsMarkers.size() < friends.size()) {
                 Marker marker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(friends.get(i).getCurrent_location().getLatitude(),
                                 friends.get(i).getCurrent_location().getLongitude()))
@@ -633,13 +703,123 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    @Override
-    public void onPolygonClick(Polygon polygon) {
+    public static String getCurrentTimeStamp() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");//dd/MM/yyyy
+        Date now = new Date();
+        String strDate = sdfDate.format(now);
+        StringBuilder newStrDate = new StringBuilder(strDate);
+        newStrDate.setCharAt(10, 'T');
+        strDate = newStrDate.toString();
+        strDate += "Z";
+        return strDate;
+    }
+
+    private void createTracker() {
+
+        if(tracker == null ) {
+            tracker = new Tracker();
+            tracker.setSource(sourceSelected.getId());
+            tracker.setDestination(destinationSelected.getId());
+            tracker.setUser_id(user.getId());
+            tracker.setCreated_at(getCurrentTimeStamp());
+
+            String data = gson.toJson(tracker, Tracker.class);
+
+            AsynchTaskPost asynchTaskPost = new AsynchTaskPost(data, getContext(), new EventListener<String>() {
+                @Override
+                public void onSuccess(String object) {
+                    JSONObject jsonObject = null;
+                    String message = "";
+                    Boolean ok = false;
+
+                    try {
+                        jsonObject = new JSONObject(object);
+                        ok = jsonObject.getBoolean("ok");
+                        message = jsonObject.getString("message");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (ok && message.contains("Tracker created")) {
+                        Toast.makeText(getContext(), "Tracker created.", Toast.LENGTH_SHORT).show();
+                        try {
+                            tracker = gson.fromJson(jsonObject.getString("data"), Tracker.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        addPolyLine();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(getContext(), "Internal server error.", Toast.LENGTH_SHORT).show();
+                }
+            });
+            asynchTaskPost.execute(Constants.CREATE_TRACKER);
+        } else
+            Toast.makeText(getContext(), "Tracker already active.", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void onPolylineClick(Polyline polyline) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setMessage("Are you sure you want to delete this tracker?");
+        alertDialogBuilder.setPositiveButton("yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                                deleteTracker();
+                    }
+                });
 
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
+
+    private void deleteTracker() {
+
+        AsynchTaskDelete asynchTaskDelete = new AsynchTaskDelete("", getContext(), new EventListener<String>() {
+            @Override
+            public void onSuccess(String object) {
+                JSONObject jsonObject = null;
+                String message = "";
+                Boolean ok = false;
+
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                    message = jsonObject.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (ok && message.contains("Tracker deleted successfully")) {
+                    Toast.makeText(getContext(), "Tracker deleted.", Toast.LENGTH_SHORT).show();
+                    polyline1.remove();
+
+                } else if (ok && message.contains("Tracker is not")) {
+                    Toast.makeText(getContext(), "Tracker not deleted.Retry", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(getContext(), "Internal server error.", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        asynchTaskDelete.execute(Constants.DELETE_TRACKER + tracker.getId());
+    }
+
 }

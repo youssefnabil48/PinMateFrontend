@@ -15,8 +15,8 @@ public class Constants {
     public static final Double DEFAULT_LONTIDUE=30.8025;
 
     //backend urls
-    public static final String BACKEND_URL="https://pin-mate.herokuapp.com/api";
-  //  public static final String BACKEND_URL="http://192.168.1.6:3000/api";
+  //  public static final String BACKEND_URL="https://pin-mate.herokuapp.com/api";
+    public static final String BACKEND_URL="http://192.168.1.6:3000/api";
     public static final String REMOTE_SOCKET="wws://pin-mate.herokuapp.com";
 
     //user urls
@@ -28,6 +28,8 @@ public class Constants {
     public static final String GET_MESSAGES = BACKEND_URL + "/chat";
     public static final String GET_FRIENDS= BACKEND_URL + "/user/friends/";
     public static final String GET_USER_FAVS_PLACES = BACKEND_URL + "/user/favoriteplaces/";
+    public static final String DELETE_USER = BACKEND_URL + "/user/delete/";
+    public static final String GET_BLOCKED = BACKEND_URL + "/user/blocks/";
 
     //places url
     public static final String GET_PLACES= BACKEND_URL + "/place/all";
@@ -54,4 +56,9 @@ public class Constants {
 
     //search urls
     public static final String SEARCH = BACKEND_URL + "/search/";
+
+    //tracker urls
+    public static final String CREATE_TRACKER = BACKEND_URL + "/tracker/create";
+    public static final String DELETE_TRACKER = BACKEND_URL + "/tracker/delete/";
+    public static final String GET_TRACKERS = BACKEND_URL + "/tracker/getfriendstracker/";
 }

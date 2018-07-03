@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,7 +46,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class HangoutRequestsFragment extends Fragment implements View.OnClickListener {
+public class HangoutRequestsFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private ListView listViewHangouts;
     private String user_id;
@@ -54,6 +55,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     ProgressBar progressBar;
+    SwipeRefreshLayout swipeRefreshLayout;
     Gson gson;
     User user;
     ImageButton newHangoutReq;
@@ -78,6 +80,8 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         editor = sharedPreferences.edit();
         editor.apply();
         progressBar = view.findViewById(R.id.progressbar_loading_hangouts);
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh_hangouts);
+        swipeRefreshLayout.setOnRefreshListener(this);
         listViewHangouts = view.findViewById(R.id.listView_hangouts);
         listViewHangouts.setOnItemClickListener(onItemClickListener);
         hangoutRequestArrayAdapter = new HangoutRequestsAdapter(getActivity(), R.layout.activity_hangouts_list_item, new ArrayList<HangoutRequest>());
@@ -97,7 +101,6 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         AsynchTaskGet asynchTaskGet = new AsynchTaskGet(getContext(), new EventListener<String>() {
             @Override
             public void onSuccess(String object) {
-                progressBar.setVisibility(View.INVISIBLE);
                 JSONObject jsonObject = null;
                 JSONArray jsonArray;
                 String message = "";
@@ -112,9 +115,10 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                 }
 
                 if (ok && message.contains("No requests")) {
-
+                        swipeRefreshLayout.setRefreshing(false);
 
                 } else if (ok && message.contains("Requests loaded")) {
+                    swipeRefreshLayout.setRefreshing(false);
                     try {
                         jsonArray = jsonObject.getJSONArray("data");
                          ArrayList<HangoutRequest> hangoutRequests = new ArrayList<>();
@@ -122,7 +126,6 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                             HangoutRequest hangoutRequest = gson.fromJson(jsonArray.get(i).toString(), HangoutRequest.class);
                             hangoutRequests.add(hangoutRequest);
                         }
-
                         populateFriendsArrayListAdapter(hangoutRequests);
 
                     } catch (JSONException e) {
@@ -134,6 +137,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
 
             @Override
             public void onFailure(Exception e) {
+                swipeRefreshLayout.setRefreshing(false);
                 showMessage("Internal server error.");
             }
         });
@@ -222,8 +226,9 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                 hangoutRequest.setTitle(title.getText().toString());
                 hangoutRequest.setInvited(new ArrayList<String>(friendsSelected.subList(1, friendsSelected.size())));
                 hangoutRequest.setPlace_id(placeSelected);
-                //na2es el invites and place
+                hangoutRequest.setDescription(desc.getText().toString());
                 createRequest(hangoutRequest);
+
             }
             break;
         }
@@ -251,6 +256,8 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                 }
 
                 if (ok && message.contains("Hangout request created")) {
+                    pw.dismiss();
+                    getHangouts();
                     showMessage("Request sent.");
                 }
             }
@@ -265,7 +272,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
     private int mYear, mMonth, mDay, mHour, mMinute;
     ImageButton date, time;
     Spinner location, friends;
-    EditText edtDate, edtTime, title;
+    EditText edtDate, edtTime, title, desc;
     Button sendReq;
     ArrayList<String> friendsNames = new ArrayList<>();
     ArrayList<String> places = new ArrayList<>();
@@ -273,6 +280,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
     ArrayList<Place> placesObjects = new ArrayList<>();
     ArrayList<String> friendsSelected = new ArrayList<>();
     String placeSelected ="";
+    PopupWindow pw;
 
     private void createHangoutPopup() {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -287,6 +295,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         friends = layout.findViewById(R.id.search_friends);
         edtDate = layout.findViewById(R.id.edt_date);
         edtTime = layout.findViewById(R.id.edt_time);
+        desc = layout.findViewById(R.id.edt_desc);
         sendReq = layout.findViewById(R.id.btn_send_req);
         sendReq.setOnClickListener(this);
         title = layout.findViewById(R.id.edt_title);
@@ -422,7 +431,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         //Get the devices screen density to calculate correct pixel sizes
         float density = getActivity().getResources().getDisplayMetrics().density;
         // create a focusable PopupWindow with the given layout and correct size
-        final PopupWindow pw = new PopupWindow(view, (int) density * 330, (int) density * 340, true);
+        pw = new PopupWindow(view, (int) density * 330, (int) density * 340, true);
         //Set up touch closing outside of pop-up
         pw.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         pw.setTouchInterceptor(new View.OnTouchListener() {
@@ -437,10 +446,13 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         pw.setOutsideTouchable(true);
         // display the pop-up in the center
         pw.showAtLocation(view, Gravity.CENTER, 0, 0);
-    }
-    public void disableNew() {
-        newHangoutReq.setVisibility(View.GONE);
+
+
     }
 
+    @Override
+    public void onRefresh() {
+        getHangouts();
+    }
 }
 

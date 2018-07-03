@@ -95,6 +95,7 @@ public class RequestsFragment extends Fragment implements View.OnClickListener, 
 
                 if (ok && message.contains("No requests")) {
                     swipeRefreshLayout.setRefreshing(false);
+                    populateFriendsArrayListAdapter(new ArrayList<Request>());
 
 
                 } else if (ok && message.contains("Requests loaded")) {
@@ -112,7 +113,6 @@ public class RequestsFragment extends Fragment implements View.OnClickListener, 
                             Request request = new Request(hangoutRequest,user,place);
                             requests.add(request);
                         }
-
                        populateFriendsArrayListAdapter(requests);
 
                     } catch (JSONException e) {
@@ -141,6 +141,8 @@ public class RequestsFragment extends Fragment implements View.OnClickListener, 
         hangoutRequestArrayAdapter.clear();
         hangoutRequestArrayAdapter.addAll(allHangoutsArrayList);
         hangoutRequestArrayAdapter.notifyDataSetChanged();
+        Log.e("count",hangoutRequestArrayAdapter.getCount()+"");
+
     }
 
     @Override
@@ -176,9 +178,9 @@ public class RequestsFragment extends Fragment implements View.OnClickListener, 
                 }
 
                 if (ok) {
-                        showMessage("Response sent.");
+                    getHangouts();
+                    showMessage("Response sent.");
                 }
-                getHangouts();
 
             }
             @Override

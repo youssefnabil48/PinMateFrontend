@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +33,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class FriendListFragment extends Fragment {
+public class FriendListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private ListView listViewUsers;
     private ArrayList<String> friendsIds;
     private ArrayList<User> friendsList;
     private ArrayAdapter<User> userArrayAdapter;
     SharedPreferences sharedPreferences;
+    SwipeRefreshLayout swipeRefreshLayout;
     SharedPreferences.Editor editor;
     ProgressBar progressBar;
     Gson gson;
@@ -63,6 +65,8 @@ public class FriendListFragment extends Fragment {
         editor = sharedPreferences.edit();
         editor.apply();
         friendsList = new ArrayList<>();
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
         progressBar = view.findViewById(R.id.progressbar_loading);
         listViewUsers = view.findViewById(R.id.listView_users);
         listViewUsers.setOnItemClickListener(onItemClickListener);
@@ -94,6 +98,7 @@ public class FriendListFragment extends Fragment {
                 }
 
                 if (ok && message.contains("friends loaded")) {
+                    swipeRefreshLayout.setRefreshing(false);
                     try {
                         jsonArray = jsonObject.getJSONArray("data");
                         friendsList = new ArrayList<>();
@@ -107,12 +112,16 @@ public class FriendListFragment extends Fragment {
                     }
 
                 } else if (ok && message.contains("No friends")) {
+                    swipeRefreshLayout.setRefreshing(false);
+
                     Log.e("Get friends", "No friends found");
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
+                swipeRefreshLayout.setRefreshing(false);
+
                 Log.e("Get friends", "internal server error");
             }
         });
@@ -124,6 +133,7 @@ public class FriendListFragment extends Fragment {
 
 
     public void populateFriendsArrayListAdapter(ArrayList<User> allFriendsArrayList) {
+        userArrayAdapter.clear();
         userArrayAdapter.addAll(allFriendsArrayList);
         userArrayAdapter.notifyDataSetChanged();
     }
@@ -150,5 +160,10 @@ public class FriendListFragment extends Fragment {
 
     private void showMessage(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRefresh() {
+        getFriendsIds("user_info");
     }
 }
