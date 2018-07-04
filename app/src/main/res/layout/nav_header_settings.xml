@@ -14,14 +14,16 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:src="@drawable/image"
-        android:layout_height="wrap_content" />
+        android:layout_width="120dp"
+        android:src="@drawable/logo"
+        android:layout_height="100dp" />
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+        android:layout_marginStart="5dp"
+        android:text="PinMate"
         android:textSize="30sp"
         android:layout_gravity="center_vertical"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />

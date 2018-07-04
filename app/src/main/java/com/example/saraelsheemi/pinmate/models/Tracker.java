@@ -11,9 +11,9 @@ public class Tracker {
     @SerializedName("_id")
     private String id;
     @SerializedName("source")
-    private String source;
+    private MLocation source;
     @SerializedName("destination")
-    private String destination;
+    private MLocation destination;
     @SerializedName("created_at")
     private String created_at;
     @SerializedName("user_id")
@@ -29,19 +29,19 @@ public class Tracker {
         this.user_id = user_id;
     }
 
-    public String getSource() {
+    public MLocation getSource() {
         return source;
     }
 
-    public void setSource(String source) {
+    public void setSource(MLocation source) {
         this.source = source;
     }
 
-    public String getDestination() {
+    public MLocation getDestination() {
         return destination;
     }
 
-    public void setDestination(String destination) {
+    public void setDestination(MLocation destination) {
         this.destination = destination;
     }
 

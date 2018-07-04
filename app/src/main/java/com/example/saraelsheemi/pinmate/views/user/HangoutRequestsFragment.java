@@ -10,8 +10,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskDelete;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
@@ -36,6 +40,7 @@ import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.controllers.adapters.HangoutRequestsAdapter;
 import com.example.saraelsheemi.pinmate.models.HangoutRequest;
 import com.example.saraelsheemi.pinmate.models.Place;
+import com.example.saraelsheemi.pinmate.models.Post;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
 
@@ -46,7 +51,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class HangoutRequestsFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class HangoutRequestsFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,
+        AdapterView.OnItemLongClickListener{
 
     private ListView listViewHangouts;
     private String user_id;
@@ -86,6 +92,9 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         listViewHangouts.setOnItemClickListener(onItemClickListener);
         hangoutRequestArrayAdapter = new HangoutRequestsAdapter(getActivity(), R.layout.activity_hangouts_list_item, new ArrayList<HangoutRequest>());
         listViewHangouts.setAdapter(hangoutRequestArrayAdapter);
+        listViewHangouts.setLongClickable(true);
+        listViewHangouts.setOnItemLongClickListener(this);
+        registerForContextMenu(listViewHangouts);
         newHangoutReq = view.findViewById(R.id.btn_new_hangout);
         newHangoutReq.setOnClickListener(this);
 
@@ -431,7 +440,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
         //Get the devices screen density to calculate correct pixel sizes
         float density = getActivity().getResources().getDisplayMetrics().density;
         // create a focusable PopupWindow with the given layout and correct size
-        pw = new PopupWindow(view, (int) density * 330, (int) density * 340, true);
+        pw = new PopupWindow(view, (int) density * 330, (int) density * 385, true);
         //Set up touch closing outside of pop-up
         pw.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         pw.setTouchInterceptor(new View.OnTouchListener() {
@@ -453,6 +462,67 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
     @Override
     public void onRefresh() {
         getHangouts();
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        HangoutRequest p = (HangoutRequest) adapterView.getItemAtPosition(i);
+        deleteRequestId = p.getId();
+        listViewHangouts.showContextMenu();
+        return true;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.post_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.remove_item: {
+                deleteRequest(deleteRequestId);
+            }
+            break;
+        }
+        return true;
+    }
+    String deleteRequestId;
+    private void deleteRequest(String id) {
+
+
+        AsynchTaskDelete asynchTaskDelete = new AsynchTaskDelete("", getContext(), new EventListener<String>() {
+            @Override
+            public void onSuccess(String object) {
+                JSONObject jsonObject = null;
+                String message = "";
+                Boolean ok = false;
+
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                    message = jsonObject.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (ok && message.contains("Request deleted successfully")) {
+                    showMessage("Request deleted.");
+                    getHangouts();
+                } else if (ok && message.contains("request is not")) {
+                    showMessage("Request not deleted. Retry");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                showMessage("Internal server error. Retry.");
+            }
+        });
+        asynchTaskDelete.execute(Constants.DELETE_HANGOUT_REQUEST + id);
+
     }
 }
 

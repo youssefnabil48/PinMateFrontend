@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.views.place.AllPlacesFragment;
 import com.squareup.picasso.Picasso;
@@ -35,7 +36,7 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView placeName;
         TextView placeDescription;
-        ImageView placePicture;
+        MLRoundedImageView placePicture;
         final ImageView favoritePlace;
 
         //convert view == one row

@@ -4,7 +4,7 @@
     android:id="@+id/popup_element"
     android:background="@drawable/newrequestshape"
     android:layout_width="330dp"
-    android:layout_height="340dp">
+    android:layout_height="385dp">
 
     <TextView
         android:id="@+id/line"
@@ -26,21 +26,21 @@
         android:paddingStart="10dp"
         android:layout_marginTop="5dp"
         android:paddingEnd="10dp"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content" />
     <EditText
         android:id="@+id/edt_desc"
-        android:layout_below="@id/line"
-        android:layout_toEndOf="@id/edt_title"
+        android:layout_below="@id/edt_title"
         android:hint="Description.."
         android:background="@drawable/rounded_corner_white"
         android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:paddingStart="10dp"
         android:textColor="#747B80"
         android:textSize="15sp"
         android:padding="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="200dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp" />
 
     <TextView
@@ -55,7 +55,7 @@
 
     <TextView
         android:id="@+id/txt_hangout_location"
-        android:layout_below="@id/edt_title"
+        android:layout_below="@id/edt_desc"
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
         android:text="Location"

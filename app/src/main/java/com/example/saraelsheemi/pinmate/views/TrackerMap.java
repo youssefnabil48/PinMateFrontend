@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -41,6 +42,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener {
     User user;
@@ -78,14 +83,40 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
         super.onViewCreated(view, savedInstanceState);
 
     }
-
+    ExecutorService es;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        addUserMarker();
         getTrackerDetails();
+        addUserMarker();
+    //   handler.postDelayed(runnable, 1000);
+        mMap.moveCamera(CameraUpdateFactory
+                .newLatLngZoom(new LatLng(user.getCurrent_location().getLatitude(), user.getCurrent_location().getLongitude()), 15));
+         es = Executors.newCachedThreadPool();
+        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+        ses.scheduleAtFixedRate(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                es.submit(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        updateUserLocation();
+                    }
+                });
+            }
+        }, 0, 5, TimeUnit.SECONDS);
 
 
+    }
+
+    @Override
+    public void onPause() {
+        es.shutdown();
+        super.onPause();
     }
 
     public void getTrackerDetails() {
@@ -96,9 +127,56 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
         String json = sharedPreferences.getString("tracker_details", "");
         tracker = gson.fromJson(json, Tracker.class);
         user = gson.fromJson(sharedPreferences.getString("tracker_user", ""), User.class);
-
         getSource();
         getDest();
+
+
+    }
+
+    public void updateUserLocation() {
+
+        AsynchTaskGet asynchTaskGet = new AsynchTaskGet(getContext(), new EventListener<String>() {
+            @Override
+            public void onSuccess(String object) {
+                JSONObject jsonObject = null;
+                String message = "";
+                Boolean ok = false;
+
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                    message = jsonObject.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (ok && message.contains("User found successfully")) {
+                    try {
+                        user = gson.fromJson(jsonObject.getString("data"), User.class);
+                        Log.e("user current loc",user.getCurrent_location().getLatitude()+"");
+                        addUserMarker();
+                        mMap.moveCamera(CameraUpdateFactory
+                                .newLatLngZoom(new LatLng(user.getCurrent_location().getLatitude(),
+                                        user.getCurrent_location().getLongitude()), 15));
+                        addPolyLine();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Log.e("user current loc","NOT");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("user current loc failed","failed");
+            }
+        });
+
+        asynchTaskGet.execute(Constants.GET_USER + user.getId());
+
 
     }
 
@@ -122,9 +200,11 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
                 if (ok && message.contains("Place loaded")) {
                     try {
                         String json = jsonObject.getString("data");
-                        dest = gson.fromJson(json,Place.class);
-                        addDstMarker();
-                        addPolyLine();
+                        dest = gson.fromJson(json, Place.class);
+                        if (dest != null) {
+                            addDstMarker();
+                            addPolyLine();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -138,6 +218,7 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
         });
         asynchTaskGet.execute(Constants.GET_PLACE + tracker.getDestination());
     }
+
     private void getSource() {
         AsynchTaskGet asynchTaskGet = new AsynchTaskGet(getContext(), new EventListener<String>() {
             @Override
@@ -158,8 +239,9 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
                 if (ok && message.contains("Place loaded")) {
                     try {
                         String json = jsonObject.getString("data");
-                        src = gson.fromJson(json,Place.class);
-                        addSrcMarker();
+                        src = gson.fromJson(json, Place.class);
+                        if (src != null)
+                            addSrcMarker();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -182,13 +264,14 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
                     .title(src.getName())
                     .snippet(getAddress(src.getLocation().getLatitude(), src.getLocation().getLongitude()))
                     .infoWindowAnchor(0.5f, 0.5f));
-                srcMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
+            srcMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
 
         } else
             srcMarker.setPosition(new LatLng(src.getLocation().getLatitude(), src.getLocation().getLongitude()));
 
 
     }
+
     private void addUserMarker() {
         if (userMarker == null) {
             userMarker = mMap.addMarker(new MarkerOptions()
@@ -219,14 +302,17 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
             dstMarker.setPosition(new LatLng(dest.getLocation().getLatitude(), dest.getLocation().getLongitude()));
 
     }
+
     public void addPolyLine() {
 
         if (src != null && dest != null) {
+            if(polyline1!= null)
+                polyline1.remove();
             polyline1 = mMap.addPolyline(new PolylineOptions()
                     .clickable(true)
                     .add(
-                            new LatLng(src.getLocation().getLatitude(),
-                                    src.getLocation().getLongitude()),
+                            new LatLng(user.getCurrent_location().getLatitude(),
+                                    user.getCurrent_location().getLongitude()),
                             new LatLng(dest.getLocation().getLatitude(),
                                     dest.getLocation().getLongitude())));
             polyline1.setStartCap(new RoundCap());
@@ -235,8 +321,7 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
             polyline1.setColor(COLOR_BLACK_ARGB);
             polyline1.setJointType(JointType.ROUND);
             mMap.setOnPolylineClickListener(this);
-            mMap.moveCamera(CameraUpdateFactory
-                    .newLatLngZoom(new LatLng(src.getLocation().getLatitude(),src.getLocation().getLongitude()), 15));
+
         }
 
 
@@ -245,7 +330,7 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
 
     @Override
     public void onPolylineClick(Polyline polyline) {
-        Toast.makeText(getContext(),"From "+src.getName() +" to " +dest.getName(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "From " + src.getName() + " to " + dest.getName(), Toast.LENGTH_LONG).show();
     }
 
     Geocoder geocoder;

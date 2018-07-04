@@ -37,6 +37,7 @@ import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPost;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPut;
 import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
+import com.example.saraelsheemi.pinmate.models.MLocation;
 import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.Tracker;
 import com.example.saraelsheemi.pinmate.models.User;
@@ -141,6 +142,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         if (savedInstanceState != null) {
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+            currentLoc.setLocation(new MLocation());
+            currentLoc.getLocation().setLatitude(mLastKnownLocation.getLatitude());
+            currentLoc.getLocation().setLongitude(mLastKnownLocation.getLongitude());
         }
 
         View view = inflater.inflate(R.layout.activity_maps, null, false);
@@ -205,6 +209,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
 
     }
+    Place currentLoc = new Place();
 
     private void getPlacesNames() {
         AsynchTaskGet asynchTaskGet = new AsynchTaskGet(getContext(), new EventListener<String>() {
@@ -226,14 +231,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 if (ok && message.contains("Places loaded")) {
                     try {
                         jsonArray = jsonObject.getJSONArray("data");
+                        ArrayList<String> cLoc = new ArrayList<>();
                         ArrayList<String> places = new ArrayList<>();
+                        cLoc.add("Current Location");
+                        currentLoc.setName("Current Location");
+                        placesObjects.add(currentLoc);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             Place place = gson.fromJson(jsonArray.get(i).toString(), Place.class);
                             placesObjects.add(place);
                             places.add(place.getName());
                         }
                         ArrayAdapter adapter2 = new ArrayAdapter<>(getContext(),
-                                android.R.layout.simple_spinner_item, places);
+                                android.R.layout.simple_spinner_item, cLoc);
                         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         src.setAdapter(adapter2);
                         src.setOnItemSelectedListener(onSourceSelected);
@@ -262,7 +271,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     AdapterView.OnItemSelectedListener onSourceSelected = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            sourceSelected = placesObjects.get(i);
+            sourceSelected = currentLoc;
         }
 
         @Override
@@ -359,7 +368,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         String newData = " {\"current_location\":{ " +
                 "\"longitude\" : " + user.getCurrent_location().getLongitude() + "," +
                 "\"latitude\" :" + user.getCurrent_location().getLatitude() + "}} ";
-        Log.e("newdata", newData);
+
 
         asynchTaskPut = new AsynchTaskPut(newData, getContext(), new EventListener<String>() {
             @Override
@@ -385,7 +394,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 Log.e("Update failed", "server error");
             }
         });
-        Log.e("url", Constants.UPDATE_USER + user_id);
         asynchTaskPut.execute(Constants.UPDATE_USER + user_id);
     }
 
@@ -441,6 +449,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                                 updateLocation(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                                 getFriends();
                                 getPlaces();
+                                currentLoc.setLocation(new MLocation());
+                                currentLoc.getLocation().setLatitude(mLastKnownLocation.getLatitude());
+                                currentLoc.getLocation().setLongitude(mLastKnownLocation.getLongitude());
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
@@ -620,8 +631,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         .snippet(getAddress(friends.get(i).getCurrent_location().getLatitude(),
                                 friends.get(i).getCurrent_location().getLongitude()))
                         .infoWindowAnchor(0.5f, 0.5f));
-                Log.e("friend name", friends.get(i).getName());
-                Log.e("friend location", friends.get(i).getCurrent_location().getLatitude() + "");
                 if (friends.get(i).getGender().equals("male"))
                     marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.manmap));
                 else if (user.getGender().equals("female"))
@@ -718,16 +727,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
         if(tracker == null ) {
             tracker = new Tracker();
-            tracker.setSource(sourceSelected.getId());
-            tracker.setDestination(destinationSelected.getId());
+            tracker.setSource(sourceSelected.getLocation());
+            tracker.setDestination(destinationSelected.getLocation());
             tracker.setUser_id(user.getId());
             tracker.setCreated_at(getCurrentTimeStamp());
 
             String data = gson.toJson(tracker, Tracker.class);
+            Log.e("tracker data", data);
 
             AsynchTaskPost asynchTaskPost = new AsynchTaskPost(data, getContext(), new EventListener<String>() {
                 @Override
                 public void onSuccess(String object) {
+
                     JSONObject jsonObject = null;
                     String message = "";
                     Boolean ok = false;
@@ -741,7 +752,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                     }
 
                     if (ok && message.contains("Tracker created")) {
-                        Toast.makeText(getContext(), "Tracker created.", Toast.LENGTH_SHORT).show();
+                        tracker = null;
                         try {
                             tracker = gson.fromJson(jsonObject.getString("data"), Tracker.class);
                         } catch (JSONException e) {
@@ -754,6 +765,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
                 @Override
                 public void onFailure(Exception e) {
+                    tracker=null;
                     Toast.makeText(getContext(), "Internal server error.", Toast.LENGTH_SHORT).show();
                 }
             });

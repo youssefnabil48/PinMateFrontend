@@ -42,7 +42,7 @@ public class Register extends AppCompatActivity implements  View.OnClickListener
 
     private void init() {
         logo =  findViewById(R.id.img_logo);
-        Picasso.get().load(R.drawable.image).resize(100,100).into(logo);
+        Picasso.get().load(R.drawable.logo).resize(100,100).into(logo);
         register =  findViewById(R.id.btn_reg_reg);
         register.setOnClickListener(this);
         login =  findViewById(R.id.btn_already_member);
