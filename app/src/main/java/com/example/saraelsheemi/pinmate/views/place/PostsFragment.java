@@ -101,7 +101,6 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         Post p = (Post) adapterView.getItemAtPosition(i);
         deletePostId = p.getId();
         listViewPosts.showContextMenu();
-
         return true;
     }
 

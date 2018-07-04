@@ -61,4 +61,7 @@ public class Constants {
     public static final String CREATE_TRACKER = BACKEND_URL + "/tracker/create";
     public static final String DELETE_TRACKER = BACKEND_URL + "/tracker/delete/";
     public static final String GET_TRACKERS = BACKEND_URL + "/tracker/getfriendstracker/";
+
+    //events requests urls
+    public static final String DELETE_EVENT= BACKEND_URL + "/place/event/delete/";
 }
