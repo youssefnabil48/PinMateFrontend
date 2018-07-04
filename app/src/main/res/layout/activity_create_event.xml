@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_element"
+    android:background="@drawable/newrequestshape"
+    android:layout_width="330dp"
+    android:layout_height="385dp">
+
+    <TextView
+        android:id="@+id/txt_create_event"
+        android:text="Create Event"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:textColor="#747B80"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/line"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:paddingTop="5dip"
+        android:layout_below="@id/txt_create_event"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#747B80" />
+
+    <EditText
+        android:id="@+id/edt_event_title"
+        android:layout_below="@id/line"
+        android:hint="Name"
+        android:layout_marginStart="20dp"
+        android:textColor="#747B80"
+        android:textSize="15sp"
+        android:paddingStart="10dp"
+        android:layout_marginTop="5dp"
+        android:paddingEnd="10dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/edt_desc"
+        android:layout_below="@id/edt_event_title"
+        android:hint="Description.."
+        android:background="@drawable/rounded_corner_white"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:paddingStart="10dp"
+        android:textColor="#747B80"
+        android:textSize="15sp"
+        android:padding="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+
+    <TextView
+        android:id="@+id/txt_event_start_date"
+        android:layout_below="@id/edt_desc"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:text="Starts"
+        android:textStyle="bold"
+        android:textColor="#747B80"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:layout_below="@id/txt_event_start_date"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_date_range_black_24dp"
+        android:id="@+id/imgbtn_event_start_date"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/edt_event_start_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/edt_event_title"
+        android:layout_below="@+id/txt_event_start_date"
+        android:text="22/7/2018"
+        android:textColor="#747B80"
+        android:textSize="13sp" />
+
+    <ImageButton
+        android:id="@+id/imgbtn_event_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/imgbtn_event_start_date"
+        android:layout_marginStart="131dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_access_time_black_24dp" />
+
+    <EditText
+        android:id="@+id/edt_event_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_event_start_date"
+        android:layout_toEndOf="@+id/imgbtn_event_start_time"
+        android:text="6:00 PM"
+        android:textColor="#747B80"
+        android:textSize="13sp" />
+    <!-- END OF START TIME-->
+
+    <TextView
+        android:id="@+id/txt_event_end_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/edt_event_title"
+        android:layout_below="@+id/edt_event_start_date"
+        android:text="Ends"
+        android:textColor="#747B80"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:layout_below="@id/txt_event_end_date"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_date_range_black_24dp"
+        android:id="@+id/imgbtn_event_end_date"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/edt_end_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/edt_event_title"
+        android:layout_below="@+id/txt_event_end_date"
+        android:text="22/7/2018"
+        android:textColor="#747B80"
+        android:textSize="13sp" />
+
+    <ImageButton
+        android:id="@+id/imgbtn_event_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/imgbtn_event_start_time"
+        android:layout_alignTop="@+id/imgbtn_event_end_date"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_access_time_black_24dp" />
+
+    <EditText
+        android:id="@+id/edt_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_event_end_date"
+        android:layout_toEndOf="@+id/imgbtn_event_start_time"
+        android:text="6:00 PM"
+        android:textColor="#747B80"
+        android:textSize="13sp" />
+
+    <Button
+        android:id="@+id/btn_Add_event"
+        style="@style/LoginButton"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/imgbtn_event_end_date"
+        android:background="@drawable/round_corner"
+        android:text="Add" />
+
+</RelativeLayout>

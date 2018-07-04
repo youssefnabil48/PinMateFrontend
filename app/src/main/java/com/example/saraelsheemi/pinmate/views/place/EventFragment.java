@@ -1,22 +1,35 @@
 package com.example.saraelsheemi.pinmate.views.place;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
@@ -28,6 +41,7 @@ import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.controllers.adapters.EventsAdapter;
 import com.example.saraelsheemi.pinmate.controllers.adapters.PostsAdapter;
 import com.example.saraelsheemi.pinmate.models.Event;
+import com.example.saraelsheemi.pinmate.models.HangoutRequest;
 import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.Post;
 import com.example.saraelsheemi.pinmate.models.User;
@@ -37,8 +51,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemLongClickListener{
+public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemLongClickListener, View.OnClickListener{
 
     TextView name;
     TextView description;
@@ -54,6 +69,7 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     EventsAdapter eventsAdapter;
     ListView eventsView;
     String deletedEventId;
+    Button addEventBtn;
 
     @Nullable
     @Override
@@ -92,6 +108,10 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         eventsView.setLongClickable(true);
         eventsView.setOnItemLongClickListener(this);
         registerForContextMenu(eventsView);
+
+        addEventBtn = view.findViewById(R.id.btn_new_event);
+        addEventBtn.setOnClickListener(this);
+
     }
 
     //called when first time opening list view
@@ -151,6 +171,64 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         asynchTaskGet.execute(Constants.GET_PLACE + place.getId());
     }
 
+
+    private int startmYear, startmMonth, startmDay, startmHour, startmMinute;
+    private int endmYear, endmMonth, endmDay, endmHour, endmMinute;
+    ImageButton startDatebtn, startTimebtn;
+    ImageButton endDatebtn, endTimebtn;
+    EditText edtStartDate, edtStartTime, edtEndDate, edtEndTime, newtitle, newdesc;
+    Button addEventButton;
+    PopupWindow pw;
+
+    private void createEventPopup() {
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //Inflate the view from a predefined XML layout (no need for root id, using entire layout)
+        View layout = inflater.inflate(R.layout.activity_create_event, null);
+
+        //buttons
+        startDatebtn = layout.findViewById(R.id.imgbtn_event_start_date);
+        endDatebtn = layout.findViewById(R.id.imgbtn_event_end_date);
+
+        startTimebtn = layout.findViewById(R.id.imgbtn_event_start_time);
+        endTimebtn = layout.findViewById(R.id.imgbtn_event_end_time);
+
+        addEventButton = layout.findViewById(R.id.btn_Add_event);
+        addEventButton.setOnClickListener(this);
+
+        //title and dexcription
+        newtitle = layout.findViewById(R.id.edt_event_title);
+        newdesc = layout.findViewById(R.id.edt_desc);
+
+        //edit text views
+        edtStartDate = layout.findViewById(R.id.edt_event_start_date);
+        edtEndDate = layout.findViewById(R.id.edt_end_date);
+        edtStartTime = layout.findViewById(R.id.edt_event_start_time);
+        edtEndTime = layout.findViewById(R.id.edt_end_time);
+
+        setUpPopup(layout);
+    }
+
+    private void setUpPopup(View view) {
+        //Get the devices screen density to calculate correct pixel sizes
+        float density = getActivity().getResources().getDisplayMetrics().density;
+        // create a focusable PopupWindow with the given layout and correct size
+        pw = new PopupWindow(view, (int) density * 330, (int) density * 385, true);
+        //Set up touch closing outside of pop-up
+        pw.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        pw.setTouchInterceptor(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    pw.dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
+        pw.setOutsideTouchable(true);
+        // display the pop-up in the center
+        pw.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
     @Override
     public void onRefresh() {
         getUpdatedEvents();
@@ -178,17 +256,16 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        showMessage(String.valueOf(item.getItemId()));
-        Log.e("event", String.valueOf(item.getItemId()));
         switch (item.getItemId()) {
             case R.id.delete_item: {
-                Log.e("delete id", deletedEventId);
                 deleteEvent(deletedEventId);
+                getUpdatedEvents();
             }
             break;
         }
         return true;
     }
+
 
     public void deleteEvent(String eventId) {
 
@@ -226,4 +303,137 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         asynchTaskDelete.execute(Constants.DELETE_EVENT + eventId);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_new_event: {
+                createEventPopup();
+            }
+            break;
+            case R.id.btn_Add_event: {
+                Event event = new Event();
+                event.setName(newtitle.getText().toString());
+                event.setDescription(newdesc.getText().toString());
+                event.setStart_date(edtStartDate.getText()+" "+edtStartTime.getText());
+                event.setEnd_date(edtEndDate.getText()+ " " + edtEndTime.getText());
+                String jsonEvent = gson.toJson(event, Event.class);
+                createAddEventRequest(event);
+            }
+            break;
+            case R.id.imgbtn_event_start_date: {
+                final Calendar c = Calendar.getInstance();
+                startmYear = c.get(Calendar.YEAR);
+                startmMonth = c.get(Calendar.MONTH);
+                startmDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                edtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        }, startmYear, startmMonth, startmDay);
+                datePickerDialog.show();
+            }
+            break;
+            case R.id.imgbtn_event_start_time: {
+                // Get Current Time
+                final Calendar c = Calendar.getInstance();
+                startmHour = c.get(Calendar.HOUR_OF_DAY);
+                startmMinute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+
+                                edtStartTime.setText(hourOfDay + ":" + minute);
+                            }
+                        }, startmHour, startmMinute, false);
+                timePickerDialog.show();
+            }
+            break;
+            case R.id.imgbtn_event_end_date: {
+                final Calendar c = Calendar.getInstance();
+                endmYear = c.get(Calendar.YEAR);
+                endmMonth = c.get(Calendar.MONTH);
+                endmDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                edtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        }, endmYear, endmMonth, endmDay);
+                datePickerDialog.show();
+            }
+            break;
+            case R.id.imgbtn_event_end_time: {
+                // Get Current Time
+                final Calendar c = Calendar.getInstance();
+                endmHour = c.get(Calendar.HOUR_OF_DAY);
+                endmMinute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+
+                                edtEndTime.setText(hourOfDay + ":" + minute);
+                            }
+                        }, endmHour, endmMinute, false);
+                timePickerDialog.show();
+            }
+            break;
+        }
+    }
+
+    private void createAddEventRequest(Event event){
+
+        String data = gson.toJson(event, Event.class);
+        Log.e("hangout request data", data);
+
+        AsynchTaskPost asynchTaskPost = new AsynchTaskPost(data, getContext(), new EventListener<String>() {
+            @Override
+            public void onSuccess(String object) {
+                JSONObject jsonObject = null;
+                String message = "";
+                Boolean ok = false;
+
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                    message = jsonObject.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (ok) {
+                    pw.dismiss();
+                    getUpdatedEvents();
+                    showMessage("Event added");
+                }
+            }
+            @Override
+            public void onFailure(Exception e) {
+                showMessage("Internal server error. Retry");
+            }
+        });
+        asynchTaskPost.execute(Constants.CREATE_EVENT);
+    }
 }

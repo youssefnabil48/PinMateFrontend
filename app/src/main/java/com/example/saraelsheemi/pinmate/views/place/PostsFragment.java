@@ -116,10 +116,10 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         switch (item.getItemId()) {
             case R.id.remove_item: {
                 deletePost(deletePostId);
+                return true;
             }
-            break;
         }
-        return true;
+        return false;
     }
 
     //called when first time opening list view

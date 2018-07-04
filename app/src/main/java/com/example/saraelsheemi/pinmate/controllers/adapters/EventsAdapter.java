@@ -35,15 +35,11 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         super(context, 0, events);
     }
 
-    /**
-     * Provides a view for an AdapterView (ListView, GridView, etc.)
-     *
-     * @param position The position in the list of data that should be displayed in the
-     *                 list item view.
-     * @param convertView The recycled view to populate.
-     * @param parent The parent ViewGroup that is used for inflation.
-     * @return The View for the position in the AdapterView.
-     */
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //convert view == one row
