@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private void init() {
         logo = findViewById(R.id.img_logo);
-        Picasso.get().load(R.drawable.image).resize(100, 100).into(logo);
+        Picasso.get().load(R.drawable.logo).resize(100, 100).into(logo);
         signUp = findViewById(R.id.btn_register);
         signIn = findViewById(R.id.btn_login);
         signIn.setOnClickListener(this);

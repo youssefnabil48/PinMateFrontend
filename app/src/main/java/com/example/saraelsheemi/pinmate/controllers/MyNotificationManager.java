@@ -27,7 +27,7 @@ public class MyNotificationManager {
     public void displayNotification(String title, String body){
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,Constants.CHANNEL_ID)
-                .setSmallIcon(R.drawable.image)
+                .setSmallIcon(R.drawable.logo)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)

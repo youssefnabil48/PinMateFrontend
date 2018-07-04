@@ -50,7 +50,6 @@ public class TrackersAdapter  extends ArrayAdapter<TrackerResponse> {
 
         userName = listItemView.findViewById(R.id.txt_tracker_friend_name);
         src = listItemView.findViewById(R.id.tracker_src);
-        dst = listItemView.findViewById(R.id.tracker_dst);
         userPicture = listItemView.findViewById(R.id.img_tracker_friend);
         openTracker= listItemView.findViewById(R.id.open);
         TrackerResponse trackerResponse = getItem(position);

@@ -14,6 +14,7 @@
      android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/img_logo"
+        android:src="@drawable/logo"
         android:layout_width="100dp"
         android:layout_marginStart="30dp"
         android:layout_height="100dp" />
@@ -22,8 +23,6 @@
         style="@style/LogoArea"
         android:layout_toEndOf="@id/img_logo" />
 </RelativeLayout>
-
-
 
     <EditText
         android:id="@+id/edt_email_login"
