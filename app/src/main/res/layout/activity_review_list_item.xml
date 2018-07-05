@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/img_fav_place_list_picture"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/male_user_profile_picture" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/txt_fav_place_list_name"
+        android:layout_toEndOf="@id/img_fav_place_list_picture"
+        android:layout_marginTop="30dp"
+        android:textSize="15sp"
+        android:text="User Name"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/txt_fav_place_list_description"
+        android:layout_below="@id/txt_fav_place_list_name"
+        android:layout_alignStart="@id/txt_fav_place_list_name"
+        android:layout_marginTop="5dp"
+        android:textSize="13sp"
+        android:text="Content"
+        android:textColor="#747B80" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/txt_post_date"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true"
+        android:text="Date"
+        android:textColor="@android:color/black" />
+
+
+</RelativeLayout>
