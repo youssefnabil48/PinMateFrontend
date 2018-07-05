@@ -18,7 +18,26 @@ public class Review {
     private String created_at;
     @SerializedName("rating")
     private int rating;
+    @SerializedName("user_name")
+    private String username;
+    @SerializedName("user_pic")
+    private String userPic;
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUserPic() {
+        return userPic;
+    }
+
+    public void setUserPic(String userPic) {
+        this.userPic = userPic;
+    }
 
     public String getContent() {
         return content;
