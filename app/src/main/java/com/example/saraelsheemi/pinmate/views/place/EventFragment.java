@@ -219,10 +219,14 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         //buttons
         startDatebtn = layout.findViewById(R.id.imgbtn_event_start_date);
+        startDatebtn.setOnClickListener(this);
         endDatebtn = layout.findViewById(R.id.imgbtn_event_end_date);
+        endDatebtn.setOnClickListener(this);
 
         startTimebtn = layout.findViewById(R.id.imgbtn_event_start_time);
+        startTimebtn.setOnClickListener(this);
         endTimebtn = layout.findViewById(R.id.imgbtn_event_end_time);
+        endTimebtn.setOnClickListener(this);
 
         addEventButton = layout.findViewById(R.id.btn_Add_event);
         addEventButton.setOnClickListener(this);
@@ -244,7 +248,7 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         //Get the devices screen density to calculate correct pixel sizes
         float density = getActivity().getResources().getDisplayMetrics().density;
         // create a focusable PopupWindow with the given layout and correct size
-        pw = new PopupWindow(view, (int) density * 330, (int) density * 385, true);
+        pw = new PopupWindow(view, (int) density * 330, (int) density * 340, true);
         //Set up touch closing outside of pop-up
         pw.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         pw.setTouchInterceptor(new View.OnTouchListener() {

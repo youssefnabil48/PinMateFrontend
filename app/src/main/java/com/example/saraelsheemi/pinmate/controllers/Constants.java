@@ -41,7 +41,6 @@ public class Constants {
 
     //hangout requests urls
     public static final String CREATE_HANGOUT= BACKEND_URL + "/hangoutRequest/create";
-    public static final String DELETE_HANGOUT= BACKEND_URL + "/hangoutRequest/delete/";
     public static final String GET_USER_HANGOUTS= BACKEND_URL + "/hangoutrequest/getsndrrequests/";
     public static final String GET_HANGOUTS= BACKEND_URL + "/hangoutRequest/getrcvrrequests/";
     public static final String RESPOND_HANGOUT_REQUEST = BACKEND_URL + "/hangoutRequest/respond";

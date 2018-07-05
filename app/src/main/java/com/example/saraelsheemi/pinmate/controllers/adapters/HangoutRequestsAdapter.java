@@ -9,7 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.saraelsheemi.pinmate.R;
+import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.models.HangoutRequest;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -45,6 +47,8 @@ public class HangoutRequestsAdapter extends ArrayAdapter<HangoutRequest> {
         hangoutTitle = listItemView.findViewById(R.id.txt_hangout_title);
         hangoutDescription = listItemView.findViewById(R.id.txt_hangout_description);
         hangoutDate = listItemView.findViewById(R.id.txt_post_date);
+        MLRoundedImageView mlRoundedImageView = listItemView.findViewById(R.id.hngoutpic);
+        Picasso.get().load(R.drawable.reunion).into(mlRoundedImageView);
 
 
         hangoutTitle.setText(hangoutRequest.getTitle());
