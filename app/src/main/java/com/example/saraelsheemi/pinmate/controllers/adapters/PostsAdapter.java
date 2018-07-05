@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.saraelsheemi.pinmate.R;
 import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskGet;
+import com.example.saraelsheemi.pinmate.controllers.MLRoundedImageView;
 import com.example.saraelsheemi.pinmate.models.Post;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.example.saraelsheemi.pinmate.views.place.PostsFragment;
@@ -23,9 +24,7 @@ import java.util.ArrayList;
 
 public class PostsAdapter  extends ArrayAdapter<Post> {
 
-    AsynchTaskGet asynchTaskGet;
-    User user;
-    Gson gson = new Gson();
+
     PostsFragment fragment;
     Post post;
     ArrayList<Post> posts;
@@ -46,8 +45,8 @@ public class PostsAdapter  extends ArrayAdapter<Post> {
         TextView userName;
         TextView content;
         TextView date;
-        ImageView userPicture;
-        ImageButton deletePost;
+        MLRoundedImageView userPicture;
+
 
 
         //convert view == one row
@@ -61,9 +60,7 @@ public class PostsAdapter  extends ArrayAdapter<Post> {
         content = listItemView.findViewById(R.id.txt_fav_place_list_description);
         userPicture = listItemView.findViewById(R.id.img_fav_place_list_picture);
         date = listItemView.findViewById(R.id.txt_post_date);
- //       deletePost = listItemView.findViewById(R.id.btn_delete_post);
 
-//        deletePost.setOnClickListener(DeletePost);
         post = getItem(position);
 
         userName.setText(post.getUser_name());
@@ -77,13 +74,5 @@ public class PostsAdapter  extends ArrayAdapter<Post> {
         return listItemView;
     }
 
-
-//    View.OnClickListener DeletePost = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View view) {
-//          Log.e("post 2 id", post.getId());
-//            fragment.deletePost(post.getId());
-//        }
-//    };
 }
 

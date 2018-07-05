@@ -20,17 +20,6 @@ import java.util.ArrayList;
 public class EventsAdapter extends ArrayAdapter<Event> {
     private static final String LOG_TAG = EventsAdapter.class.getSimpleName();
 
-    /**
-     * This is our own custom constructor (it doesn't mirror a superclass constructor).
-     * The context is used to inflate the layout file, and the list is the data we want
-     * to populate into the lists.
-     *
-     * @param context        The current context. Used to inflate the layout file.
-     * @param events A List of AndroidFlavor objects to display in a list
-     */
-    //to dont use super
-    // activity context
-    //arraylist kk
     public EventsAdapter(Activity context, ArrayList<Event> events) {
         super(context, 0, events);
     }
@@ -45,8 +34,9 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         //convert view == one row
         // Check if the existing view is being reused, otherwise inflate the view
         View listItemView = convertView;
-        listItemView = LayoutInflater.from(getContext()).inflate(R.layout.activity_event_list_item, parent, false);
-
+        if(listItemView == null) {
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.activity_event_list_item, parent, false);
+        }
         Event event = getItem(position);
 
         TextView nameTextView = listItemView.findViewById(R.id.event_name);
@@ -59,6 +49,8 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         TextView startDateTextView = listItemView.findViewById(R.id.start_date);
         startDateTextView.setText(event.getStart_date());
 
+        MLRoundedImageView mlRoundedImageView = listItemView.findViewById(R.id.eventpic);
+        Picasso.get().load(R.drawable.fireworks).into(mlRoundedImageView);
 
         TextView endDateTextView = listItemView.findViewById(R.id.end_date);
         endDateTextView.setText(event.getEnd_date());
