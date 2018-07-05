@@ -10,13 +10,16 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone" />
+
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:numStars="5"
-        android:stepSize="1.0"
-        android:rating="0" />
+        android:rating="0"
+        android:stepSize="1.0" />
     <Button
         android:id="@+id/btn_new_review"
         android:layout_alignParentEnd="true"
@@ -31,11 +34,12 @@
 
     <EditText
         android:id="@+id/edt_new_review_content"
-        android:paddingStart="10dp"
-        android:textSize="15sp"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ratingBar"
         android:hint="Enter your review here..."
-        android:layout_width="300dp"
-        android:layout_height="80dp" />
+        android:paddingStart="10dp"
+        android:textSize="15sp" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
