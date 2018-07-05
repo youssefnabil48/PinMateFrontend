@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <ProgressBar
+        android:id="@+id/progressbar_review_loading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:rating="0" />
+    <Button
+        android:id="@+id/btn_new_review"
+        android:layout_alignParentEnd="true"
+        android:text="Submit"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        style="@style/LoginButton"
+        android:background="@drawable/round_corner"
+        android:layout_toEndOf="@id/edt_new_review_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/edt_new_review_content"
+        android:paddingStart="10dp"
+        android:textSize="15sp"
+        android:hint="Enter your review here..."
+        android:layout_width="300dp"
+        android:layout_height="80dp" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiperefresh_reviews"
+        android:layout_width="match_parent"
+        android:layout_below="@id/edt_new_review_content"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/listView_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>
