@@ -5,8 +5,6 @@ public class Constants {
 
     public static final String CHANNEL_ID="mychannelid";
     public static final String CHANNEL_NAME="channelname";
-//    public static final String BASE_URL_REMOTE = "https://pin-mate.herokuapp.com";
-//    public static final String BASE_URL_LOCAL = "http://192.168.3.25:3000";
     public static final String CHANNEL_DESCRIPTION="channeldescription";
 
 

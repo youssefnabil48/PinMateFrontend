@@ -1,6 +1,16 @@
 package com.example.saraelsheemi.pinmate.models;
 
+import android.app.Activity;
+import android.content.Context;
+import android.widget.Toast;
+
+import com.example.saraelsheemi.pinmate.controllers.AsynchTasks.AsynchTaskPost;
+import com.example.saraelsheemi.pinmate.controllers.Constants;
+import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -103,7 +113,7 @@ public class Place {
         this.mobile_number = mobile_number;
     }
 
-    public String  getManager() {
+    public String getManager() {
         return manager;
     }
 
@@ -151,4 +161,5 @@ public class Place {
     public void setStories(ArrayList<String> stories) {
         this.stories = stories;
     }
+
 }

@@ -41,6 +41,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.github.nkzawa:socket.io-client:0.3.0'
     implementation 'com.github.jd-alexander:library:1.1.0'
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
 }
 
 

@@ -107,11 +107,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
         sendRegistrationToServer(refreshedToken);
-//        viewPager =  findViewById(R.id.viewpager);
-//        setUpViewPager(viewPager);
-//        tabLayout = findViewById(R.id.tabs);
-//        tabLayout.setupWithViewPager(viewPager);
-//        setUpTabIcons();
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -131,20 +127,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         });
     }
 
-    //    private void setUpTabIcons(){
-//        tabLayout.getTabAt(0).setIcon(R.drawable.ic_person_outline_white_48dp);
-//        tabLayout.getTabAt(1).setIcon(R.drawable.ic_place_white_48dp);
-//        tabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_white_48dp);
-//        tabLayout.getTabAt(3).setIcon(R.drawable.ic_plus_one_white_48dp);
-//    }
-//    private void setUpViewPager(ViewPager viewPager){
-//        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(),getApplicationContext());
-//        adapter.addFragment(new UserProfile(),"one");
-//        adapter.addFragment(new Map(),"one");
-//        adapter.addFragment(new Chats(),"one");
-//        adapter.addFragment(new FriendRequestsFragment(),"one");
-//        viewPager.setAdapter(adapter);
-//    }
 
     private void sendRegistrationToServer(String refreshedToken) {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);

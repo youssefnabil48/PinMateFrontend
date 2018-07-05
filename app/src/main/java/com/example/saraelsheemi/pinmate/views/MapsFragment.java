@@ -39,6 +39,7 @@ import com.example.saraelsheemi.pinmate.controllers.Constants;
 import com.example.saraelsheemi.pinmate.controllers.EventListener;
 import com.example.saraelsheemi.pinmate.models.MLocation;
 import com.example.saraelsheemi.pinmate.models.Place;
+import com.example.saraelsheemi.pinmate.models.Post;
 import com.example.saraelsheemi.pinmate.models.Tracker;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -62,6 +63,7 @@ import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,8 +72,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
@@ -92,7 +99,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
-    private static final int DEFAULT_ZOOM = 15;
+    private static final int DEFAULT_ZOOM = 20;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
 
@@ -128,6 +135,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     Button btntracker;
     ArrayList<Place> placesObjects = new ArrayList<>();
     Tracker tracker;
+
+    //check in
+    Button btnCheckIn;
+    final double CHECK_IN_RADIUS = 15;
 
     Polyline polyline1;
     private static final int COLOR_BLACK_ARGB = 0xff000000;
@@ -180,8 +191,72 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 createTrackerPopup();
             }
         });
+        btnCheckIn = view.findViewById(R.id.btn_chkin);
+        btnCheckIn.setVisibility(View.GONE);
+
+        btnCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnCheckIn.setVisibility(View.GONE);
+                addCheckInPost();
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    private void addCheckInPost() {
+
+        SimpleDateFormat mdformat = new SimpleDateFormat("dd MM yyyy, HH:mm");
+        String strDate = mdformat.format(Calendar.getInstance().getTime());
+
+        Post post = new Post();
+        post.setUser(user.getId());
+        post.setContent(user.getName() + " checked in." );
+        post.setUser_pic(user.getPicture());
+        post.setCreated_at(strDate);
+        post.setUser_name(user.getName());
+
+        String postData = "{ \"place_id\":" + "\"" + selectedMarker.getTag() + "\","
+                + "\"user\":" + "\"" + user.getId() + "\","
+                + "\"user_name\":\"" + user.getName() + "\","
+                + "\"user_pic\":\"" + user.getPicture() + "\","
+                + "\"created_at\":" + "\"" + strDate + "\","
+                + "\"content\":" + "\"" + user.getName() + " checked in at " + strDate + "\""
+                + "}";
+
+        Log.e("checkked in data", postData);
+
+        AsynchTaskPost asynchTaskPost = new AsynchTaskPost(postData, getContext(), new EventListener<String>() {
+            @Override
+            public void onSuccess(String object) {
+                JSONObject jsonObject = null;
+                String message = "";
+                Boolean ok = false;
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                    message = jsonObject.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (ok && message.contains("Post was not added")) {
+                    showMessage("Error. Please Retry.");
+                } else if (ok && message.contains("Post added")) {
+                    showMessage("Checked in!");
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                showMessage("Post not added. Internal server error");
+            }
+        });
+        asynchTaskPost.execute(Constants.CREATE_POST);
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     Spinner src, dest;
@@ -209,7 +284,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
 
     }
+
     Place currentLoc = new Place();
+    Place sourceSelected;
+    Place destinationSelected;
 
     private void getPlacesNames() {
         AsynchTaskGet asynchTaskGet = new AsynchTaskGet(getContext(), new EventListener<String>() {
@@ -235,21 +313,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         ArrayList<String> places = new ArrayList<>();
                         cLoc.add("Current Location");
                         currentLoc.setName("Current Location");
-                        placesObjects.add(currentLoc);
+
                         for (int i = 0; i < jsonArray.length(); i++) {
                             Place place = gson.fromJson(jsonArray.get(i).toString(), Place.class);
                             placesObjects.add(place);
                             places.add(place.getName());
                         }
+                        Log.e("places size array",places.size()+"");
                         ArrayAdapter adapter2 = new ArrayAdapter<>(getContext(),
                                 android.R.layout.simple_spinner_item, cLoc);
                         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         src.setAdapter(adapter2);
                         src.setOnItemSelectedListener(onSourceSelected);
+
                         ArrayAdapter adapter = new ArrayAdapter<>(getContext(),
                                 android.R.layout.simple_spinner_item, places);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        dest.setAdapter(adapter2);
+                        dest.setAdapter(adapter);
                         dest.setOnItemSelectedListener(onDestinationSelected);
 
                     } catch (JSONException e) {
@@ -265,8 +345,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         asynchTaskGet.execute(Constants.GET_PLACES);
     }
 
-    Place sourceSelected;
-    Place destinationSelected;
 
     AdapterView.OnItemSelectedListener onSourceSelected = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -294,11 +372,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public void addPolyLine() {
 
         if (sourceSelected != null && destinationSelected != null) {
+            if(polyline1 != null)
+                polyline1.remove();
             polyline1 = mMap.addPolyline(new PolylineOptions()
                     .clickable(true)
                     .add(
-                            new LatLng(sourceSelected.getLocation().getLatitude(),
-                                    sourceSelected.getLocation().getLongitude()),
+                            new LatLng(user.getCurrent_location().getLatitude(),
+                                    user.getCurrent_location().getLongitude()),
                             new LatLng(destinationSelected.getLocation().getLatitude(),
                                     destinationSelected.getLocation().getLongitude())));
             polyline1.setStartCap(new RoundCap());
@@ -410,6 +490,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
      * Manipulates the map when it's available.
      * This callback is triggered when the map is ready to be used.
      */
+
+    Marker selectedMarker;
+
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
@@ -422,8 +505,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                selectedMarker = marker;
+                checkIfinRadius(marker);
+
+            }
+        });
+
     }
 
+    private void checkIfinRadius(Marker marker) {
+        LatLng latLng = marker.getPosition();
+        LatLng userLat = new LatLng(user.getCurrent_location().getLatitude(), user.getCurrent_location().getLongitude());
+        if(SphericalUtil.computeDistanceBetween(latLng,userLat) <= CHECK_IN_RADIUS) {
+            btnCheckIn.setVisibility(View.VISIBLE);
+        }
+    }
 
     /**
      * Gets the current location of the device, and positions the map's camera.
@@ -570,6 +670,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         return address + "" + city;
     }
 
+
     private void addUserMarker() {
         if (userMarker == null) {
             userMarker = mMap.addMarker(new MarkerOptions()
@@ -602,6 +703,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                                     places.get(i).getLocation().getLongitude()))
                             .infoWindowAnchor(0.5f, 0.5f));
                     marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
+                    marker.setTag(places.get(i).getId());
                     placesMarkers.add(marker);
                 } else
                     placesMarkers.get(i).setPosition(new LatLng(places.get(i).getLocation().getLatitude(),
@@ -613,6 +715,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         .title(places.get(i).getName())
                         .infoWindowAnchor(0.5f, 0.5f));
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
+
                 placesMarkers.add(marker);
             }
         }
@@ -817,6 +920,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
                 if (ok && message.contains("Tracker deleted successfully")) {
                     Toast.makeText(getContext(), "Tracker deleted.", Toast.LENGTH_SHORT).show();
+                    tracker=null;
                     polyline1.remove();
 
                 } else if (ok && message.contains("Tracker is not")) {
