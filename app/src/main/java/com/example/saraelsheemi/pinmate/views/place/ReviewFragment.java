@@ -89,16 +89,12 @@ public class ReviewFragment extends Fragment implements SwipeRefreshLayout.OnRef
         listViewReviews.setOnItemLongClickListener(this);
         registerForContextMenu(listViewReviews);
 
-        sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.apply();
-
         newReviewContent = view.findViewById(R.id.edt_new_review_content);
         submitReviewButton = view.findViewById(R.id.btn_new_review);
         submitReviewButton.setOnClickListener(AddReviewListner);
 
         reviewRatingBar = view.findViewById(R.id.ratingBar);
-
+        newReviewRating = "0";
 
         //get current logged in user
         sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
@@ -146,6 +142,9 @@ public class ReviewFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     //called when first time opening list view
     private void getReviews() {
+        sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
         String json = sharedPreferences.getString("place_details", "");
         gson = new Gson();
         place = gson.fromJson(json, Place.class);
