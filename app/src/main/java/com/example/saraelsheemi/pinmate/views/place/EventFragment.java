@@ -27,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -46,6 +47,8 @@ import com.example.saraelsheemi.pinmate.models.Place;
 import com.example.saraelsheemi.pinmate.models.Post;
 import com.example.saraelsheemi.pinmate.models.User;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,6 +73,7 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     ListView eventsView;
     String deletedEventId;
     Button addEventBtn;
+    User loggedInUser;
 
     @Nullable
     @Override
@@ -86,15 +90,14 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void init(View view){
+        place = new Place();
         name = view.findViewById(R.id.event_name);
         description = view.findViewById(R.id.description);
         startDate = view.findViewById(R.id.start_date);
         endDate = view.findViewById(R.id.end_date);
         gson = new Gson();
         events = new ArrayList<>();
-        sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.apply();
+
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_events);
         swipeRefreshLayout.setOnRefreshListener(this);
         progressBar = view.findViewById(R.id.progressbar_events_loading);
@@ -112,13 +115,40 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         addEventBtn = view.findViewById(R.id.btn_new_event);
         addEventBtn.setOnClickListener(this);
 
+        //get current logged in user
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+        String json = sharedPreferences.getString("user_info","");
+        loggedInUser = gson.fromJson(json,User.class);
+
+        sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+        String placeJson = sharedPreferences.getString("place_details", "");
+        place = gson.fromJson(placeJson,Place.class);
+        actAsManager();
+
     }
+
+    private void actAsManager(){
+        try {
+            if (!(place.getManager().equals(loggedInUser.getId()))) {
+                addEventBtn.setVisibility(View.INVISIBLE);
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
+                lp.removeRule(RelativeLayout.BELOW);
+            }
+        }catch (Exception e ){
+            addEventBtn.setVisibility(View.INVISIBLE);
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
+            lp.removeRule(RelativeLayout.BELOW);
+            Log.e("error", e.getMessage());
+        }
+    }
+
 
     //called when first time opening list view
     private void getEvents() {
-        String json = sharedPreferences.getString("place_details", "");
-        gson = new Gson();
-        place = gson.fromJson(json, Place.class);
         events = place.getEvents();
         populatePostsArrayListAdapter(events);
     }
@@ -145,14 +175,16 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                     jsonObject = new JSONObject(object);
                     ok = jsonObject.getBoolean("ok");
                     message = jsonObject.getString("message");
+                    Log.e("response message", message);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                if (ok && message.contains("events loaded")) {
+                if (ok) {
                     showMessage("Updated");
                     try {
                         placeinfo = jsonObject.getString("data");
+                        Log.e("place after update", placeinfo);
                         Place p = gson.fromJson(placeinfo, Place.class);
                         events = p.getEvents();
                         populatePostsArrayListAdapter(events);
@@ -406,9 +438,11 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private void createAddEventRequest(Event event){
 
         String data = gson.toJson(event, Event.class);
+        JsonObject o = new JsonParser().parse(data).getAsJsonObject();
+        o.addProperty("place_id", String.valueOf(place.getId()));
         Log.e("hangout request data", data);
 
-        AsynchTaskPost asynchTaskPost = new AsynchTaskPost(data, getContext(), new EventListener<String>() {
+        AsynchTaskPost asynchTaskPost = new AsynchTaskPost(o.toString(), getContext(), new EventListener<String>() {
             @Override
             public void onSuccess(String object) {
                 JSONObject jsonObject = null;
