@@ -279,9 +279,6 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        showMessage("on events fragment");
-        Log.e("manager",place.getManager());
-        Log.e("log in user", loggedInUser.getId());
         Event e = (Event) adapterView.getItemAtPosition(i);
         deletedEventId = e.getId();
         if (place.getManager().equals(loggedInUser.getId())) {

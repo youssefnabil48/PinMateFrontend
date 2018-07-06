@@ -71,9 +71,9 @@ public class ReviewFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         init(view);
         getReviews();
-        super.onViewCreated(view, savedInstanceState);
     }
 
     public void init(View view) {
@@ -117,11 +117,9 @@ public class ReviewFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        showMessage("on review fragment");
         Review p = (Review) adapterView.getItemAtPosition(i);
         deletedReviewId = p.getId();
-        Log.e("post user id", currentSelectedReviewUserId);
-        Log.e("host user id", loggedInUser.getId());
+        currentSelectedReviewUserId = p.getUser_id();
         if (p.getUser_id().equals(loggedInUser.getId())){
             listViewReviews.showContextMenu();
             return true;
@@ -157,7 +155,6 @@ public class ReviewFragment extends Fragment implements SwipeRefreshLayout.OnRef
         gson = new Gson();
         place = gson.fromJson(json, Place.class);
         reviews = place.getReviews();
-        // sortData(posts);
         populateReviewsArrayListAdapter(reviews);
 
     }
@@ -236,7 +233,7 @@ public class ReviewFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     e.printStackTrace();
                 }
                 if (ok) {
-                    showMessage("Post deleted.");
+                    showMessage("Review deleted.");
                     getUpdatedReviews();
                 } else if (ok && message.contains("Review was not")) {
                     showMessage("Review not deleted. Retry");

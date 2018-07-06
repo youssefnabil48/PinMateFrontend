@@ -106,7 +106,6 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        showMessage("on posts fragment");
         Post p = (Post) adapterView.getItemAtPosition(i);
         currentSelectedPostUserId = p.getUser();
         deletePostId = p.getId();
