@@ -88,34 +88,11 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
         listViewPlace.setAdapter(placesAdapter);
         listViewPlace.setOnItemClickListener(onItemClickListener);
 
-        setListViewHeightBasedOnChildren(listViewPlace);
-        setListViewHeightBasedOnChildren(listViewRec);
-
         sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
 
 
-    }
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
     }
 
     private void getPlaces() {
@@ -177,11 +154,15 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
         recAdapter.notifyDataSetChanged();
     }
 
+
     AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
             //add place info in shared preferences to pass it to next fragment
+            sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+            editor.apply();
             Place place = (Place) adapterView.getItemAtPosition(position);
             String jsonData = gson.toJson(place, Place.class);
             editor.putString("place_details", jsonData);
