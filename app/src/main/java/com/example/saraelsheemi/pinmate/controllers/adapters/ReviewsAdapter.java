@@ -50,19 +50,22 @@ public class ReviewsAdapter extends ArrayAdapter<Review> {
         TextView content;
         TextView date;
         RatingBar ratingBar;
+        TextView ratingCount;
 
 
         //convert view == one row
         // Check if the existing view is being reused, otherwise inflate the view
         View listItemView = convertView;
         if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.activity_posts_list_item, parent, false);
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.activity_review_list_item, parent, false);
         }
 
         userName = listItemView.findViewById(R.id.txt_fav_place_list_name);
         content = listItemView.findViewById(R.id.txt_fav_place_list_description);
         userPicture = listItemView.findViewById(R.id.img_fav_place_list_picture);
         date = listItemView.findViewById(R.id.txt_post_date);
+        ratingCount = listItemView.findViewById(R.id.ratingCount);
+
         //       deletePost = listItemView.findViewById(R.id.btn_delete_post);
 
 //        deletePost.setOnClickListener(DeletePost);
@@ -72,7 +75,7 @@ public class ReviewsAdapter extends ArrayAdapter<Review> {
         userName.setText(review.getUsername());
         content.setText(review.getContent());
         date.setText(review.getCreated_at());
-
+        ratingCount.setText(String.valueOf(review.getRating()));
         if (review.getUserPic() != null)
             Picasso.get().load(review.getUserPic()).into(userPicture);
 

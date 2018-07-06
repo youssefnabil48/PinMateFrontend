@@ -137,11 +137,13 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 addEventBtn.setVisibility(View.INVISIBLE);
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
                 lp.removeRule(RelativeLayout.BELOW);
+                eventsView.setOnLongClickListener(null);
             }
         }catch (Exception e ){
             addEventBtn.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
             lp.removeRule(RelativeLayout.BELOW);
+            eventsView.setOnLongClickListener(null);
             Log.e("error", e.getMessage());
         }
     }
@@ -279,15 +281,20 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
         Event e = (Event) adapterView.getItemAtPosition(i);
         deletedEventId = e.getId();
-        eventsView.showContextMenu();
-        return true;
+        if (place.getManager().equals(loggedInUser.getId())) {
+            eventsView.showContextMenu();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.event_menu, menu);
+        if (place.getManager().equals(loggedInUser.getId())) {
+            inflater.inflate(R.menu.event_menu, menu);
+        }
     }
 
     @Override

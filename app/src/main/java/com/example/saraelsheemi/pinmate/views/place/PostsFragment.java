@@ -55,6 +55,8 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     Button addPost;
     EditText newContent;
     String deletePostId;
+    String currentSelectedPostUserId;
+    User loggedInUser;
 
 
     @Nullable
@@ -85,6 +87,12 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         listViewPosts.setOnItemLongClickListener(this);
         registerForContextMenu(listViewPosts);
 
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+        String json = sharedPreferences.getString("user_info", "");
+        loggedInUser = gson.fromJson(json, User.class);
+
         sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
@@ -99,16 +107,21 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
         Post p = (Post) adapterView.getItemAtPosition(i);
+        currentSelectedPostUserId = p.getUser();
         deletePostId = p.getId();
-        listViewPosts.showContextMenu();
-        return true;
+        if(p.getUser().equals(loggedInUser.getId())) {
+            listViewPosts.showContextMenu();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.post_menu, menu);
+        if(currentSelectedPostUserId.equals(loggedInUser.getId()))
+            inflater.inflate(R.menu.post_menu, menu);
     }
 
     @Override
