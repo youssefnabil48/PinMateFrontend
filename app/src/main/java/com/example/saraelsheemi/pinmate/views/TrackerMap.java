@@ -304,7 +304,6 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
     }
 
     public void addPolyLine() {
-
         if (src != null && dest != null) {
             if(polyline1!= null)
                 polyline1.remove();

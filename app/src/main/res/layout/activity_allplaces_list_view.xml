@@ -12,17 +12,79 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/txt_rec"
+        android:text="Recommended"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_margin="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/line"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:paddingTop="5dip"
+        android:layout_below="@id/txt_rec"
+
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#747B80" />
+    <ListView
+        android:smoothScrollbar="true"
+        android:id="@+id/listView_recommended"
+        android:layout_below="@id/line"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/line3"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:paddingTop="5dip"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/listView_recommended"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#747B80" />
+
+    <TextView
+        android:id="@+id/txt_all"
+        android:text="All"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_margin="12dp"
+        android:layout_below="@id/line3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/line2"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:paddingTop="5dip"
+        android:layout_below="@id/txt_all"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#747B80" />
+
+    <RelativeLayout
+        android:layout_below="@id/line2"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swiperefresh_allPlaces"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ListView
             android:smoothScrollbar="true"
+            android:layout_marginTop="100dp"
             android:id="@+id/listView_allPlaces"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="wrap_content" />
     </android.support.v4.widget.SwipeRefreshLayout>
+    </RelativeLayout>
 </RelativeLayout>
