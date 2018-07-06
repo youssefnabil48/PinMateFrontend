@@ -59,6 +59,7 @@ public class ReviewFragment extends Fragment implements SwipeRefreshLayout.OnRef
     String newReviewRating;
     String deletedReviewId;
     User loggedInUser;
+    String currentSelectedReviewUserId;
 
 
     @Nullable
@@ -116,17 +117,24 @@ public class ReviewFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        showMessage("on review fragment");
         Review p = (Review) adapterView.getItemAtPosition(i);
         deletedReviewId = p.getId();
-        listViewReviews.showContextMenu();
-        return true;
+        Log.e("post user id", currentSelectedReviewUserId);
+        Log.e("host user id", loggedInUser.getId());
+        if (p.getUser_id().equals(loggedInUser.getId())){
+            listViewReviews.showContextMenu();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.review_menu, menu);
+        if(currentSelectedReviewUserId.equals(loggedInUser.getId()))
+            inflater.inflate(R.menu.review_menu, menu);
     }
 
     @Override

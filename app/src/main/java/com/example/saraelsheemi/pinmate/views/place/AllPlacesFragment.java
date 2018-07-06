@@ -35,9 +35,9 @@ import java.util.ArrayList;
 
 public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private ListView listViewPlace;
-    private ArrayList<Place> places;
-    private ArrayAdapter<Place> placesAdapter;
+    private ListView listViewPlace, listViewRec;
+    private ArrayList<Place> places, recPlaces;
+    private ArrayAdapter<Place> placesAdapter, recAdapter;
     ProgressBar progressBar;
     SwipeRefreshLayout swipeRefreshLayout;
     Gson gson;
@@ -68,8 +68,17 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
         swipeRefreshLayout.setOnRefreshListener(this);
         progressBar = view.findViewById(R.id.progressbar_favorites_loading);
         listViewPlace = view.findViewById(R.id.listView_allPlaces);
+        listViewRec = view.findViewById(R.id.listView_recommended);
+        Place p = new Place();
+        p.setName("TEEST");
+        ArrayList<Place> arrayList = new ArrayList<>();
+        arrayList.add(p);
 
         placesAdapter = new PlacesAdapter(getActivity(), R.layout.activity_allplaces_list_item, new ArrayList<Place>(), this);
+        recAdapter = new PlacesAdapter(getActivity(), R.layout.activity_allplaces_list_item, arrayList, this);
+
+        listViewRec.setAdapter(recAdapter);
+        listViewPlace.setOnItemClickListener(onItemClickListener);
         listViewPlace.setAdapter(placesAdapter);
         listViewPlace.setOnItemClickListener(onItemClickListener);
 

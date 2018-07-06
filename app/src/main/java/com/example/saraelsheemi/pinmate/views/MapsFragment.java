@@ -99,7 +99,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
-    private static final int DEFAULT_ZOOM = 20;
+    private static final int DEFAULT_ZOOM = 17;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
 
@@ -138,8 +138,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     //check in
     Button btnCheckIn;
-    final double CHECK_IN_RADIUS = 15;
-
+    final double CHECK_IN_RADIUS = 20;
     Polyline polyline1;
     private static final int COLOR_BLACK_ARGB = 0xff000000;
     private static final int POLYLINE_STROKE_WIDTH_PX = 12;
@@ -153,6 +152,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         if (savedInstanceState != null) {
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+            mMap.moveCamera(CameraUpdateFactory
+                    .newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
             currentLoc.setLocation(new MLocation());
             currentLoc.getLocation().setLatitude(mLastKnownLocation.getLatitude());
             currentLoc.getLocation().setLongitude(mLastKnownLocation.getLongitude());
@@ -212,7 +213,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
         Post post = new Post();
         post.setUser(user.getId());
-        post.setContent(user.getName() + " checked in." );
+        post.setContent(user.getName() + " checked in.");
         post.setUser_pic(user.getPicture());
         post.setCreated_at(strDate);
         post.setUser_name(user.getName());
@@ -319,7 +320,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                             placesObjects.add(place);
                             places.add(place.getName());
                         }
-                        Log.e("places size array",places.size()+"");
+                        Log.e("places size array", places.size() + "");
                         ArrayAdapter adapter2 = new ArrayAdapter<>(getContext(),
                                 android.R.layout.simple_spinner_item, cLoc);
                         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -372,7 +373,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public void addPolyLine() {
 
         if (sourceSelected != null && destinationSelected != null) {
-            if(polyline1 != null)
+            if (polyline1 != null)
                 polyline1.remove();
             polyline1 = mMap.addPolyline(new PolylineOptions()
                     .clickable(true)
@@ -504,7 +505,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         updateLocationUI();
 
         // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
+//        final ExecutorService es = Executors.newCachedThreadPool();
+//        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+//        ses.scheduleAtFixedRate(new Runnable() {
+//            @Override
+//            public void run() {
+//                es.submit(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        getDeviceLocation();
+//                    }
+//                });
+//            }
+//        }, 0, 5, TimeUnit.SECONDS);
+
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -520,7 +534,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     private void checkIfinRadius(Marker marker) {
         LatLng latLng = marker.getPosition();
         LatLng userLat = new LatLng(user.getCurrent_location().getLatitude(), user.getCurrent_location().getLongitude());
-        if(SphericalUtil.computeDistanceBetween(latLng,userLat) <= CHECK_IN_RADIUS) {
+        if (SphericalUtil.computeDistanceBetween(latLng, userLat) <= CHECK_IN_RADIUS) {
             btnCheckIn.setVisibility(View.VISIBLE);
         }
     }
@@ -598,7 +612,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                             Place place = gson.fromJson(jsonArray.get(i).toString(), Place.class);
                             places.add(place);
                         }
-                         addPlacessMarker();
+                        addPlacessMarker();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -702,7 +716,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                             .snippet(getAddress(places.get(i).getLocation().getLatitude(),
                                     places.get(i).getLocation().getLongitude()))
                             .infoWindowAnchor(0.5f, 0.5f));
-                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
+                    if (places.get(i).getId().contains("5b3eb26d09e7df0014b5cd8c"))
+                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.school));
+                    else
+                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
+
                     marker.setTag(places.get(i).getId());
                     placesMarkers.add(marker);
                 } else
@@ -714,6 +732,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                                 Constants.DEFAULT_LONTIDUE))
                         .title(places.get(i).getName())
                         .infoWindowAnchor(0.5f, 0.5f));
+                if (places.get(i).getId().equals("5b3eb26d09e7df0014b5cd8c"))
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.school));
+                else
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.savoryplace));
 
                 placesMarkers.add(marker);
@@ -828,7 +849,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     private void createTracker() {
 
-        if(tracker == null ) {
+        if (tracker == null) {
             tracker = new Tracker();
             tracker.setSource(sourceSelected.getLocation());
             tracker.setDestination(destinationSelected.getLocation());
@@ -868,7 +889,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
                 @Override
                 public void onFailure(Exception e) {
-                    tracker=null;
+                    tracker = null;
                     Toast.makeText(getContext(), "Internal server error.", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -886,14 +907,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                                deleteTracker();
+                        deleteTracker();
                     }
                 });
 
         alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
+                dialog.dismiss();
             }
         });
 
@@ -920,7 +941,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
                 if (ok && message.contains("Tracker deleted successfully")) {
                     Toast.makeText(getContext(), "Tracker deleted.", Toast.LENGTH_SHORT).show();
-                    tracker=null;
+                    tracker = null;
                     polyline1.remove();
 
                 } else if (ok && message.contains("Tracker is not")) {
