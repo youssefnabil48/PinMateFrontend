@@ -77,6 +77,7 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
         progressBar = view.findViewById(R.id.progressbar_favorites_loading);
         listViewPlace = view.findViewById(R.id.listView_allPlaces);
         listViewRec = view.findViewById(R.id.listView_recommended);
+        recPlaces = new ArrayList<>();
 
         //get recommended places
 
@@ -213,7 +214,6 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
                 if (ok) {
                     try {
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        recPlaces = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             Place place = gson.fromJson(jsonArray.get(i).toString(), Place.class);
                             recPlaces.add(place);

@@ -294,10 +294,10 @@ public class ReviewFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         e.printStackTrace();
                     }
                     if (ok && message.contains("Review was not added")) {
-                        showMessage("Post not added. Retry.");
+                        showMessage("Review not added. Retry.");
                     } else if (ok) {
                         getUpdatedReviews();
-                        showMessage("Post added");
+                        showMessage("Review added");
                     }
                 }
 
