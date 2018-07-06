@@ -13,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.saraelsheemi.pinmate.R;
@@ -58,35 +60,62 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
         init(view);
         getActivity().setTitle("Places");
         getPlaces();
+        try {
+            getRecommendedPlaces();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         super.onViewCreated(view, savedInstanceState);
     }
 
     public void init(View view) {
         places = new ArrayList<>();
+        recPlaces = new ArrayList<>();
         gson = new Gson();
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_allPlaces);
         swipeRefreshLayout.setOnRefreshListener(this);
         progressBar = view.findViewById(R.id.progressbar_favorites_loading);
         listViewPlace = view.findViewById(R.id.listView_allPlaces);
         listViewRec = view.findViewById(R.id.listView_recommended);
-        Place p = new Place();
-        p.setName("TEEST");
-        ArrayList<Place> arrayList = new ArrayList<>();
-        arrayList.add(p);
+
+        //get recommended places
 
         placesAdapter = new PlacesAdapter(getActivity(), R.layout.activity_allplaces_list_item, new ArrayList<Place>(), this);
-        recAdapter = new PlacesAdapter(getActivity(), R.layout.activity_allplaces_list_item, arrayList, this);
+        recAdapter = new PlacesAdapter(getActivity(), R.layout.activity_recplaces_list_item, recPlaces, this);
 
         listViewRec.setAdapter(recAdapter);
-        listViewPlace.setOnItemClickListener(onItemClickListener);
+        listViewRec.setOnItemClickListener(onItemClickListener);
         listViewPlace.setAdapter(placesAdapter);
         listViewPlace.setOnItemClickListener(onItemClickListener);
+
+        setListViewHeightBasedOnChildren(listViewPlace);
+        setListViewHeightBasedOnChildren(listViewRec);
 
         sharedPreferences = getActivity().getSharedPreferences("placeInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
 
 
+    }
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 
     private void getPlaces() {
@@ -142,6 +171,12 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
         placesAdapter.notifyDataSetChanged();
     }
 
+    public void populateRecPlacesArrayListAdapter(ArrayList<Place> placeArrayList) {
+        recAdapter.clear();
+        recAdapter.addAll(placeArrayList);
+        recAdapter.notifyDataSetChanged();
+    }
+
     AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -166,6 +201,59 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onRefresh() {
         getPlaces();
+    }
+
+
+    public void getRecommendedPlaces() throws JSONException {
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+        String json = sharedPreferences.getString("user_info", "");
+        final Gson gson = new Gson();
+        User user = gson.fromJson(json, User.class);
+
+        final JSONObject data = new JSONObject();
+        data.put("id", user.getId());
+        AsynchTaskPost asynchTaskPost = new AsynchTaskPost(data.toString(), getContext(), new EventListener<String>() {
+            @Override
+            public void onSuccess(String object) {
+                JSONObject jsonObject = null;
+                String message = "";
+                Boolean ok = false;
+
+                try {
+                    jsonObject = new JSONObject(object);
+                    ok = jsonObject.getBoolean("ok");
+                    message = jsonObject.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (ok) {
+                    try {
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        recPlaces = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Place place = gson.fromJson(jsonArray.get(i).toString(), Place.class);
+                            recPlaces.add(place);
+                        }
+                        populateRecPlacesArrayListAdapter(recPlaces);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    showMessage("Place not added.");
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                showMessage("Internal server error");
+            }
+        });
+        asynchTaskPost.execute(Constants.RECOMMEND_PLACE);
+
     }
 
     public void favoritePlace(String placeId) {

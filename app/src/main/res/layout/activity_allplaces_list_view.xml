@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:padding="10dp"
         android:visibility="gone" />
 
     <TextView
@@ -30,20 +31,28 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#747B80" />
-    <ListView
-        android:smoothScrollbar="true"
-        android:id="@+id/listView_recommended"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="170dp"
         android:layout_below="@id/line"
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/listView_recommended2"
+        >
+        <ListView
+            android:smoothScrollbar="true"
+            android:layout_marginTop="5dp"
+            android:id="@+id/listView_recommended"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/line3"
         style="?android:attr/listSeparatorTextViewStyle"
         android:paddingTop="5dip"
         android:layout_marginTop="5dp"
-        android:layout_below="@id/listView_recommended"
+        android:layout_below="@id/listView_recommended2"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#747B80" />
