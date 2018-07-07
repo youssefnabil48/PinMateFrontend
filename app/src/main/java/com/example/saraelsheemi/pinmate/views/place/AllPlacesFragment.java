@@ -210,12 +210,15 @@ public class AllPlacesFragment extends Fragment implements SwipeRefreshLayout.On
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                Log.e("rec response", jsonObject.toString());
                 if (ok) {
                     try {
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        Log.e("rec response", jsonArray.toString());
+                        recPlaces = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             Place place = gson.fromJson(jsonArray.get(i).toString(), Place.class);
+                            Log.e("recplace", jsonArray.get(i).toString());
                             recPlaces.add(place);
                         }
                         populateRecPlacesArrayListAdapter(recPlaces);
