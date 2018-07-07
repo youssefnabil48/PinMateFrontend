@@ -125,7 +125,6 @@ public class ActiveTrackersFragment extends Fragment implements SwipeRefreshLayo
             }
         });
         asynchTaskGet.execute(Constants.GET_TRACKERS + user_id);
-
     }
 
     public void init(View view) {

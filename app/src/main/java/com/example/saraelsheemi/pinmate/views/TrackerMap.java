@@ -127,7 +127,7 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
         String json = sharedPreferences.getString("tracker_details", "");
         tracker = gson.fromJson(json, Tracker.class);
         user = gson.fromJson(sharedPreferences.getString("tracker_user", ""), User.class);
-        getSource();
+      //  getSource();
         getDest();
 
 
@@ -216,7 +216,7 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
                 Log.e("loading places", "Internal server error.");
             }
         });
-        asynchTaskGet.execute(Constants.GET_PLACE + tracker.getDestination());
+        asynchTaskGet.execute(Constants.GET_PLACE + tracker.getDestination_id());
     }
 
     private void getSource() {
@@ -304,7 +304,7 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
     }
 
     public void addPolyLine() {
-        if (src != null && dest != null) {
+        if (user.getCurrent_location() != null && dest != null) {
             if(polyline1!= null)
                 polyline1.remove();
             polyline1 = mMap.addPolyline(new PolylineOptions()

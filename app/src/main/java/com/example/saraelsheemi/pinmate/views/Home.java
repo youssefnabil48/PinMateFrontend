@@ -230,6 +230,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             clearSharedPreferences();
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
+            finish();
         }
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

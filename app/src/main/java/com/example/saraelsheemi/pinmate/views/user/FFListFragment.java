@@ -140,7 +140,7 @@ public class FFListFragment  extends Fragment {
             Fragment profile = new FriendProfileFragment();
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.content_frame, profile); // give your fragment container id in first parameter
-            transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+          //  transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
             transaction.commit();
 
         }

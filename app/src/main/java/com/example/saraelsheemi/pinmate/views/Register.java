@@ -64,6 +64,7 @@ public class Register extends AppCompatActivity implements  View.OnClickListener
             case R.id.btn_already_member : {
                 Intent intent = new Intent(this,Login.class);
                 startActivity(intent);
+                finish();
             }
                 break;
             case R.id.btn_reg_reg : {
@@ -114,6 +115,7 @@ public class Register extends AppCompatActivity implements  View.OnClickListener
                     showMessage("Account created successfully.");
                     Intent intent = new Intent(getApplicationContext(),Login.class);
                     startActivity(intent);
+                    finish();
                 } else {
                     showMessage("Failed to create account. Please retry.");
                 }

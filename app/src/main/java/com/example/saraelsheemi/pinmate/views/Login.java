@@ -91,6 +91,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private boolean checkIfRemembered() {
+        Log.e("logged in", sharedPreferences.getString("logged_in", ""));
+
         if (sharedPreferences.getString("logged_in", "").contains("true")) {
         Log.e("logged in", sharedPreferences.getString("logged_in", ""));
             return true;
@@ -100,6 +102,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private void keepLogged() {
         if (rememberMe.isChecked()) {
+            Log.e("put check","done");
             editor.putString("logged_in", "true");
             editor.apply();
         }
@@ -145,6 +148,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     }
                     Intent intent = new Intent(getApplicationContext(), Home.class);
                     startActivity(intent);
+                    finish();
                 } else if (ok && message.contains("User not")) {
                     showMessage("No user found.");
 

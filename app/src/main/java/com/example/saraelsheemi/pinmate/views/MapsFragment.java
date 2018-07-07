@@ -855,7 +855,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             tracker.setDestination(destinationSelected.getLocation());
             tracker.setUser_id(user.getId());
             tracker.setCreated_at(getCurrentTimeStamp());
-
+            tracker.setDestination_id(destinationSelected.getId());
             String data = gson.toJson(tracker, Tracker.class);
             Log.e("tracker data", data);
 

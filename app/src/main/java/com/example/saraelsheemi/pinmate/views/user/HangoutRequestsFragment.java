@@ -405,6 +405,10 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
                 if (ok && message.contains("friends loaded")) {
                     try {
                         jsonArray = jsonObject.getJSONArray("data");
+                        friendsObjects = new ArrayList<>();
+                        friendsNames = new ArrayList<>();
+                        friendsObjects.add(new User());
+                        friendsNames.add("Select friends...");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             User u = gson.fromJson(jsonArray.get(i).toString(), User.class);
                             friendsObjects.add(u);
@@ -476,7 +480,7 @@ public class HangoutRequestsFragment extends Fragment implements View.OnClickLis
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.post_menu, menu);
+        inflater.inflate(R.menu.req_menu, menu);
     }
 
     @Override

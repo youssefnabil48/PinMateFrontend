@@ -20,6 +20,16 @@ public class Tracker {
     private String user_id;
     @SerializedName("eta")
     private int ETA;
+    @SerializedName("destination_id")
+    private String destination_id;
+
+    public String getDestination_id() {
+        return destination_id;
+    }
+
+    public void setDestination_id(String destination_id) {
+        this.destination_id = destination_id;
+    }
 
     public String getUser_id() {
         return user_id;
