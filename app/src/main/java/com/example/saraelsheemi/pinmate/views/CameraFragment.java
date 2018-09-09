@@ -34,6 +34,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class CameraFragment extends Fragment {
 
+    //trial
     private static final String TAG = "CapturePicture";
     static final int REQUEST_PICTURE_CAPTURE = 1;
     private ImageView image;

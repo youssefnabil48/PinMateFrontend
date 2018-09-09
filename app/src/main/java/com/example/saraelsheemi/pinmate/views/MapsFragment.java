@@ -138,7 +138,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     //check in
     Button btnCheckIn;
-    final double CHECK_IN_RADIUS = 20;
+    final double CHECK_IN_RADIUS = 100;
     Polyline polyline1;
     private static final int COLOR_BLACK_ARGB = 0xff000000;
     private static final int POLYLINE_STROKE_WIDTH_PX = 12;
@@ -372,7 +372,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     public void addPolyLine() {
 
-        if (sourceSelected != null && destinationSelected != null) {
+        if (user.getCurrent_location() != null && destinationSelected != null) {
             if (polyline1 != null)
                 polyline1.remove();
             polyline1 = mMap.addPolyline(new PolylineOptions()
@@ -678,9 +678,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String address = addresses.get(0).getAddressLine(0);
-        String city = addresses.get(0).getAddressLine(1);
-
+        String address= "";
+        String city="";
+        if(addresses != null ) {
+            address = addresses.get(0).getAddressLine(0);
+            city = addresses.get(0).getAddressLine(1);
+        }
         return address + "" + city;
     }
 

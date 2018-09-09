@@ -342,9 +342,12 @@ public class TrackerMap extends Fragment implements OnMapReadyCallback, GoogleMa
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String address = addresses.get(0).getAddressLine(0);
-        String city = addresses.get(0).getAddressLine(1);
-
+        String address= "";
+        String city="";
+        if(addresses != null ) {
+            address = addresses.get(0).getAddressLine(0);
+            city = addresses.get(0).getAddressLine(1);
+        }
         return address + "" + city;
     }
 
